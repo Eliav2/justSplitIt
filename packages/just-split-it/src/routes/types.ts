@@ -5,12 +5,15 @@ import type { SvgIconProps } from '@mui/material/SvgIcon';
 
 enum Pages {
   Welcome,
-  Home,
   Page1,
   Page2,
   Page3,
   Page4,
   NotFound,
+}
+
+enum ProtectedPages {
+  Home,
 }
 
 type PathRouteCustomProps = {
@@ -20,6 +23,7 @@ type PathRouteCustomProps = {
 };
 
 type Routes = Record<Pages, PathRouteProps & PathRouteCustomProps>;
+type ProtectedRoutes = Record<ProtectedPages, PathRouteProps & PathRouteCustomProps>;
 
-export type { Routes };
-export { Pages };
+export type { Routes, ProtectedRoutes };
+export { Pages, ProtectedPages };

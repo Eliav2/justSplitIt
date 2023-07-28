@@ -6,19 +6,13 @@ import TerrainIcon from '@mui/icons-material/Terrain';
 
 import asyncComponentLoader from '@/utils/loader';
 
-import { Pages, Routes } from './types';
+import { Pages, ProtectedPages, ProtectedRoutes, Routes } from './types';
 
-const routes: Routes = {
+export const routes: Routes = {
   [Pages.Welcome]: {
     component: asyncComponentLoader(() => import('@/pages/Welcome')),
     path: '/',
     title: 'Welcome',
-    icon: HomeIcon,
-  },
-  [Pages.Home]: {
-    component: asyncComponentLoader(() => import('@/pages/Home')),
-    path: '/home',
-    title: 'Home',
     icon: HomeIcon,
   },
   [Pages.Page1]: {
@@ -51,4 +45,11 @@ const routes: Routes = {
   },
 };
 
-export default routes;
+export const protectedRoutes: ProtectedRoutes = {
+  [ProtectedPages.Home]: {
+    component: asyncComponentLoader(() => import('@/pages/Home')),
+    path: '/home',
+    title: 'Home',
+    icon: HomeIcon,
+  },
+};

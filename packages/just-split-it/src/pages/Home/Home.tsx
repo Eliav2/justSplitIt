@@ -6,7 +6,7 @@ import { FullSizeCenteredFlexBoxColumn } from '@/components/styled';
 function Home() {
   return (
     <>
-      <Meta title="page 1" />
+      <Meta title="Home" />
       <FullSizeCenteredFlexBoxColumn>
         <Typography variant="h3">Home page</Typography>
         <Typography variant="h3">here</Typography>
