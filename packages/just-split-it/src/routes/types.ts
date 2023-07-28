@@ -3,10 +3,11 @@ import { PathRouteProps } from 'react-router-dom';
 
 import type { SvgIconProps } from '@mui/material/SvgIcon';
 
-type PathRouteCustomProps = {
+interface PathRouteCustomProps extends PathRouteProps {
   title?: string;
   component: FC;
   icon?: FC<SvgIconProps>;
-};
+  showInSidebar?: boolean; //default true
+}
 
-export type Routes = { [key: string]: PathRouteProps & PathRouteCustomProps };
+export type Routes = { [key: string]: PathRouteCustomProps };

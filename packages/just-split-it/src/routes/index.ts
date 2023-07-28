@@ -20,6 +20,7 @@ export const routes: Routes = {
     path: '/login',
     title: 'Login',
     icon: HomeIcon,
+    showInSidebar: false,
   },
   NotFound: {
     component: asyncComponentLoader(() => import('@/pages/NotFound')),
@@ -27,7 +28,7 @@ export const routes: Routes = {
   },
 } as const;
 
-export const protectedRoutes = {
+export const protectedRoutes: Routes = {
   Home: {
     component: asyncComponentLoader(() => import('@/pages/Home')),
     path: '/Home',
@@ -39,5 +40,6 @@ export const protectedRoutes = {
     path: '/user',
     title: 'User',
     icon: HomeIcon,
+    showInSidebar: false,
   },
 } as const;

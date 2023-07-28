@@ -11,7 +11,7 @@ import SwipeableDrawer from '@mui/material/SwipeableDrawer';
 import { routes, protectedRoutes } from '@/routes';
 import useSidebar from '@/store/sidebar';
 
-const sidebarRoutes = { ...routes, ...protectedRoutes };
+const sidebarRoutes = { ...routes, ...protectedRoutes } as const;
 
 function Sidebar() {
   const [isSidebarOpen, sidebarActions] = useSidebar();
@@ -27,7 +27,7 @@ function Sidebar() {
     >
       <List sx={{ width: 250, pt: (theme) => `${theme.mixins.toolbar.minHeight}px` }}>
         {Object.values(sidebarRoutes)
-          .filter((route) => route.title)
+          .filter((route) => route.title && (route?.showInSidebar ?? true))
           .map(({ path, title, icon: Icon }) => (
             <ListItem sx={{ p: 0 }} key={path}>
               <ListItemButton component={Link} to={path as string} onClick={sidebarActions.close}>
