@@ -6,7 +6,7 @@ const title = 'JustSplitIt';
 
 const email = 'auther-email@gmail.com';
 
-const repository = 'https://github.com/suren-atoyan/react-pwa';
+const repository = 'https://github.com/Eliav2/justSplitIt';
 
 const messages = {
   app: {
