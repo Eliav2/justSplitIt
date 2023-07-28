@@ -6,7 +6,7 @@ import { RecoilRoot } from 'recoil';
 import ThemeProvider from '@/theme/Provider';
 
 // initialize firebase
-import '@/utils/firebase';
+// import '@/utils/firebase';
 
 const container = document.getElementById('root') as HTMLElement;
 const root = createRoot(container);

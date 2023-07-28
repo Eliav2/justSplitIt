@@ -62,7 +62,12 @@ function Header() {
             >
               <MenuIcon />
             </IconButton>
-            <Button onClick={showNotification} color="info">
+            <Button
+              onClick={showNotification}
+              color="info"
+              sx={{ textTransform: 'none' }}
+              autoCapitalize={'false'}
+            >
               {title}
             </Button>
           </FlexBox>
