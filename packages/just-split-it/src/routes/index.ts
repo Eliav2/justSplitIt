@@ -47,9 +47,9 @@ export const routes: Routes = {
 
 export const protectedRoutes: ProtectedRoutes = {
   [ProtectedPages.Home]: {
-    component: asyncComponentLoader(() => import('@/pages/Home')),
-    path: '/home',
-    title: 'Home',
+    component: asyncComponentLoader(() => import('@/pages/Login')),
+    path: '/login',
+    title: 'Login',
     icon: HomeIcon,
   },
 };
