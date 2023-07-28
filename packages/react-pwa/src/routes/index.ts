@@ -15,6 +15,12 @@ const routes: Routes = {
     title: 'Welcome',
     icon: HomeIcon,
   },
+  [Pages.Home]: {
+    component: asyncComponentLoader(() => import('@/pages/Home')),
+    path: '/home',
+    title: 'Home',
+    icon: HomeIcon,
+  },
   [Pages.Page1]: {
     component: asyncComponentLoader(() => import('@/pages/Page1')),
     path: '/page-1',
