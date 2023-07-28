@@ -21,30 +21,6 @@ export const routes: Routes = {
     title: 'Login',
     icon: HomeIcon,
   },
-  Page1: {
-    component: asyncComponentLoader(() => import('@/pages/Page1')),
-    path: '/page-1',
-    title: 'Page 1',
-    icon: GitHubIcon,
-  },
-  Page2: {
-    component: asyncComponentLoader(() => import('@/pages/Page2')),
-    path: '/page-2',
-    title: 'Page 2',
-    icon: AddTaskIcon,
-  },
-  Page3: {
-    component: asyncComponentLoader(() => import('@/pages/Page3')),
-    path: '/page-3',
-    title: 'Page 3',
-    icon: TerrainIcon,
-  },
-  Page4: {
-    component: asyncComponentLoader(() => import('@/pages/Page4')),
-    path: '/page-4',
-    title: 'Page 4',
-    icon: BugReportIcon,
-  },
   NotFound: {
     component: asyncComponentLoader(() => import('@/pages/NotFound')),
     path: '*',

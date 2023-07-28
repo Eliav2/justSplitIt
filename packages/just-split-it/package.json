@@ -5,11 +5,11 @@
   "homepage": "https://react-pwa.surenatoyan.com/",
   "repository": {
     "type": "git",
-    "url": "https://github.com/suren-atoyan/react-pwa.git"
+    "url": "https://github.com/Eliav2/justSplitIt.git"
   },
   "bugs": {
-    "url": "https://github.com/suren-atoyan/react-pwa/issues",
-    "email": "contact@surenatoyan.com"
+    "url": "https://github.com/Eliav2/justSplitIt/issues",
+    "email": "louski.a@gmail.com"
   },
   "license": "MIT",
   "scripts": {
@@ -17,7 +17,8 @@
     "build": "tsc && vite build",
     "preview": "vite preview",
     "https-preview": "serve dist",
-    "prepare": "husky install"
+    "prepare": "husky install",
+    "deploy": "firebase deploy"
   },
   "dependencies": {
     "@emotion/react": "^11.11.1",
