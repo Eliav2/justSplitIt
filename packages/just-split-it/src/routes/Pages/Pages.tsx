@@ -6,6 +6,7 @@ import { routes, protectedRoutes } from '..';
 import { getPageHeight } from './utils';
 import RequireAuth from '@/components/ProtectedRoute/RequireAuth';
 
+// todo: change to data browser ('createBroswerRouter')
 function Pages() {
   return (
     <Box sx={{ height: (theme) => getPageHeight(theme) }}>

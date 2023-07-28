@@ -81,7 +81,7 @@ function Login() {
 
   // if authenticated, redirect to root page
   if (user) {
-    return <Navigate to="/" state={{ from: location }} />;
+    return <Navigate to="/" />;
   }
   return (
     <>

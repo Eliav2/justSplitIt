@@ -8,24 +8,32 @@ import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Divider from '@mui/material/Divider';
 import IconButton from '@mui/material/IconButton';
+import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import Toolbar from '@mui/material/Toolbar';
 import Tooltip from '@mui/material/Tooltip';
 
-import { FlexBox } from '@/components/styled';
+import { CenteredFlexBox, FlexBox } from '@/components/styled';
 import { repository, title } from '@/config';
 import useHotKeysDialog from '@/store/hotkeys';
 import useNotifications from '@/store/notifications';
 import useSidebar from '@/store/sidebar';
 import useTheme from '@/store/theme';
 
-import { HotKeysButton } from './styled';
 import { getRandomJoke } from './utils';
+import { useAuthState } from 'react-firebase-hooks/auth';
+import { fbAuth } from '@/utils/firebase';
+import Typography from '@mui/material/Typography';
+import { redirect } from 'react-router-dom';
+import { protectedRoutes } from '@/routes';
+import { useNavigate } from 'react-router-dom';
 
 function Header() {
   const [, sidebarActions] = useSidebar();
   const [, themeActions] = useTheme();
   const [, notificationsActions] = useNotifications();
-  const [, hotKeysDialogActions] = useHotKeysDialog();
+
+  const [user, loading, error] = useAuthState(fbAuth);
+  const navigate = useNavigate();
 
   function showNotification() {
     notificationsActions.push({
@@ -72,18 +80,22 @@ function Header() {
             </Button>
           </FlexBox>
           <FlexBox>
-            <FlexBox>
-              <Tooltip title="Hot keys" arrow>
-                <HotKeysButton
-                  size="small"
-                  variant="outlined"
-                  aria-label="open hotkeys dialog"
-                  onClick={hotKeysDialogActions.open}
-                >
-                  alt + /
-                </HotKeysButton>
-              </Tooltip>
-            </FlexBox>
+            <CenteredFlexBox>
+              {user && <Typography>{user.displayName}</Typography>}
+              <IconButton
+                onClick={() => {
+                  navigate(protectedRoutes.User.path);
+                }}
+                size="large"
+                edge="start"
+                color="info"
+                aria-label="menu"
+                sx={{ ml: 1 }}
+              >
+                <AccountCircleIcon />
+              </IconButton>
+            </CenteredFlexBox>
+
             <Divider orientation="vertical" flexItem />
             <Tooltip title="It's open source" arrow>
               <IconButton color="info" size="large" component="a" href={repository} target="_blank">

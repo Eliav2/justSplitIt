@@ -10,8 +10,12 @@ import rrLogo from './logos/rr.svg';
 import tsLogo from './logos/ts.svg';
 import viteLogo from './logos/vite.svg';
 import { Image } from './styled';
+import { useAuthState } from 'react-firebase-hooks/auth';
+import { fbAuth } from '@/utils/firebase';
 
 function Welcome() {
+  // const [user, loading, error] = useAuthState(fbAuth);
+  // console.log('user', user);
   const isPortrait = useOrientation();
 
   const width = isPortrait ? '40%' : '30%';
