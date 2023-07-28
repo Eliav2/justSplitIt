@@ -14,5 +14,8 @@ const FullSizeCenteredFlexBox = styled(CenteredFlexBox)({
   width: '100%',
   height: '100%',
 });
+export const FullSizeCenteredFlexBoxColumn = styled(FullSizeCenteredFlexBox)({
+  flexDirection:'column'
+});
 
 export { FlexBox, CenteredFlexBox, FullSizeCenteredFlexBox };
