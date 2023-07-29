@@ -10,6 +10,7 @@ import SwipeableDrawer from '@mui/material/SwipeableDrawer';
 
 import { routes, protectedRoutes } from '@/routes';
 import useSidebar from '@/store/sidebar';
+import { ListSubheader } from '@mui/material';
 
 const sidebarRoutes = { ...routes, ...protectedRoutes } as const;
 
@@ -37,6 +38,7 @@ function Sidebar() {
             </ListItem>
           ))}
       </List>
+      <ListSubheader>Events</ListSubheader>
     </SwipeableDrawer>
   );
 }

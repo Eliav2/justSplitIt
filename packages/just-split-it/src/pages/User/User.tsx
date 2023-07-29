@@ -4,7 +4,7 @@ import Meta from '@/components/Meta';
 import { FullSizeCenteredFlexBoxColumn } from '@/components/styled';
 import { useAuthState, useSignOut } from 'react-firebase-hooks/auth';
 import CircularProgress from '@mui/material/CircularProgress';
-import { fbAuth } from '@/utils/firebase';
+import { fbAuth } from '@/utils/firebase/firebase';
 import Button from '@mui/material/Button';
 
 const SignOut = () => {

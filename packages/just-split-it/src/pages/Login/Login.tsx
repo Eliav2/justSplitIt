@@ -6,7 +6,7 @@ import { signInWithPopup, GoogleAuthProvider } from 'firebase/auth';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import CircularProgress from '@mui/material/CircularProgress';
 import { Navigate } from 'react-router-dom';
-import { fbAuth } from '@/utils/firebase';
+import { fbAuth } from '@/utils/firebase/firebase';
 import Button from '@mui/material/Button';
 
 const useLoginUser = () => {

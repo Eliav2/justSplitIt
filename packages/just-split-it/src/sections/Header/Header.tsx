@@ -20,7 +20,7 @@ import useTheme from '@/store/theme';
 
 import { getRandomJoke } from './utils';
 import { useAuthState } from 'react-firebase-hooks/auth';
-import { fbAuth } from '@/utils/firebase';
+import { fbAuth } from '@/utils/firebase/firebase';
 import Typography from '@mui/material/Typography';
 import { redirect } from 'react-router-dom';
 import { protectedRoutes } from '@/routes';
