@@ -4,7 +4,7 @@ import asyncComponentLoader from '@/utils/loader';
 
 import { Routes } from './types';
 
-export const routes: Routes = {
+export const routes = {
   Welcome: {
     component: asyncComponentLoader(() => import('@/pages/Welcome')),
     path: '/',
@@ -22,9 +22,9 @@ export const routes: Routes = {
     component: asyncComponentLoader(() => import('@/pages/NotFound')),
     path: '*',
   },
-} as const;
+} as const satisfies Routes;
 
-export const protectedRoutes: Routes = {
+export const protectedRoutes = {
   Home: {
     component: asyncComponentLoader(() => import('@/pages/Home')),
     path: '/Home',
@@ -38,4 +38,4 @@ export const protectedRoutes: Routes = {
     icon: HomeIcon,
     showInSidebar: false,
   },
-} as const;
+} as const satisfies Routes;

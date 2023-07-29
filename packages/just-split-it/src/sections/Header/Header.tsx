@@ -31,7 +31,7 @@ function Header() {
   const [, themeActions] = useTheme();
   const [, notificationsActions] = useNotifications();
 
-  const [user, loading, error] = useAuthState(fbAuth);
+  const [user] = useAuthState(fbAuth);
   const navigate = useNavigate();
 
   function showNotification() {
