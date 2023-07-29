@@ -15,12 +15,12 @@ export async function addEvent(eventName: string) {
 
   // add event to the user's events list
   // const userRef = doc(fbDB, 'user', fbAuth.currentUser!.uid);
-  // const userRef = doc(firestore.user(fbAuth.currentUser.uid));
-  // const userDoc = await getDoc(userRef);
-  // const userEvents = (userDoc.exists() && userDoc.data().events) || [];
-  const userRef = firestore.user().doc(fbAuth.currentUser!.uid);
+  const userRef = doc(firestore.user(), fbAuth.currentUser.uid);
   const userDoc = await getDoc(userRef);
   const userEvents = (userDoc.exists() && userDoc.data().events) || [];
+  // const userRef = firestore.user().doc(fbAuth.currentUser!.uid);
+  // const userDoc = await getDoc(userRef);
+  // const userEvents = (userDoc.exists() && userDoc.data().events) || [];
   await setDoc(
     userRef,
     {
@@ -40,7 +40,8 @@ export async function getUserEvents() {
 
 import { query, where } from 'firebase/firestore';
 import { useAuthState } from 'react-firebase-hooks/auth';
-import { firestore } from '@/utils/firebase/firestore/schema';
+
+import { firestore } from '@/utils/firebase/firestore/client';
 
 export const useUserEvents = async () => {
   const [user] = useAuthState(fbAuth);
