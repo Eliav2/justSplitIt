@@ -2,7 +2,8 @@
 import { initializeApp } from 'firebase/app';
 import { getAnalytics } from 'firebase/analytics';
 import { connectAuthEmulator, getAuth } from 'firebase/auth';
-import { getFirestore } from 'firebase/firestore';
+import { connectFirestoreEmulator, getFirestore } from 'firebase/firestore';
+import { isDev } from '@/utils/isDev';
 
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
@@ -25,3 +26,9 @@ export const fbAuth = getAuth(fbApp);
 export const fbDB = getFirestore(fbApp);
 
 const analytics = getAnalytics(fbApp);
+
+console.log(isDev);
+
+if (isDev) {
+  // connectFirestoreEmulator(fbDB, '127.0.0.1', 8080);
+}
