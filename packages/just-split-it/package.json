@@ -18,7 +18,8 @@
     "preview": "vite preview",
     "https-preview": "serve dist",
     "prepare": "husky install",
-    "deploy": "firebase deploy"
+    "deploy": "firebase deploy",
+    "firebase-emulator": "firebase "
   },
   "dependencies": {
     "@emotion/react": "^11.11.1",
@@ -29,6 +30,7 @@
     "@mui/system": "^5.14.1",
     "@mui/utils": "^5.14.1",
     "is-mobile": "^3.1.1",
+    "just-clone": "^6.2.0",
     "notistack": "^2.0.8",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",

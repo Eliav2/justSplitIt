@@ -15,7 +15,10 @@ export async function addEvent(eventName: string) {
 
   // add event to the user's events list
   // const userRef = doc(fbDB, 'user', fbAuth.currentUser!.uid);
-  const userRef = doc(firestore.user(fbAuth.currentUser.uid));
+  // const userRef = doc(firestore.user(fbAuth.currentUser.uid));
+  // const userDoc = await getDoc(userRef);
+  // const userEvents = (userDoc.exists() && userDoc.data().events) || [];
+  const userRef = firestore.user().doc(fbAuth.currentUser!.uid);
   const userDoc = await getDoc(userRef);
   const userEvents = (userDoc.exists() && userDoc.data().events) || [];
   await setDoc(
@@ -46,18 +49,31 @@ export const useUserEvents = async () => {
   // const userRef = doc(collection(fbDB, 'user'), user.uid);
 
   // const safeEvents = await firestore.user().get('events');
-  const edoc = await firestore.user().getDoc(user.uid);
-  const edoc2 = edoc.get('events');
-  const safeEvents = await (await firestore.user().getDoc(user.uid)).get('events');
+  // const edoc = await firestore.user().getDoc(user.uid);
+  // const edoc2 = await edoc.get('events');
+  const userSafeRef = firestore.user().doc(user.uid);
+
+  const userSafeDoc = await firestore.user().doc(user.uid).getDoc();
+
+  const eventsRefs = await (await firestore.user().doc(user.uid).getDoc()).get('events');
+
+  const eventsData = await Promise.all(
+    eventsRefs.map(async (event) => (await getDoc(event)).data()),
+  );
+  console.log(eventsData);
 
   const userRef = doc(firestore.user().collection, user.uid);
+
   const userDoc = await getDoc(userRef);
-  if (!userDoc.exists()) return [];
-  const userData = await userDoc.data();
-  const events = await userDoc.get('events');
-  console.log('userData', userData);
-  console.log('events', events);
-  console.log('safeEvents', safeEvents);
+  // userDoc.get();
+  // userDoc.data()
+
+  // if (!userDoc.exists()) return [];
+  // const userData = await userDoc.data();
+  // const events = await userDoc.get('events');
+  // console.log('userData', userData);
+  // // console.log('events', events);
+  // console.log('safeEvents', safeEvents);
   // console.log('safeEvents', safeEvents);
 
   // Create a query to fetch all documents in the 'events' subcollection
