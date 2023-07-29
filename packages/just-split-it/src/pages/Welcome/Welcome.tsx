@@ -20,6 +20,7 @@ import { useState } from 'react';
 import { FirestoreError } from 'firebase/firestore';
 import CircularProgress from '@mui/material/CircularProgress';
 import { addEvent } from '@/utils/firebase/firestore/queries';
+import { useForm, Controller, SubmitHandler } from 'react-hook-form';
 
 function Welcome() {
   // const [user, loading, error] = useAuthState(fbAuth);
@@ -50,11 +51,20 @@ function Welcome() {
   );
 }
 
+interface IEventForm {
+  event: string;
+}
+
 const NewEventModal = () => {
-  const [eventName, setEventName] = useState('');
   const [open, setOpen] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
   const [loadingState, setLoadingState] = useState<'idle' | 'loading'>('idle');
+
+  const eventForm = useForm<IEventForm>({
+    defaultValues: {
+      event: '',
+    },
+  });
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -64,11 +74,13 @@ const NewEventModal = () => {
     setOpen(false);
   };
 
-  const handleAddEvent = async () => {
-    addEvent(eventName)
+  const handleCreate = async (data: IEventForm) => {
+    setLoadingState('loading');
+    await addEvent(data.event)
       .then(() => {
         setLoadingState('idle');
         setOpen(false);
+        eventForm.reset();
       })
       .catch((e: FirestoreError) => {
         console.error(e);
@@ -76,14 +88,6 @@ const NewEventModal = () => {
         setLoadingState('idle');
         setErrorMessage(e.message);
       });
-
-    // add the event to the list of the events in the user collection
-    // Reference to the user document in the 'users' collection
-  };
-
-  const handleCreate = async () => {
-    setLoadingState('loading');
-    await handleAddEvent();
   };
 
   return (
@@ -91,30 +95,40 @@ const NewEventModal = () => {
       <Button variant="outlined" onClick={handleClickOpen}>
         Create new Event
       </Button>
-      <Dialog open={open} onClose={handleCreate}>
-        <DialogTitle>New Event</DialogTitle>
-        <DialogContent>
-          <DialogContentText>Provide a name for the new event.</DialogContentText>
-          <TextField
-            autoFocus
-            margin="dense"
-            id="event"
-            label="Event"
-            type="text"
-            fullWidth
-            variant="standard"
-            helperText={errorMessage}
-            error={errorMessage.length > 0}
-            value={eventName}
-            onChange={(e) => setEventName(e.target.value)}
-          />
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={handleCancel}>Cancel</Button>
-          <Button onClick={handleCreate}>
-            {loadingState == 'idle' ? 'Create' : <CircularProgress />}
-          </Button>
-        </DialogActions>
+      <Dialog open={open} onClose={handleCancel}>
+        <form onSubmit={eventForm.handleSubmit(handleCreate)}>
+          <DialogTitle>New Event</DialogTitle>
+          <DialogContent>
+            <DialogContentText>Provide a name for the new event.</DialogContentText>
+            <Controller
+              name={'event'}
+              control={eventForm.control}
+              render={({ field: { onChange, value }, fieldState: { error }, formState }) => (
+                <TextField
+                  // helperText={error ? error.message : null}
+                  // error={!!error}
+                  size="small"
+                  onChange={onChange}
+                  value={value}
+                  fullWidth
+                  label={'Event'}
+                  autoFocus
+                  margin="dense"
+                  type="text"
+                  variant="standard"
+                  helperText={errorMessage}
+                  error={errorMessage.length > 0}
+                />
+              )}
+            />
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={handleCancel}>Cancel</Button>
+            <Button type={'submit'}>
+              {loadingState == 'idle' ? 'Create' : <CircularProgress />}
+            </Button>
+          </DialogActions>
+        </form>
       </Dialog>
     </div>
   );
