@@ -1,15 +1,16 @@
 // firestore.<collection>.document
 
-import { addDoc, collection, doc, getDoc } from 'firebase/firestore';
 import type {
-  DocumentReference,
-  QueryDocumentSnapshot,
-  SnapshotOptions,
   CollectionReference,
   DocumentData,
+  DocumentReference,
+  FieldPath,
+  QueryDocumentSnapshot,
+  SnapshotOptions,
 } from 'firebase/firestore';
+import { collection, doc, getDoc } from 'firebase/firestore';
 
-import { fbAuth, fbDB } from '@/utils/firebase/firebase';
+import { fbDB } from '@/utils/firebase/firebase';
 
 interface FirestoreEvent {
   name: string;
@@ -34,20 +35,64 @@ const withConverter = <T extends DocumentData>(
     },
   }) as CollectionReference<T, T>;
 };
+type myGetDoc<T> = <Path extends keyof T>(
+  fieldPath: Path | FieldPath,
+  options?: SnapshotOptions,
+) => Promise<T[Path]>;
+
+const withMethods = <T extends DocumentData>(collection: CollectionReference) => {
+  // const userRef = doc(collection, user.uid);
+  // const userDoc = await getDoc(userRef);
+  // if (!userDoc.exists()) return [];
+  // const userData = await userDoc.data();
+  // const events = await userDoc.get('events');
+
+  const _doc = (documentPath?: string): DocumentReference<T, T> => {
+    return doc(collection, documentPath) as DocumentReference<T, T>;
+  };
+
+  const myGet = async <Path extends keyof T>(
+    fetchedDoc: Promise<QueryDocumentSnapshot<T, T>>,
+    fieldPath: Path | FieldPath,
+    options?: SnapshotOptions,
+  ): Promise<T[Path]> => {
+    return (await fetchedDoc).get(fieldPath as any, options) as T[Path];
+  };
+
+  const _getDoc = async (documentPath?: string) => {
+    // const docRef = doc(collection, documentPath);
+    const docRef = _doc(documentPath);
+    const fetchedDoc = getDoc(docRef);
+    return {
+      ...fetchedDoc,
+      //override get method with type safe version
+      get: async <Path extends keyof T>(fieldPath: Path | FieldPath, options?: SnapshotOptions) =>
+        myGet(fetchedDoc, fieldPath, options) as myGetDoc,
+    };
+  };
+
+  return {
+    collection, // for self reference
+    doc: _doc,
+    getDoc: _getDoc,
+  };
+};
 
 export const firestore = {
-  user: (...pathSegments: string[]) =>
-    // just to show how to wrap withConverter manually
-    collection(fbDB, 'user', ...pathSegments).withConverter({
-      toFirestore: (user: FirestoreUser) => user,
-      fromFirestore: (snapshot, options): FirestoreUser => {
-        const data = snapshot.data(options);
-        return data as FirestoreUser;
-      },
-    }),
   // use own withConverter wrapper
   event: (...pathSegments: string[]) =>
     withConverter<FirestoreEvent>(collection(fbDB, 'event', ...pathSegments)),
+  // just to show how to wrap withConverter manually (for advanced use cases)
+  user: (...pathSegments: string[]) =>
+    withMethods<FirestoreUser>(
+      collection(fbDB, 'user', ...pathSegments).withConverter({
+        toFirestore: (user: FirestoreUser) => user,
+        fromFirestore: (snapshot, options): FirestoreUser => {
+          const data = snapshot.data(options);
+          return data as FirestoreUser;
+        },
+      }),
+    ),
 };
 
 // const eventRef = await addDoc(firestore.event(), {

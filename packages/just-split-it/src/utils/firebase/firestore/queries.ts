@@ -42,19 +42,29 @@ import { firestore } from '@/utils/firebase/firestore/schema';
 export const useUserEvents = async () => {
   const [user] = useAuthState(fbAuth);
   if (!user) return [];
-  console.log(user.uid);
-  const userRef = doc(fbDB, 'user', user.uid);
+  // console.log(user.uid);
+  // const userRef = doc(collection(fbDB, 'user'), user.uid);
+
+  // const safeEvents = await firestore.user().get('events');
+  const edoc = await firestore.user().getDoc(user.uid);
+  const edoc2 = edoc.get('events');
+  const safeEvents = await (await firestore.user().getDoc(user.uid)).get('events');
+
+  const userRef = doc(firestore.user().collection, user.uid);
   const userDoc = await getDoc(userRef);
-  console.log(userDoc.exists());
   if (!userDoc.exists()) return [];
+  const userData = await userDoc.data();
   const events = await userDoc.get('events');
-  console.log(events);
+  console.log('userData', userData);
+  console.log('events', events);
+  console.log('safeEvents', safeEvents);
+  // console.log('safeEvents', safeEvents);
 
   // Create a query to fetch all documents in the 'events' subcollection
-  const eventsQuery = query(userRef); // useEffect(() => {
+  // const eventsQuery = query(userRef); // useEffect(() => {
 
   //     const unsubscribe = onSnapshot(doc(fbDB, 'user', fbAuth.currentUser!.uid), (doc) => {
-  //         const userEvents = (doc.exists() && doc.data().events) || [];
+  //         const userEvent  s = (doc.exists() && doc.data().events) || [];
   //         setUserEvents(userEvents);
   //     });
   //     return unsubscribe;
