@@ -11,8 +11,10 @@ import SwipeableDrawer from '@mui/material/SwipeableDrawer';
 import { routes, protectedRoutes } from '@/routes';
 import useSidebar from '@/store/sidebar';
 import { ListSubheader } from '@mui/material';
+import { useUserEvents } from '@/utils/firebase/firestore/queries';
+import type {Routes} from "@/routes/types";
 
-const sidebarRoutes = { ...routes, ...protectedRoutes } as const;
+const sidebarRoutes:Routes = { ...routes, ...protectedRoutes } as const satisfies Routes;
 
 function Sidebar() {
   const [isSidebarOpen, sidebarActions] = useSidebar();
@@ -38,9 +40,14 @@ function Sidebar() {
             </ListItem>
           ))}
       </List>
-      <ListSubheader>Events</ListSubheader>
+      <EventsSubmenu />
     </SwipeableDrawer>
   );
 }
+
+const EventsSubmenu = () => {
+  useUserEvents();
+  return <ListSubheader>Events</ListSubheader>;
+};
 
 export default Sidebar;
