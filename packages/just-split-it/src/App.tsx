@@ -11,8 +11,10 @@ import HotKeys from '@/sections/HotKeys';
 import Notifications from '@/sections/Notifications';
 import SW from '@/sections/SW';
 import Sidebar from '@/sections/Sidebar';
+import { useEnsureUserExists } from '@/utils/firebase/firestore/hooks/util';
 
 function App() {
+  useEnsureUserExists();
   return (
     <Fragment>
       <CssBaseline />

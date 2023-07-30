@@ -11,9 +11,9 @@ import SwipeableDrawer from '@mui/material/SwipeableDrawer';
 import { protectedRoutes, routes } from '@/routes';
 import useSidebar from '@/store/sidebar';
 import { ListSubheader } from '@mui/material';
-import { useGetUserEvents } from '@/utils/firebase/firestore/queries';
 import type { Routes } from '@/routes/types';
 import { useEffect } from 'react';
+import { useGetUserEvents } from '@/utils/firebase/firestore/queris/hooks';
 
 const sidebarRoutes: Routes = { ...routes, ...protectedRoutes } as const satisfies Routes;
 

@@ -8,9 +8,23 @@ export interface FirestoreEvent {
   participantsIds: string[];
 }
 
+export interface FirestoreEventWithId extends FirestoreEvent {
+  id: string;
+}
+
 export interface FirestoreUser {
   // refence to the user document
   name: string;
   email: string;
-  events: DocumentReference<FirestoreEvent, FirestoreEvent>[];
+}
+
+export interface FirestoreUserWithId extends FirestoreUser {
+  id: string;
+}
+
+export interface FirestoreExpense {
+  name: string;
+  amount: number;
+  payerId: string;
+  parentEventId: string;
 }

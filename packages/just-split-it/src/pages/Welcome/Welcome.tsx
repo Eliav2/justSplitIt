@@ -11,7 +11,7 @@ import tsLogo from './logos/ts.svg';
 import viteLogo from './logos/vite.svg';
 import { Image } from './styled';
 import { useNavigate } from 'react-router-dom';
-import { NewEventModal } from '@/pages/Welcome/NewEventModal';
+import { NewEventDialog } from '@/pages/Welcome/NewEventDialog';
 
 function Welcome() {
   // const [user, loading, error] = useAuthState(fbAuth);
@@ -36,7 +36,7 @@ function Welcome() {
           <Image alt="recoil" src={recoilLogo} />
           <Image alt="pwa" src={pwaLogo} />
         </FullSizeCenteredFlexBox>
-        <NewEventModal />
+        <NewEventDialog />
       </FullSizeCenteredFlexBoxColumn>
     </>
   );

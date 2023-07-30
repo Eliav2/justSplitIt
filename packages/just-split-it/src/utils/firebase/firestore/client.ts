@@ -10,7 +10,7 @@ import {
   SnapshotOptions,
 } from 'firebase/firestore';
 import { fbDB } from '@/utils/firebase/firebase';
-import type { FirestoreEvent, FirestoreUser } from './schema';
+import type { FirestoreEvent, FirestoreExpense, FirestoreUser } from './schema';
 
 const withConverter = <T extends DocumentData>(
   collection: CollectionReference,
@@ -118,6 +118,8 @@ export const firestore = {
       },
     }),
   // ),
+  expense: (...pathSegments: string[]) =>
+    withConverter<FirestoreExpense>(collection(fbDB, 'expense', ...pathSegments)),
 };
 
 // const eventRef = await addDoc(firestore.event(), {

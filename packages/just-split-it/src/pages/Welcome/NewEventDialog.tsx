@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
-import { addEvent } from '@/utils/firebase/firestore/queries';
+import { addEvent } from '@/utils/firebase/firestore/queris/queries';
 import { FirestoreError } from 'firebase/firestore';
 import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
@@ -13,7 +13,7 @@ interface IEventForm {
   event: string;
 }
 
-export const NewEventModal = () => {
+export const NewEventDialog = () => {
   const [open, setOpen] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
   const [loadingState, setLoadingState] = useState<'idle' | 'loading'>('idle');
