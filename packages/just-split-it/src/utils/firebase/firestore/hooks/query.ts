@@ -1,13 +1,12 @@
-import {
-  getDocs,
+import { getDocs, doc, onSnapshot, query, where, getDoc } from 'firebase/firestore';
+import type {
+  DocumentData,
+  SnapshotListenOptions,
+  DocumentReference,
+  DocumentSnapshot,
   CollectionReference,
-  doc,
-  onSnapshot,
-  query,
   Query,
-  where,
 } from 'firebase/firestore';
-import type { DocumentData, SnapshotListenOptions, DocumentReference } from 'firebase/firestore';
 import { useEffect, useState } from 'react';
 import { firestore } from '@/utils/firebase/firestore/client';
 
@@ -42,15 +41,29 @@ export const useDocument = <T extends DocumentData>(
   options?: { enable?: boolean; snapshotListenOptions?: SnapshotListenOptions },
   dependencies: any[] = [],
 ) => {
-  const [doc, setDoc] = useState<T & { id: string }>();
+  const [loading, setLoading] = useState(true);
+  const [docSnap, setDocSnap] = useState<DocumentSnapshot>();
+  const [docData, setDocData] = useState<T & { id: string }>();
   useEffect(() => {
     if (!docRef) return;
     const unsubscribe = onSnapshot(docRef, (snapshot) => {
-      setDoc({ ...snapshot.data(), id: docRef.id } as T & { id: string });
+      setLoading(false);
+      setDocData({ ...snapshot.data(), id: docRef.id } as T & { id: string });
     });
-    return unsubscribe;
+    return () => {
+      unsubscribe();
+      setLoading(true);
+    };
   }, [options?.enable ?? true, ...dependencies]);
-  return doc;
+
+  useEffect(() => {
+    if (!docRef) return;
+    getDoc(docRef).then((docSnap) => {
+      setDocSnap(docSnap);
+    });
+  }, [docData]);
+  // const docSnap = docRef && getDoc(docRef);
+  return [docData, loading, docSnap] as const;
 };
 
 export const useGrabDocumentById = <T extends DocumentData>(

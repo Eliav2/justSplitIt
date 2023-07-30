@@ -71,6 +71,9 @@ export const NewExpenseDialog = (props: NewExpenseDialogProps) => {
       payerId: data.payer.id,
       payerName: payer!.name,
       parentEventId: props.parentEvent.id,
+
+      //by default, all participants of an event would be added to an expense
+      participantsIds: props.parentEvent.participantsIds,
     })
       .then(() => {
         setLoadingState('idle');

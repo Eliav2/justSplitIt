@@ -1,7 +1,11 @@
 // get all events a user participates in
 import { doc, limit, query, where } from 'firebase/firestore';
 import { firestore } from '@/utils/firebase/firestore/client';
-import { useCollection, useDocument } from '@/utils/firebase/firestore/hooks/query';
+import {
+  useCollection,
+  useDocument,
+  useGrabDocumentById,
+} from '@/utils/firebase/firestore/hooks/query';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { fbAuth } from '@/utils/firebase/firebase';
 
@@ -22,4 +26,8 @@ export function useGetEvent(eventId: string) {
 export const useGetEventExpenses = (eventId: string) => {
   const expensesQuery = query(firestore.expense(), where('parentEventId', '==', eventId));
   return useCollection(expensesQuery, {}, [eventId]);
+};
+
+export const useExpense = (expenseId: string) => {
+  return useGrabDocumentById(firestore.expense(), expenseId);
 };
