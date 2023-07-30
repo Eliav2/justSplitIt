@@ -1,8 +1,9 @@
-import { addDoc, doc, getDoc, setDoc } from 'firebase/firestore';
+import { addDoc, doc, getDoc, setDoc, deleteDoc, query, where, getDocs } from 'firebase/firestore';
 import { fbAuth } from '@/utils/firebase/firebase';
 
 import { firestore } from '@/utils/firebase/firestore/client';
 import { FirestoreExpense } from '@/utils/firebase/firestore/schema';
+import { grabDocumentById } from '@/utils/firebase/firestore/queris/util';
 
 // add event to the events collection and to the user's events list
 export async function addEvent(eventName: string) {
@@ -17,24 +18,29 @@ export async function addEvent(eventName: string) {
     participantsIds: [fbAuth.currentUser?.uid],
   });
   return eventRef;
-
-  // add event to the user's events list
-  // const userRef = doc(fbDB, 'user', fbAuth.currentUser!.uid);
-  // const userRef = doc(firestore.user(), fbAuth.currentUser.uid);
-  // const userDoc = await getDoc(userRef);
-  // const userEvents = (userDoc.exists() && userDoc.data().events) || [];
-  // const userRef = firestore.user().doc(fbAuth.currentUser!.uid);
-  // const userDoc = await getDoc(userRef);
-  // const userEvents = (userDoc.exists() && userDoc.data().events) || [];
-  // await setDoc(
-  //   userRef,
-  //   {
-  //     events: [...userEvents, eventRef],
-  //   },
-  //   { merge: true },
-  // );
 }
 
 export const addExpense = async (data: FirestoreExpense) => {
   return await addDoc(firestore.expense(), data);
+};
+
+export const deleteExpense = async (expenseId: string) => {
+  const expenseRef = doc(firestore.expense(), expenseId);
+  await deleteDoc(expenseRef);
+};
+
+export const deleteEvent = async (eventId: string) => {
+  const eventRef = doc(firestore.event(), eventId);
+
+  //query for all expenses of this event
+  const expensesQuery = query(firestore.expense(), where('parentEventId', '==', eventId));
+  const expenses = await getDocs(expensesQuery);
+
+  // delete all expenses of this event
+  expenses.forEach(async (expense) => {
+    await deleteExpense(expense.id);
+  });
+
+  // delete the event
+  await deleteDoc(eventRef);
 };

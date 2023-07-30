@@ -13,6 +13,7 @@ interface EventDoesNotExistDialogProps {
 export const EventDoesNotExistDialog = (props: EventDoesNotExistDialogProps) => {
   const { open } = props;
   const navigate = useNavigate();
+
   return (
     <>
       <Dialog open={open}>

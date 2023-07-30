@@ -7,6 +7,7 @@ export const grabDocumentById = async <T extends DocumentData>(
 ) => {
   const docRef = doc(collection, docId);
   const docSnap = await getDoc(docRef);
+
   // if (!docSnap.exists()) return null;
   return docSnap.data();
 };

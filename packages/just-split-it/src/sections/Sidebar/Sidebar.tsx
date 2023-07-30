@@ -10,10 +10,8 @@ import SwipeableDrawer from '@mui/material/SwipeableDrawer';
 
 import { protectedRoutes, routes } from '@/routes';
 import useSidebar from '@/store/sidebar';
-import { ListSubheader } from '@mui/material';
 import type { Routes } from '@/routes/types';
-import { useEffect } from 'react';
-import { useGetUserEvents } from '@/utils/firebase/firestore/queris/hooks';
+import { EventsSubmenu } from '@/sections/Sidebar/EventsSubmenu';
 
 const sidebarRoutes: Routes = { ...routes, ...protectedRoutes } as const satisfies Routes;
 
@@ -54,26 +52,5 @@ function Sidebar() {
     </SwipeableDrawer>
   );
 }
-
-const EventsSubmenu = () => {
-  const [events, loading] = useGetUserEvents();
-  const [isSidebarOpen, sidebarActions] = useSidebar();
-
-  return (
-    <>
-      <ListSubheader sx={{ pt: 2 }}>Events</ListSubheader>
-      <List sx={{ width: 250 }}>
-        {events.map(({ name, id }) => (
-          <ListItem sx={{ p: 0 }} key={id}>
-            <ListItemButton component={Link} to={`/event/${id}`} onClick={sidebarActions.close}>
-              <ListItemIcon>{<DefaultIcon />}</ListItemIcon>
-              <ListItemText>{name}</ListItemText>
-            </ListItemButton>
-          </ListItem>
-        ))}
-      </List>
-    </>
-  );
-};
 
 export default Sidebar;
