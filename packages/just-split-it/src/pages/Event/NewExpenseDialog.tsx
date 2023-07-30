@@ -126,6 +126,7 @@ export const NewExpenseDialog = (props: NewExpenseDialogProps) => {
               render={({ field: { onChange, value }, fieldState: { error }, formState }) => (
                 <TextField
                   helperText={error ? error.message : null}
+                  type={'number'}
                   error={!!error}
                   size="small"
                   onChange={onChange}
@@ -134,7 +135,6 @@ export const NewExpenseDialog = (props: NewExpenseDialogProps) => {
                   label={'Amount'}
                   autoFocus
                   margin="dense"
-                  type="text"
                   variant="standard"
                   required
                 />

@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 
 import DefaultIcon from '@mui/icons-material/Deblur';
 import List from '@mui/material/List';
@@ -17,6 +17,8 @@ const sidebarRoutes: Routes = { ...routes, ...protectedRoutes } as const satisfi
 
 function Sidebar() {
   const [isSidebarOpen, sidebarActions] = useSidebar();
+  const { eventId } = useParams();
+  console.log(eventId);
 
   // events.then((data) => {
   //   console.log(data);

@@ -55,7 +55,7 @@ export const NewEventDialog = () => {
       <Button variant="outlined" onClick={handleClickOpen}>
         Create new Event
       </Button>
-      <Dialog open={open} onClose={handleCancel}>
+      <Dialog open={open} onClose={handleCancel} disableRestoreFocus>
         <form onSubmit={eventForm.handleSubmit(handleCreate)}>
           <DialogTitle>New Event</DialogTitle>
           <DialogContent>
@@ -67,13 +67,13 @@ export const NewEventDialog = () => {
                 <TextField
                   // helperText={error ? error.message : null}
                   // error={!!error}
+                  autoFocus
                   required
                   size="small"
                   onChange={onChange}
                   value={value}
                   fullWidth
                   label={'Event'}
-                  autoFocus
                   margin="dense"
                   type="text"
                   variant="standard"

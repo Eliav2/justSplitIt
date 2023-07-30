@@ -6,7 +6,7 @@ import ListItem from '@mui/material/ListItem';
 import IconButton from '@mui/material/IconButton';
 import DeleteIcon from '@mui/icons-material/Delete';
 import ListItemButton from '@mui/material/ListItemButton';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate, useParams } from 'react-router-dom';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import DefaultIcon from '@mui/icons-material/Deblur';
 import ListItemText from '@mui/material/ListItemText';
@@ -25,11 +25,19 @@ interface DeleteDialogButtonProps {
 
 const DeleteDialogButton = (props: DeleteDialogButtonProps) => {
   const [open, setOpen] = useState(false);
+  const navigate = useNavigate();
+  // const { eventId: currentEventId } = useParams();
+  const { eventId } = useParams();
 
+  console.log(eventId);
   const handleYes = async () => {
     // setOpen(true);
     console.log('delete');
     await deleteEvent(props.event.id);
+
+    if (params.currentEventId === props.event.id) {
+      navigate('/');
+    }
     setOpen(false);
   };
 
@@ -64,6 +72,9 @@ const DeleteDialogButton = (props: DeleteDialogButtonProps) => {
 export const EventsSubmenu = () => {
   const [events, loading] = useGetUserEvents();
   const [isSidebarOpen, sidebarActions] = useSidebar();
+
+  const { eventId } = useParams();
+  console.log(eventId);
 
   return (
     <>
