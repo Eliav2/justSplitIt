@@ -8,16 +8,26 @@ import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import SwipeableDrawer from '@mui/material/SwipeableDrawer';
 
-import { routes, protectedRoutes } from '@/routes';
+import { protectedRoutes, routes } from '@/routes';
 import useSidebar from '@/store/sidebar';
 import { ListSubheader } from '@mui/material';
-import { useUserEvents } from '@/utils/firebase/firestore/queries';
-import type {Routes} from "@/routes/types";
+import { useGetUserEvents } from '@/utils/firebase/firestore/queries';
+import type { Routes } from '@/routes/types';
+import { useEffect } from 'react';
 
-const sidebarRoutes:Routes = { ...routes, ...protectedRoutes } as const satisfies Routes;
+const sidebarRoutes: Routes = { ...routes, ...protectedRoutes } as const satisfies Routes;
 
 function Sidebar() {
   const [isSidebarOpen, sidebarActions] = useSidebar();
+
+  // events.then((data) => {
+  //   console.log(data);
+  // });
+  // useEffect(() => {
+  //   (async () => {
+  //     console.log(events);
+  //   })();
+  // }, []);
 
   return (
     <SwipeableDrawer
@@ -46,8 +56,24 @@ function Sidebar() {
 }
 
 const EventsSubmenu = () => {
-  useUserEvents();
-  return <ListSubheader>Events</ListSubheader>;
+  const events = useGetUserEvents();
+  const [isSidebarOpen, sidebarActions] = useSidebar();
+
+  return (
+    <>
+      <ListSubheader sx={{ pt: 2 }}>Events</ListSubheader>
+      <List sx={{ width: 250 }}>
+        {events.map(({ name, id }) => (
+          <ListItem sx={{ p: 0 }} key={id}>
+            <ListItemButton component={Link} to={`/event/${id}`} onClick={sidebarActions.close}>
+              <ListItemIcon>{<DefaultIcon />}</ListItemIcon>
+              <ListItemText>{name}</ListItemText>
+            </ListItemButton>
+          </ListItem>
+        ))}
+      </List>
+    </>
+  );
 };
 
 export default Sidebar;

@@ -7,7 +7,7 @@ import Dialog from '@mui/material/Dialog';
 import DialogTitle from '@mui/material/DialogTitle';
 import DialogContent from '@mui/material/DialogContent';
 import { DialogActions, DialogContentText, TextField } from '@mui/material';
-import CircularProgress from '@mui/material/CircularProgress';
+import Loading from '@/components/Loading';
 
 interface IEventForm {
   event: string;
@@ -81,9 +81,7 @@ export const NewEventModal = () => {
           </DialogContent>
           <DialogActions>
             <Button onClick={handleCancel}>Cancel</Button>
-            <Button type={'submit'}>
-              {loadingState == 'idle' ? 'Create' : <CircularProgress />}
-            </Button>
+            <Button type={'submit'}>{loadingState == 'idle' ? 'Create' : <Loading />}</Button>
           </DialogActions>
         </form>
       </Dialog>

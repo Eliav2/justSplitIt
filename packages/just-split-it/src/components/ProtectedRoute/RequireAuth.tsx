@@ -1,7 +1,7 @@
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { Navigate, useLocation } from 'react-router-dom';
-import CircularProgress from '@mui/material/CircularProgress';
 import { fbAuth } from '@/utils/firebase/firebase';
+import Loading from '@/components/Loading';
 
 function RequireAuth({ children }: { children: JSX.Element }) {
   const [user, loading, error] = useAuthState(fbAuth);
@@ -10,7 +10,7 @@ function RequireAuth({ children }: { children: JSX.Element }) {
   // console.log(user, loading, error);
 
   if (loading) {
-    return <CircularProgress />;
+    return <Loading />;
   }
 
   if (error) {

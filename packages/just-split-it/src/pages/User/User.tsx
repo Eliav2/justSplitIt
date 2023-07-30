@@ -3,9 +3,9 @@ import Typography from '@mui/material/Typography';
 import Meta from '@/components/Meta';
 import { FullSizeCenteredFlexBoxColumn } from '@/components/styled';
 import { useAuthState, useSignOut } from 'react-firebase-hooks/auth';
-import CircularProgress from '@mui/material/CircularProgress';
 import { fbAuth } from '@/utils/firebase/firebase';
 import Button from '@mui/material/Button';
+import Loading from '@/components/Loading';
 
 const SignOut = () => {
   const [signOut, loading, error] = useSignOut(fbAuth);
@@ -36,11 +36,7 @@ function User() {
   const [user, loading, error] = useAuthState(fbAuth);
 
   if (loading) {
-    return (
-      <FullSizeCenteredFlexBoxColumn>
-        <CircularProgress />
-      </FullSizeCenteredFlexBoxColumn>
-    );
+    return <Loading />;
   }
 
   if (error) {

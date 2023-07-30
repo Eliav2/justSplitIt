@@ -38,4 +38,8 @@ export const protectedRoutes = {
     icon: HomeIcon,
     showInSidebar: false,
   },
+  Event: {
+    component: asyncComponentLoader(() => import('@/pages/Event/Event')),
+    path: '/event/:eventId',
+  },
 } as const satisfies Routes;
