@@ -16,6 +16,7 @@ export async function addEvent(eventName: string) {
     ownerId: fbAuth.currentUser?.uid,
     participantsIds: [fbAuth.currentUser?.uid],
   });
+  return eventRef;
 
   // add event to the user's events list
   // const userRef = doc(fbDB, 'user', fbAuth.currentUser!.uid);
@@ -35,10 +36,5 @@ export async function addEvent(eventName: string) {
 }
 
 export const addExpense = async (data: FirestoreExpense) => {
-  const expenseRef = await addDoc(firestore.expense(), {
-    name: data.name,
-    amount: data.amount,
-    payerId: data.payerId,
-    parentEventId: data.parentEventId,
-  });
+  return await addDoc(firestore.expense(), data);
 };

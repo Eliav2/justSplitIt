@@ -23,7 +23,7 @@ import { useAuthState } from 'react-firebase-hooks/auth';
 import { fbAuth } from '@/utils/firebase/firebase';
 import Typography from '@mui/material/Typography';
 import { redirect } from 'react-router-dom';
-import { protectedRoutes } from '@/routes';
+import { protectedRoutes, routes } from '@/routes';
 import { useNavigate } from 'react-router-dom';
 
 function Header() {
@@ -70,7 +70,8 @@ function Header() {
               <MenuIcon />
             </IconButton>
             <Button
-              onClick={showNotification}
+              // onClick={showNotification}
+              onClick={() => navigate(routes.Welcome.path)}
               color="info"
               sx={{ textTransform: 'none' }}
               autoCapitalize={'false'}

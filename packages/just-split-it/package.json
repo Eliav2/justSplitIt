@@ -19,7 +19,7 @@
     "https-preview": "serve dist",
     "prepare": "husky install",
     "deploy": "firebase deploy",
-    "firebase-emulator": "firebase emulators:start --only firestore"
+    "firebase-emulator": "firebase emulators:start"
   },
   "dependencies": {
     "@emotion/react": "^11.11.1",

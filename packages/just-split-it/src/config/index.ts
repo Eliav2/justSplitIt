@@ -4,7 +4,7 @@ import type { Notifications } from './types';
 
 const title = 'JustSplitIt';
 
-const email = 'auther-email@gmail.com';
+const email = 'louski.a@gmail.com';
 
 const repository = 'https://github.com/Eliav2/justSplitIt';
 

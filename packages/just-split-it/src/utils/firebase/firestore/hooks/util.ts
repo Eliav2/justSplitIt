@@ -11,7 +11,6 @@ export const useEnsureUserExists = () => {
   useEffect(() => {
     if (!user) return;
     const userRef = doc(firestore.user(), user.uid);
-    console.log('check!');
     getDoc(userRef).then((userDoc) => {
       if (!userDoc.exists()) {
         setDoc(userRef, {

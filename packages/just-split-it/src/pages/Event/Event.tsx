@@ -6,7 +6,6 @@ import { useParams } from 'react-router-dom';
 import { NewExpenseDialog } from '@/pages/Event/NewExpenseDialog';
 import { useGetEvent, useGetEventExpenses } from '@/utils/firebase/firestore/queris/hooks';
 import List from '@mui/material/List';
-import { useState } from 'react';
 import QueryIndicator from '@/components/QueryIndicator';
 import { EventDoesNotExistDialog } from '@/pages/Event/EventDoesNotExistDialog';
 import { ExpenseListItem } from '@/pages/Event/ExpenseListItem';
@@ -30,7 +29,7 @@ function Event() {
 
   // console.log(eventSnap);
 
-  const eventNotExistsDialogOpen = !eventSnap?.exists();
+  const eventNotExistsDialogOpen = loadingEvent && !eventSnap?.exists();
 
   return (
     <>
@@ -44,7 +43,7 @@ function Event() {
               <List sx={{ width: '100%', maxWidth: 360, bgcolor: 'background.paper' }}>
                 <QueryIndicator loading={loadingExpenses}>
                   {expenes.map((expene, expenseIndex) => {
-                    return <ExpenseListItem expenseId={expene.id} />;
+                    return <ExpenseListItem expenseId={expene.id} key={expene.id} />;
                     // return (
                     //   <ListItem
                     //     key={expene.id}

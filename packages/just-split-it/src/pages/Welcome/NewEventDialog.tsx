@@ -8,6 +8,7 @@ import DialogTitle from '@mui/material/DialogTitle';
 import DialogContent from '@mui/material/DialogContent';
 import { DialogActions, DialogContentText, TextField } from '@mui/material';
 import Loading from '@/components/Loading';
+import { useNavigate } from 'react-router-dom';
 
 interface IEventForm {
   event: string;
@@ -17,6 +18,7 @@ export const NewEventDialog = () => {
   const [open, setOpen] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
   const [loadingState, setLoadingState] = useState<'idle' | 'loading'>('idle');
+  const navigate = useNavigate();
 
   const eventForm = useForm<IEventForm>({
     defaultValues: {
@@ -35,10 +37,11 @@ export const NewEventDialog = () => {
   const handleCreate = async (data: IEventForm) => {
     setLoadingState('loading');
     await addEvent(data.event)
-      .then(() => {
+      .then((eventRef) => {
         setLoadingState('idle');
         setOpen(false);
         eventForm.reset();
+        navigate(`/event/${eventRef.id}`);
       })
       .catch((e: FirestoreError) => {
         console.error(e);
