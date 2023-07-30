@@ -67,6 +67,7 @@ export const NewEventDialog = () => {
                 <TextField
                   // helperText={error ? error.message : null}
                   // error={!!error}
+                  required
                   size="small"
                   onChange={onChange}
                   value={value}

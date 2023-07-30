@@ -116,6 +116,7 @@ export const NewExpenseDialog = (props: NewExpenseDialogProps) => {
                   margin="dense"
                   type="text"
                   variant="standard"
+                  required
                 />
               )}
             />
@@ -135,6 +136,7 @@ export const NewExpenseDialog = (props: NewExpenseDialogProps) => {
                   margin="dense"
                   type="text"
                   variant="standard"
+                  required
                 />
               )}
             />
@@ -142,10 +144,20 @@ export const NewExpenseDialog = (props: NewExpenseDialogProps) => {
               name={'payer'}
               control={expenseForm.control}
               // defaultValue={undefined}
+              rules={{
+                validate: (value) => {
+                  console.log(value);
+                  return (
+                    participants.some((p) => p.id == value?.id) ||
+                    'Please select a valid option from the list.'
+                  );
+                },
+              }}
               render={({ field: { onChange, value }, fieldState: { error } }) => {
+                console.log(error);
                 return (
                   <Autocomplete
-                    onChange={(event, value, reason, details) => {
+                    onChange={(event, value) => {
                       onChange(value);
                     }}
                     value={value}
@@ -156,9 +168,16 @@ export const NewExpenseDialog = (props: NewExpenseDialogProps) => {
                     disablePortal
                     options={participants}
                     sx={{ width: 300 }}
-                    // error={!!error}
                     renderInput={(params) => (
-                      <TextField {...params} margin="dense" label="Payed by" variant="standard" />
+                      <TextField
+                        {...params}
+                        margin="dense"
+                        label="Payed by"
+                        variant="standard"
+                        error={!!error}
+                        helperText={error ? error.message : null}
+                        required
+                      />
                     )}
                   />
                 );
