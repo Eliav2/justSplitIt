@@ -56,7 +56,7 @@ function Sidebar() {
 }
 
 const EventsSubmenu = () => {
-  const events = useGetUserEvents();
+  const [events, loading] = useGetUserEvents();
   const [isSidebarOpen, sidebarActions] = useSidebar();
 
   return (

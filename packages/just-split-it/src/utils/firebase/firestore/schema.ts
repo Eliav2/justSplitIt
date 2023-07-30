@@ -26,5 +26,7 @@ export interface FirestoreExpense {
   name: string;
   amount: number;
   payerId: string;
+  payerName: string;
   parentEventId: string;
+  participantsIds: string[];
 }

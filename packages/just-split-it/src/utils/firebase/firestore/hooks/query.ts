@@ -14,7 +14,9 @@ import { firestore } from '@/utils/firebase/firestore/client';
 export const useCollection = <T extends DocumentData>(
   query: Query<T, T> | undefined | null,
   options?: { enable?: boolean; snapshotListenOptions?: SnapshotListenOptions },
+  dependencies: any[] = [],
 ) => {
+  const [loading, setLoading] = useState(true);
   const [docs, setDocs] = useState<(T & { id: string })[]>([]);
   useEffect(() => {
     if (!query) return;
@@ -23,11 +25,15 @@ export const useCollection = <T extends DocumentData>(
         ...doc.data(),
         id: doc.id,
       }));
+      setLoading(false);
       setDocs(docs);
     });
-    return unsubscribe;
-  }, [options?.enable ?? true]);
-  return docs;
+    return () => {
+      unsubscribe();
+      setLoading(true);
+    };
+  }, [options?.enable ?? true, ...dependencies]);
+  return [docs, loading] as const;
 };
 
 // get and watch a single document

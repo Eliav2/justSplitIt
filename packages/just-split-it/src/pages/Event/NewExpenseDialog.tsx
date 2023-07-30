@@ -26,6 +26,7 @@ import { useGrabDocumentsById } from '@/utils/firebase/firestore/hooks/query';
 import { firestore } from '@/utils/firebase/firestore/client';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { fbAuth } from '@/utils/firebase/firebase';
+import { grabDocumentById } from '@/utils/firebase/firestore/queris/util';
 
 type ExpenseForm = Pick<FirestoreExpense, 'name' | 'amount'>;
 
@@ -63,10 +64,12 @@ export const NewExpenseDialog = (props: NewExpenseDialogProps) => {
 
   const handleCreate = async (data: ExpenseFormInput) => {
     setLoadingState('loading');
+    const payer = await grabDocumentById(firestore.user(), data.payer.id);
     await addExpense({
       amount: data.amount,
       name: data.name,
       payerId: data.payer.id,
+      payerName: payer!.name,
       parentEventId: props.parentEvent.id,
     })
       .then(() => {

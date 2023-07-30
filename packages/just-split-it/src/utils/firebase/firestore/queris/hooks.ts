@@ -18,3 +18,8 @@ export function useGetEvent(eventId: string) {
   const eventRef = doc(firestore.event(), eventId);
   return useDocument(eventRef, {}, [eventId]);
 }
+
+export const useGetEventExpenses = (eventId: string) => {
+  const expensesQuery = query(firestore.expense(), where('parentEventId', '==', eventId));
+  return useCollection(expensesQuery, {}, [eventId]);
+};
