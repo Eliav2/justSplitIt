@@ -48,6 +48,7 @@ export const useDocument = <T extends DocumentData>(
     if (!docRef) return;
     const unsubscribe = onSnapshot(docRef, (snapshot) => {
       setLoading(false);
+      setDocSnap(snapshot);
       setDocData({ ...snapshot.data(), id: docRef.id } as T & { id: string });
     });
     return () => {
@@ -56,13 +57,6 @@ export const useDocument = <T extends DocumentData>(
     };
   }, [options?.enable ?? true, ...dependencies]);
 
-  useEffect(() => {
-    if (!docRef) return;
-    getDoc(docRef).then((docSnap) => {
-      setDocSnap(docSnap);
-    });
-  }, [docData]);
-  // const docSnap = docRef && getDoc(docRef);
   return [docData, loading, docSnap] as const;
 };
 

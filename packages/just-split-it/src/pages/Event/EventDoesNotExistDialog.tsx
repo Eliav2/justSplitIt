@@ -13,10 +13,9 @@ interface EventDoesNotExistDialogProps {
 export const EventDoesNotExistDialog = (props: EventDoesNotExistDialogProps) => {
   const { open } = props;
   const navigate = useNavigate();
-  console.log(open);
   return (
     <>
-      <Dialog open={true}>
+      <Dialog open={open}>
         <DialogTitle>Event does not exists</DialogTitle>
         <DialogContent>
           This Event does not seem to exists. <br />

@@ -27,10 +27,8 @@ function Event() {
   //   setChecked((prev) => ({ ...prev, [expenseName]: { selected: !prev[expenseName]?.selected } }));
   // };
 
-  // console.log(eventSnap);
-
-  const eventNotExistsDialogOpen = loadingEvent && !eventSnap?.exists();
-
+  const eventExists = eventSnap?.exists();
+  const eventNotExistsDialogOpen = !loadingEvent && !eventExists;
   return (
     <>
       <Meta title="Event" />
@@ -38,7 +36,7 @@ function Event() {
         <QueryIndicator loading={loadingEvent}>
           {!eventNotExistsDialogOpen ? (
             <>
-              <Typography variant="h3">{event!.name}</Typography>
+              <Typography variant="h3">{event?.name}</Typography>
 
               <List sx={{ width: '100%', maxWidth: 360, bgcolor: 'background.paper' }}>
                 <QueryIndicator loading={loadingExpenses}>
