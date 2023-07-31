@@ -9,7 +9,7 @@ import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import Checkbox from '@mui/material/Checkbox';
 import ListItemText from '@mui/material/ListItemText';
-
+import DeleteIcon from '@mui/icons-material/Delete';
 interface ExpenseProps {
   expenseId: string;
 }
@@ -31,7 +31,7 @@ export const ExpenseListItem = (props: ExpenseProps) => {
           key={expene.id}
           secondaryAction={
             <IconButton edge="end" aria-label="comments">
-              <CommentIcon />
+              <DeleteIcon />
             </IconButton>
           }
           disablePadding

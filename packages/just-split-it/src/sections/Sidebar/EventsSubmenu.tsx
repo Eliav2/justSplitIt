@@ -1,6 +1,6 @@
 import { useGetUserEvents } from '@/utils/firebase/firestore/queris/hooks';
 import useSidebar from '@/store/sidebar';
-import { DialogActions, ListSubheader } from '@mui/material';
+import { DialogActions, DialogContentText, ListSubheader } from '@mui/material';
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
 import IconButton from '@mui/material/IconButton';
@@ -18,52 +18,35 @@ import { useState } from 'react';
 import Loading from '@/components/Loading';
 import { deleteEvent } from '@/utils/firebase/firestore/queris/queries';
 import { FirestoreEvent, FirestoreEventWithId } from '@/utils/firebase/firestore/schema';
+import ConfirmDialogButton, {
+  ConfirmDialogButtonProps,
+} from '@/components/Dialog/ConfirmDialogButton';
 
-interface DeleteDialogButtonProps {
+interface DeleteEventDialogButtonProps {
   event: FirestoreEventWithId;
 }
 
-const DeleteDialogButton = (props: DeleteDialogButtonProps) => {
-  const [open, setOpen] = useState(false);
+const DeleteEventDialogButton = (props: DeleteEventDialogButtonProps) => {
   const navigate = useNavigate();
-  // const { eventId: currentEventId } = useParams();
   const { eventId } = useParams();
 
-  const handleYes = async () => {
-    if (eventId === props.event.id) {
-      navigate('/');
-    }
-
-    await deleteEvent(props.event.id);
-
-    setOpen(false);
-  };
-
-  const handleCancel = () => {
-    setOpen(false);
-  };
-
-  const handleOpen = () => {
-    setOpen(true);
-  };
-
   return (
-    <>
-      <IconButton edge="end" aria-label="delete" onClick={handleOpen}>
-        <DeleteIcon />
-      </IconButton>
-      <Dialog open={open}>
-        <DialogTitle>Delete Event</DialogTitle>
+    <ConfirmDialogButton
+      content={
         <DialogContent>
           This will delete the event and all the related expenses. <br />
           this action cannot be undone. Are you sure you want to delete this event?
         </DialogContent>
-        <DialogActions>
-          <Button onClick={handleCancel}>Cancel</Button>
-          <Button onClick={handleYes}>Yes</Button>
-        </DialogActions>
-      </Dialog>
-    </>
+      }
+      handleConfirm={async (close) => {
+        if (eventId === props.event.id) {
+          navigate('/');
+        }
+        close();
+
+        await deleteEvent(props.event.id);
+      }}
+    />
   );
 };
 
@@ -75,13 +58,14 @@ export const EventsSubmenu = () => {
 
   return (
     <>
+      {/*<AlertDialog />*/}
       <ListSubheader sx={{ pt: 2 }}>Events</ListSubheader>
       <List sx={{ width: 250 }}>
         {events.map((event) => (
           <ListItem
             sx={{ p: 0 }}
             key={event.id}
-            secondaryAction={<DeleteDialogButton event={event} />}
+            secondaryAction={<DeleteEventDialogButton event={event} />}
           >
             <ListItemButton
               component={Link}
@@ -97,3 +81,38 @@ export const EventsSubmenu = () => {
     </>
   );
 };
+
+// function AlertDialog() {
+//   const [open, setOpen] = useState(false);
+//
+//   const handleClickOpen = () => {
+//     setOpen(true);
+//   };
+//
+//   const handleClose = () => {
+//     setOpen(false);
+//   };
+//
+//   return (
+//     <div>
+//       <Button variant="outlined" onClick={handleClickOpen}>
+//         Open alert dialog
+//       </Button>
+//       <Dialog open={open} onClose={handleClose}>
+//         <DialogTitle>{"Use Google's location service?"}</DialogTitle>
+//         <DialogContent>
+//           <DialogContentText>
+//             Let Google help apps determine location. This means sending anonymous location data to
+//             Google, even when no apps are running.
+//           </DialogContentText>
+//         </DialogContent>
+//         <DialogActions>
+//           <Button onClick={handleClose}>Disagree</Button>
+//           <Button onClick={handleClose} autoFocus>
+//             Agree
+//           </Button>
+//         </DialogActions>
+//       </Dialog>
+//     </div>
+//   );
+// }

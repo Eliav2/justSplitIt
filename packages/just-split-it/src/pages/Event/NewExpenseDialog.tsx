@@ -53,8 +53,8 @@ export const NewExpenseDialog = (props: NewExpenseDialogProps) => {
     },
   });
 
+  // set the payer to the current user by default (only when the participants are loaded)
   useEffect(() => {
-    console.log('participants');
     expenseForm.setValue('payer', participants?.find((p) => p.id == user?.uid) || (null as any));
   }, [participants]);
 
