@@ -15,6 +15,7 @@ function Event() {
   const [event, loadingEvent, eventSnap] = useGetEvent(eventId as string);
   const [expenes, loadingExpenses] = useGetEventExpenses(eventId as string);
 
+  // console.log(eventId);
   // const [checked, setChecked] = useState<{
   //   [key: string]: { selected: boolean };
   // }>(() =>

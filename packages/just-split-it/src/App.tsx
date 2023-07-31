@@ -1,17 +1,16 @@
 import { Fragment } from 'react';
-import { BrowserRouter } from 'react-router-dom';
 
 import CssBaseline from '@mui/material/CssBaseline';
 
 import { withErrorHandler } from '@/error-handling';
 import AppErrorBoundaryFallback from '@/error-handling/fallbacks/App';
-import Pages from '@/routes/Pages';
-import Header from '@/sections/Header';
+import AppPages from '@/routes/AppPages';
 import HotKeys from '@/sections/HotKeys';
 import Notifications from '@/sections/Notifications';
 import SW from '@/sections/SW';
-import Sidebar from '@/sections/Sidebar';
 import { useEnsureUserExists } from '@/utils/firebase/firestore/hooks/util';
+
+// import { router } from '@/routes/AppPages/AppPages';
 
 function App() {
   useEnsureUserExists();
@@ -21,11 +20,7 @@ function App() {
       <Notifications />
       <HotKeys />
       <SW />
-      <BrowserRouter>
-        <Header />
-        <Sidebar />
-        <Pages />
-      </BrowserRouter>
+      <AppPages />
     </Fragment>
   );
 }
