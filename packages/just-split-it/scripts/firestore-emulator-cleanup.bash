@@ -1,0 +1,1 @@
+for pid in $(netstat -ano | grep '0.0.0.0' | grep '127.0.0.1:8080' | awk '{print $5}'); do taskkill.exe //PID $pid //T //F; done

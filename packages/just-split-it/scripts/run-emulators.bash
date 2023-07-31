@@ -1,0 +1,1 @@
+firebase emulators:start --only firestore,auth --import /home/eliav/development/data/firebase-data --export-on-exit /home/eliav/development/data/firebase-data
