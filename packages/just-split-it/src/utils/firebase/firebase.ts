@@ -30,6 +30,8 @@ const analytics = getAnalytics(fbApp);
 // if (isDev) {
 //   connectFirestoreEmulator(fbDB, '127.0.0.1', 8080);
 // }
+
+// console.log('isDev', isDev);
 if (isDev) {
   connectFirestoreEmulator(fbDB, '127.0.0.1', 8080);
 }
