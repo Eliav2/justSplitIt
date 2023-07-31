@@ -33,5 +33,6 @@ const analytics = getAnalytics(fbApp);
 
 // console.log('isDev', isDev);
 if (isDev) {
+  connectAuthEmulator(fbAuth, 'http://127.0.0.1:9099');
   connectFirestoreEmulator(fbDB, '127.0.0.1', 8080);
 }

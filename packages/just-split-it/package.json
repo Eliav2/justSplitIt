@@ -18,7 +18,7 @@
     "preview": "vite preview",
     "https-preview": "serve dist",
     "deploy": "firebase deploy",
-    "firestore-emulator": "firebase emulators:start --only firestore",
+    "firestore-emulator": "firebase emulators:start --only firestore,auth",
     "firebase-emulator": "firebase emulators:start"
   },
   "dependencies": {
