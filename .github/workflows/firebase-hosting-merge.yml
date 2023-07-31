@@ -11,7 +11,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      - run: cd packages/just-split-it
+      - name: Navigate to the package directory
+        working-directory: packages/just-split-it
+        run: cd packages/just-split-it
       - run: npm install -g pnpm
       - run: pnpm install
       - run: pnpm run build
