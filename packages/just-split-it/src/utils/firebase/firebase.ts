@@ -30,6 +30,6 @@ const analytics = getAnalytics(fbApp);
 // if (isDev) {
 //   connectFirestoreEmulator(fbDB, '127.0.0.1', 8080);
 // }
-if (import.meta.env['VITE_FIRESTORE_EMULATOR'] == 'true') {
+if (isDev) {
   connectFirestoreEmulator(fbDB, '127.0.0.1', 8080);
 }

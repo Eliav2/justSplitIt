@@ -10,6 +10,7 @@ import ListItemText from '@mui/material/ListItemText';
 import ConfirmDeleteDialogButton from '@/components/Dialog/ConfirmDeleteDialogButton';
 import { deleteExpense } from '@/utils/firebase/firestore/queris/queries';
 import { updateDoc } from 'firebase/firestore';
+import * as React from 'react';
 
 interface ExpenseProps {
   expenseId: string;
@@ -25,7 +26,10 @@ export const ExpenseListItem = (props: ExpenseProps) => {
 
   const includedInExpense = expense.data?.participantsIds.includes(user!.uid);
 
-  const handleCheckToggle = async (event, checked) => {
+  const handleCheckToggle = async (
+    event: React.ChangeEvent<HTMLInputElement>,
+    checked: boolean,
+  ) => {
     if (!expense.ref || !expense.data) return;
     if (checked) {
       await updateDoc(expense.ref, {
