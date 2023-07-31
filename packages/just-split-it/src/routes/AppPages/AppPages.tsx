@@ -1,19 +1,13 @@
-import {
-  BrowserRouter,
-  createBrowserRouter,
-  createRoutesFromElements,
-  Outlet,
-  Route,
-  Routes,
-} from 'react-router-dom';
+import { BrowserRouter, Outlet, Route, Routes } from 'react-router-dom';
 
 import Box from '@mui/material/Box';
 
-import { routes, protectedRoutes } from '..';
+import { protectedRoutes, routes } from '..';
 import { getPageHeight } from './utils';
 import RequireAuth from '@/components/ProtectedRoute/RequireAuth';
 import Header from '@/sections/Header';
 import Sidebar from '@/sections/Sidebar';
+import Footer from '@/sections/Footer';
 
 const Layout = () => {
   return (
@@ -21,6 +15,7 @@ const Layout = () => {
       <Header />
       <Sidebar />
       <Outlet />
+      <Footer />
     </>
   );
 };
@@ -28,8 +23,8 @@ const Layout = () => {
 // todo: change to  data browser ('createBroswerRouter')
 function AppPages() {
   return (
-    <BrowserRouter>
-      <Box sx={{ height: (theme) => getPageHeight(theme) }}>
+    <Box sx={{ height: (theme) => getPageHeight(theme) }}>
+      <BrowserRouter>
         <Routes>
           <Route element={<Layout />}>
             {/* public routes */}
@@ -52,8 +47,8 @@ function AppPages() {
             })}
           </Route>
         </Routes>
-      </Box>
-    </BrowserRouter>
+      </BrowserRouter>
+    </Box>
   );
 }
 
