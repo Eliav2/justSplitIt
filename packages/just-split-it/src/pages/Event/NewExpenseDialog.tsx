@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { addExpense } from '@/utils/firebase/firestore/queris/queries';
 import { doc, FirestoreError, query, where } from 'firebase/firestore';
@@ -52,6 +52,11 @@ export const NewExpenseDialog = (props: NewExpenseDialogProps) => {
       payer: participants?.find((p) => p.id == user?.uid) || (null as any),
     },
   });
+
+  useEffect(() => {
+    console.log('participants');
+    expenseForm.setValue('payer', participants?.find((p) => p.id == user?.uid) || (null as any));
+  }, [participants]);
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -154,7 +159,6 @@ export const NewExpenseDialog = (props: NewExpenseDialogProps) => {
                 },
               }}
               render={({ field: { onChange, value }, fieldState: { error } }) => {
-                console.log(error);
                 return (
                   <Autocomplete
                     onChange={(event, value) => {
