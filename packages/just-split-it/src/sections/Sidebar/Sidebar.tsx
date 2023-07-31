@@ -17,8 +17,6 @@ const sidebarRoutes: Routes = { ...routes, ...protectedRoutes } as const satisfi
 
 function Sidebar() {
   const [isSidebarOpen, sidebarActions] = useSidebar();
-  const { eventId } = useParams();
-  console.log(eventId);
 
   // events.then((data) => {
   //   console.log(data);

@@ -29,15 +29,13 @@ const DeleteDialogButton = (props: DeleteDialogButtonProps) => {
   // const { eventId: currentEventId } = useParams();
   const { eventId } = useParams();
 
-  console.log(eventId);
   const handleYes = async () => {
-    // setOpen(true);
-    console.log('delete');
-    await deleteEvent(props.event.id);
-
-    if (params.currentEventId === props.event.id) {
+    if (eventId === props.event.id) {
       navigate('/');
     }
+
+    await deleteEvent(props.event.id);
+
     setOpen(false);
   };
 
@@ -74,7 +72,6 @@ export const EventsSubmenu = () => {
   const [isSidebarOpen, sidebarActions] = useSidebar();
 
   const { eventId } = useParams();
-  console.log(eventId);
 
   return (
     <>
