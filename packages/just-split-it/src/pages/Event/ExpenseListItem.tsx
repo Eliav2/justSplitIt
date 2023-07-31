@@ -3,50 +3,72 @@ import { useAuthState } from 'react-firebase-hooks/auth';
 import { fbAuth } from '@/utils/firebase/firebase';
 import QueryIndicator from '@/components/QueryIndicator';
 import ListItem from '@mui/material/ListItem';
-import IconButton from '@mui/material/IconButton';
-import CommentIcon from '@mui/icons-material/Comment';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import Checkbox from '@mui/material/Checkbox';
 import ListItemText from '@mui/material/ListItemText';
-import DeleteIcon from '@mui/icons-material/Delete';
+import ConfirmDeleteDialogButton from '@/components/Dialog/ConfirmDeleteDialogButton';
+import { deleteExpense } from '@/utils/firebase/firestore/queris/queries';
+import { updateDoc } from 'firebase/firestore';
+
 interface ExpenseProps {
   expenseId: string;
 }
 
 export const ExpenseListItem = (props: ExpenseProps) => {
-  const [expene, loading] = useExpense(props.expenseId);
+  const expense = useExpense(props.expenseId);
   const [user] = useAuthState(fbAuth);
 
   function handleToggle(name: string) {
     return undefined;
   }
 
-  const includedInExpense = expene?.participantsIds.includes(user!.uid);
+  const includedInExpense = expense.data?.participantsIds.includes(user!.uid);
+
+  const handleCheckToggle = async (event, checked) => {
+    if (!expense.ref || !expense.data) return;
+    if (checked) {
+      await updateDoc(expense.ref, {
+        participantsIds: [...expense.data.participantsIds, user!.uid],
+      });
+    } else {
+      await updateDoc(expense.ref, {
+        participantsIds: expense.data.participantsIds.filter((id) => id !== user!.uid),
+      });
+    }
+  };
 
   return (
-    <QueryIndicator loading={loading}>
-      {expene && (
+    <QueryIndicator loading={expense.loading}>
+      {expense.data && (
         <ListItem
-          key={expene.id}
+          key={expense.data?.id}
           secondaryAction={
-            <IconButton edge="end" aria-label="comments">
-              <DeleteIcon />
-            </IconButton>
+            <ConfirmDeleteDialogButton
+              handleConfirm={async (close) => {
+                await deleteExpense(expense.data!.id);
+                close();
+              }}
+            />
           }
           disablePadding
         >
-          <ListItemButton role={undefined} onClick={handleToggle(expene.name)} dense>
+          <ListItemButton role={undefined} onClick={handleToggle(expense.data.name)} dense>
             <ListItemIcon>
               <Checkbox
                 edge="start"
-                // checked={checked[expene.name]?.selected}
+                // checked={checked[expense.name]?.selected}
                 checked={includedInExpense}
+                onChange={handleCheckToggle}
                 tabIndex={-1}
                 disableRipple
               />
             </ListItemIcon>
-            <ListItemText id={expene.id} primary={`Expense: ${expene.name}`} />
+            <ListItemText
+              id={expense.data.id}
+              primary={`${expense.data.name}`}
+              secondary={`${expense.data.amount}₪`}
+            />
           </ListItemButton>
         </ListItem>
       )}

@@ -17,7 +17,7 @@ export interface ConfirmDialogButtonProps {
   open?: boolean;
 }
 
-const ConfirmDialogButton = (props: ConfirmDialogButtonProps) => {
+const ConfirmDeleteDialogButton = (props: ConfirmDialogButtonProps) => {
   const [open, setOpen] = useState(false);
   const _open = props.open ?? open;
 
@@ -67,4 +67,4 @@ const ConfirmDialogButton = (props: ConfirmDialogButtonProps) => {
     </>
   );
 };
-export default ConfirmDialogButton;
+export default ConfirmDeleteDialogButton;

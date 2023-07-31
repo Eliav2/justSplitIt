@@ -37,19 +37,19 @@ export const useCollection = <T extends DocumentData>(
 
 // get and watch a single document
 export const useDocument = <T extends DocumentData>(
-  docRef: DocumentReference<T, T> | undefined | null,
+  ref: DocumentReference<T, T> | undefined | null,
   options?: { enable?: boolean; snapshotListenOptions?: SnapshotListenOptions },
   dependencies: any[] = [],
 ) => {
   const [loading, setLoading] = useState(true);
-  const [docSnap, setDocSnap] = useState<DocumentSnapshot>();
-  const [docData, setDocData] = useState<T & { id: string }>();
+  const [snap, setSnap] = useState<DocumentSnapshot>();
+  const [data, setData] = useState<T & { id: string }>();
   useEffect(() => {
-    if (!docRef) return;
-    const unsubscribe = onSnapshot(docRef, (snapshot) => {
+    if (!ref) return;
+    const unsubscribe = onSnapshot(ref, (snapshot) => {
       setLoading(false);
-      setDocSnap(snapshot);
-      setDocData({ ...snapshot.data(), id: docRef.id } as T & { id: string });
+      setSnap(snapshot);
+      setData({ ...snapshot.data(), id: ref.id } as T & { id: string });
     });
     return () => {
       unsubscribe();
@@ -57,7 +57,7 @@ export const useDocument = <T extends DocumentData>(
     };
   }, [options?.enable ?? true, ...dependencies]);
 
-  return [docData, loading, docSnap] as const;
+  return { data, loading, snap, ref } as const;
 };
 
 export const useGrabDocumentById = <T extends DocumentData>(

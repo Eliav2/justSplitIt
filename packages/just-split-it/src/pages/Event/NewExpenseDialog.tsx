@@ -11,6 +11,7 @@ import {
   DialogActions,
   DialogContentText,
   FormHelperText,
+  InputAdornment,
   TextField,
 } from '@mui/material';
 import Loading from '@/components/Loading';
@@ -138,6 +139,9 @@ export const NewExpenseDialog = (props: NewExpenseDialogProps) => {
                   value={value}
                   fullWidth
                   label={'Amount'}
+                  InputProps={{
+                    startAdornment: <InputAdornment position="start">₪</InputAdornment>,
+                  }}
                   autoFocus
                   margin="dense"
                   variant="standard"

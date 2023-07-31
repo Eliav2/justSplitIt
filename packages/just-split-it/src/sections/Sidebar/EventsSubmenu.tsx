@@ -18,9 +18,9 @@ import { useState } from 'react';
 import Loading from '@/components/Loading';
 import { deleteEvent } from '@/utils/firebase/firestore/queris/queries';
 import { FirestoreEvent, FirestoreEventWithId } from '@/utils/firebase/firestore/schema';
-import ConfirmDialogButton, {
+import ConfirmDeleteDialogButton, {
   ConfirmDialogButtonProps,
-} from '@/components/Dialog/ConfirmDialogButton';
+} from '@/components/Dialog/ConfirmDeleteDialogButton';
 
 interface DeleteEventDialogButtonProps {
   event: FirestoreEventWithId;
@@ -31,7 +31,7 @@ const DeleteEventDialogButton = (props: DeleteEventDialogButtonProps) => {
   const { eventId } = useParams();
 
   return (
-    <ConfirmDialogButton
+    <ConfirmDeleteDialogButton
       content={
         <DialogContent>
           This will delete the event and all the related expenses. <br />
