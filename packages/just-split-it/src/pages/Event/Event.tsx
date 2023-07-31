@@ -20,19 +20,6 @@ function Event() {
 
   const [expenes, loadingExpenses] = useGetEventExpenses(eventId as string);
 
-  // console.log(eventId);
-  // const [checked, setChecked] = useState<{
-  //   [key: string]: { selected: boolean };
-  // }>(() =>
-  //   expenes
-  //     .map((expene) => ({ [expene.name]: { selected: false } }))
-  //     .reduce((acc, curr) => ({ ...acc, ...curr }), {}),
-  // );
-  //
-  // const handleToggle = (expenseName: string) => () => {
-  //   setChecked((prev) => ({ ...prev, [expenseName]: { selected: !prev[expenseName]?.selected } }));
-  // };
-
   const eventExists = event.snap?.exists();
   const eventNotExistsDialogOpen = !event.loading && !eventExists;
   return (
