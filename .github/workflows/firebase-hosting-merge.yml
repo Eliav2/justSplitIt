@@ -9,11 +9,12 @@ name: Deploy to Firebase Hosting on merge
 jobs:
   build_and_deploy:
     runs-on: ubuntu-latest
+    # change working directory for script
+    defaults:
+      run:
+        working-directory: packages/just-split-it
     steps:
       - uses: actions/checkout@v3
-      - name: Navigate to the package directory
-        working-directory: packages/just-split-it
-        run: cd packages/just-split-it
       - run: npm install -g pnpm
       - run: pnpm install
       - run: pnpm run build
