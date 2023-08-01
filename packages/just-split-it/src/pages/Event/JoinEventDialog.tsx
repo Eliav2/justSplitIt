@@ -1,5 +1,5 @@
 import { useNavigate } from 'react-router-dom';
-import { addParticipantToEvent } from '@/utils/firebase/firestore/queris/queries';
+import { participantJoinsToEvent } from '@/utils/firebase/firestore/queris/queries';
 import Dialog from '@mui/material/Dialog';
 import DialogTitle from '@mui/material/DialogTitle';
 import DialogContent from '@mui/material/DialogContent';
@@ -22,7 +22,7 @@ export const JoinEventDialog = (props: JoinEventDialogProps) => {
 
   function handleJoin() {
     if (!props.user?.uid) return;
-    addParticipantToEvent(props.eventId, props.user?.uid);
+    participantJoinsToEvent(props.eventId, props.user?.uid);
   }
 
   return (

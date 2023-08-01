@@ -23,6 +23,7 @@ const QueryIndicator = ({ children, loading, error }: QueryIndicatorProps) => {
   const handleExpandClick = () => {
     setExpanded(!expanded);
   };
+  // console.log(error);
   if (error)
     return (
       <Box sx={{ textAlign: 'center', pt: 2 }}>
@@ -35,7 +36,6 @@ const QueryIndicator = ({ children, loading, error }: QueryIndicatorProps) => {
         <Box onClick={handleExpandClick} style={{ cursor: 'pointer' }}>
           <CenteredFlexBox>
             <Typography variant={'body2'}>details</Typography>
-
             <RotatingIconButton isRotated={expanded} />
           </CenteredFlexBox>
           <Collapse in={expanded} timeout="auto" unmountOnExit>

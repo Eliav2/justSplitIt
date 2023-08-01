@@ -15,6 +15,8 @@ import { fbAuth } from '@/utils/firebase/firebase';
 
 import { DeleteEventDialogButton } from '@/components/Dialog/DeleteEventDialogButton';
 import { JoinEventDialog } from '@/pages/Event/JoinEventDialog';
+import ParticipantLeaveEventDialogButton from '@/components/Dialog/ParticipantLeaveEventDialogButton';
+import { useEffect } from 'react';
 
 function Event() {
   const [user] = useAuthState(fbAuth);
@@ -23,7 +25,12 @@ function Event() {
   const event = useGetEvent(eventId as string);
   const isUserParticipating = user && event.data?.participantsIds?.includes(user?.uid);
 
+  // useEffect(() => {
+  //   console.log('event changed');
+  // }, [event]);
+
   const [expenes, loadingExpenses, expensesError] = useGetEventExpenses(eventId as string);
+  // console.log('expensesError', expensesError);
 
   const eventExists = event.snap?.exists();
   const eventNotExistsDialogOpen = !event.loading && !eventExists;
@@ -61,14 +68,7 @@ function Event() {
                       )}
                     />
                   ) : (
-                    <DeleteEventDialogButton
-                      event={event.data}
-                      buttonElement={(handleOpen) => (
-                        <Button onClick={handleOpen} color={'warning'}>
-                          Leave Event
-                        </Button>
-                      )}
-                    />
+                    <ParticipantLeaveEventDialogButton eventId={event.data.id} />
                   )}
                 </>
               )}

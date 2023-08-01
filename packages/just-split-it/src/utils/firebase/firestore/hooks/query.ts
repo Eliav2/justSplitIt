@@ -29,6 +29,8 @@ export const useCollection = <T extends DocumentData>(
         }));
         setLoading(false);
         setDocs(docs);
+        // console.log('snap!');
+        setError(null);
       },
       (error) => {
         setError(error);
@@ -38,8 +40,11 @@ export const useCollection = <T extends DocumentData>(
     return () => {
       unsubscribe();
       setLoading(true);
+      setError(null);
+      setDocs([]);
     };
   }, [options?.enable ?? true, ...dependencies]);
+  // console.log('err', error);
   return [docs, loading, error] as const;
 };
 
