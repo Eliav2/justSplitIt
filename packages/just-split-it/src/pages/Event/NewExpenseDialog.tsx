@@ -156,7 +156,6 @@ export const NewExpenseDialog = (props: NewExpenseDialogProps) => {
               // defaultValue={undefined}
               rules={{
                 validate: (value) => {
-                  console.log(value);
                   return (
                     participants.some((p) => p.id == value?.id) ||
                     'Please select a valid option from the list.'

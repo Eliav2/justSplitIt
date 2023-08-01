@@ -37,18 +37,11 @@ service cloud.firestore {
             allow write: if request.auth.uid == userId;
         }
 
-
         // user can only read/write expenses of events he is a participant of
         match /expense/{expenseId} {
             allow read: if true;
-            // allow create: if request.auth.uid in get(/events/$(resource.data.parentEventId)).data.participantsIds;
-            allow create: if request.auth.uid in debug(get(/events/$(request.resource.data.parentEventId)).data.participantsIds);
-            // allow create: if get(/events/$(request.resource.data.parentEventId));
-//            allow read, update, delete: if debug(
-//                    get(/events/$(request.resource.data.parentEventId)) == request.auth.uid
-//            );
-
-
+            allow create: if request.auth.uid in get(/databases/$(database)/documents/event/$(request.resource.data.parentEventId)).data.participantsIds;
+            allow delete: if request.auth.uid in get(/databases/$(database)/documents/event/$(resource.data.parentEventId)).data.participantsIds;
         }
 
     }
