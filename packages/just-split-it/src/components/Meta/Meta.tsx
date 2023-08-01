@@ -8,7 +8,8 @@ function Meta({
   description = defaultMetaTags.description,
   meta = [],
   title,
-  image = defaultMetaTags.image,
+  // image = defaultMetaTags.image,
+  image,
 }: MetaProps) {
   const pageTitle = `${appTitle}${title ? ' | ' + title : ''}`;
 

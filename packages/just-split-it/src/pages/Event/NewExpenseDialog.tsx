@@ -29,10 +29,11 @@ import { useAuthState } from 'react-firebase-hooks/auth';
 import { fbAuth } from '@/utils/firebase/firebase';
 import { grabDocumentById } from '@/utils/firebase/firestore/queris/util';
 
-type ExpenseForm = Pick<FirestoreExpense, 'name' | 'amount'>;
+type ExpenseForm = Pick<FirestoreExpense, 'name'>;
 
 type ExpenseFormInput = ExpenseForm & {
   payer: FirestoreUserWithId;
+  amount: string;
 };
 
 interface NewExpenseDialogProps {
@@ -49,7 +50,7 @@ export const NewExpenseDialog = (props: NewExpenseDialogProps) => {
   const expenseForm = useForm<ExpenseFormInput>({
     defaultValues: {
       name: '',
-      amount: 0,
+      amount: '0',
       payer: participants?.find((p) => p.id == user?.uid) || (null as any),
     },
   });
@@ -72,7 +73,7 @@ export const NewExpenseDialog = (props: NewExpenseDialogProps) => {
     setLoadingState('loading');
     const [payer] = await grabDocumentById(firestore.user(), data.payer.id);
     await addExpense({
-      amount: data.amount,
+      amount: Number(data.amount),
       name: data.name,
       payerId: data.payer.id,
       payerName: payer!.name,
@@ -133,7 +134,7 @@ export const NewExpenseDialog = (props: NewExpenseDialogProps) => {
               render={({ field: { onChange, value }, fieldState: { error }, formState }) => (
                 <TextField
                   helperText={error ? error.message : null}
-                  type={'number'}
+                  type="number"
                   error={!!error}
                   size="small"
                   onChange={onChange}

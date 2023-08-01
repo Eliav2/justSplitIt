@@ -10,6 +10,10 @@ const CenteredFlexBox = styled(FlexBox)({
   justifyContent: 'center',
   alignItems: 'center',
 });
+export const ColumnFlexBox = styled(FlexBox)({
+  alignItems: 'center',
+  flexDirection: 'column',
+});
 
 const FullSizeCenteredFlexBox = styled(CenteredFlexBox)({
   width: '100%',
