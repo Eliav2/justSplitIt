@@ -28,24 +28,7 @@ function Event() {
 
   const isUserParticipating = user && eventData?.participantsIds?.includes(user?.uid);
 
-  // const expensesQuery = useGetEventExpenses(eventId as string);
   const [expenses, loading, error] = useGetEventExpenses(eventId as string, event);
-
-  // console.log(expenses);
-  // const {
-  //   docs: expenes,
-  //   loading: loadingExpenses,
-  //   error: expensesError,
-  //
-  // } = useGetEventExpenses(eventId as string);
-
-  useEffect(() => {
-    console.log('event changed', event);
-    // expensesQuery.refresh();
-    // event.refresh();
-  }, [event]);
-
-  // console.log('expensesError', expensesError);
 
   const eventExists = event?.exists();
   const eventNotExistsDialogOpen = !eventLoading && !eventExists;

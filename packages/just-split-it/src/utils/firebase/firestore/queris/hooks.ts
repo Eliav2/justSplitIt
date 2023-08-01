@@ -10,8 +10,8 @@ import {
 } from 'firebase/firestore';
 import { firestore } from '@/utils/firebase/firestore/client';
 import {
-  useCollection,
-  useDocument,
+  // useCollection,
+  // useDocument,
   useGrabDocumentById,
 } from '@/utils/firebase/firestore/hooks/query';
 import { useAuthState } from 'react-firebase-hooks/auth';
@@ -26,7 +26,12 @@ export function useGetUserEvents() {
     user &&
     query(firestore.event(), where('participantsIds', 'array-contains', user?.uid), limit(100));
 
-  return useCollection(userEventsQuery, { enable: !!user });
+  return useFirestoreCollection(userEventsQuery);
+  // const userEventsQuery =
+  //   user &&
+  //   query(firestore.event(), where('participantsIds', 'array-contains', user?.uid), limit(100));
+  //
+  // return useCollection(userEventsQuery, { enable: !!user });
 }
 
 export function useGetEvent(eventId: string) {

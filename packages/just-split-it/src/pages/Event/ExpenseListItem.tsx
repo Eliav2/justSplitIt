@@ -11,6 +11,7 @@ import ConfirmDeleteDialogButton from '@/components/Dialog/ConfirmDeleteDialogBu
 import { deleteExpense } from '@/utils/firebase/firestore/queris/queries';
 import { updateDoc } from 'firebase/firestore';
 import * as React from 'react';
+import Typography from '@mui/material/Typography';
 
 interface ExpenseProps {
   expenseId: string;
@@ -71,7 +72,16 @@ export const ExpenseListItem = (props: ExpenseProps) => {
             <ListItemText
               id={expense.data.id}
               primary={`${expense.data.name}`}
-              secondary={`${expense.data.amount}₪`}
+              // secondary={`${expense.data.amount}₪`}
+              secondary={
+                <Typography variant={'body2'} color="textSecondary">
+                  {expense.data.amount}₪{' '}
+                  <Typography variant={'caption'} color="textSecondary" sx={{ fontSize: '0.8em' }}>
+                    payed by
+                  </Typography>{' '}
+                  {expense.data.payerName}
+                </Typography>
+              }
             />
           </ListItemButton>
         </ListItem>

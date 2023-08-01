@@ -12,7 +12,9 @@ import QueryIndicator from '@/components/QueryIndicator';
 import { DeleteEventDialogButton } from '@/components/Dialog/DeleteEventDialogButton';
 
 export const EventsSubmenu = () => {
-  const { docs: events, loading, error } = useGetUserEvents();
+  const [events, loading, error] = useGetUserEvents();
+  const eventsData = events?.docs.map((event) => Object.assign({}, event.data(), { id: event.id }));
+  // const { docs: events, loading, error } = useGetUserEvents();
   const [isSidebarOpen, sidebarActions] = useSidebar();
 
   const { eventId } = useParams();
@@ -23,7 +25,7 @@ export const EventsSubmenu = () => {
       <ListSubheader sx={{ pt: 2 }}>Events</ListSubheader>
       <List sx={{ width: 250 }}>
         <QueryIndicator loading={loading} errorMessage={error?.message}>
-          {events.map((event) => (
+          {eventsData?.map((event) => (
             <ListItem
               sx={{ p: 0 }}
               key={event.id}
