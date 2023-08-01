@@ -1,55 +1,15 @@
 import { useGetUserEvents } from '@/utils/firebase/firestore/queris/hooks';
 import useSidebar from '@/store/sidebar';
-import { DialogActions, DialogContentText, ListSubheader } from '@mui/material';
+import { ListSubheader } from '@mui/material';
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
-import IconButton from '@mui/material/IconButton';
-import DeleteIcon from '@mui/icons-material/Delete';
 import ListItemButton from '@mui/material/ListItemButton';
-import { Link, useNavigate, useParams } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import DefaultIcon from '@mui/icons-material/Deblur';
 import ListItemText from '@mui/material/ListItemText';
-import Dialog from '@mui/material/Dialog';
-import DialogTitle from '@mui/material/DialogTitle';
-import DialogContent from '@mui/material/DialogContent';
-import Button from '@mui/material/Button';
-import { useState } from 'react';
-import Loading from '@/components/Loading';
-import { deleteEvent } from '@/utils/firebase/firestore/queris/queries';
-import { FirestoreEvent, FirestoreEventWithId } from '@/utils/firebase/firestore/schema';
-import ConfirmDeleteDialogButton, {
-  ConfirmDialogButtonProps,
-} from '@/components/Dialog/ConfirmDeleteDialogButton';
 import QueryIndicator from '@/components/QueryIndicator';
-
-interface DeleteEventDialogButtonProps {
-  event: FirestoreEventWithId;
-}
-
-const DeleteEventDialogButton = (props: DeleteEventDialogButtonProps) => {
-  const navigate = useNavigate();
-  const { eventId } = useParams();
-
-  return (
-    <ConfirmDeleteDialogButton
-      content={
-        <DialogContent>
-          This will delete the event and all the related expenses. <br />
-          this action cannot be undone. Are you sure you want to delete this event?
-        </DialogContent>
-      }
-      handleConfirm={async (close) => {
-        if (eventId === props.event.id) {
-          navigate('/');
-        }
-        close();
-
-        await deleteEvent(props.event.id);
-      }}
-    />
-  );
-};
+import { DeleteEventDialogButton } from '@/components/Dialog/DeleteEventDialogButton';
 
 export const EventsSubmenu = () => {
   const [events, loading, error] = useGetUserEvents();

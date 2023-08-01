@@ -1,4 +1,3 @@
-import { useDocument, useGrabDocumentById } from '@/utils/firebase/firestore/hooks/query';
 import { CollectionReference, doc, DocumentData, getDoc } from 'firebase/firestore';
 
 export const grabDocumentById = async <T extends DocumentData>(
@@ -9,5 +8,5 @@ export const grabDocumentById = async <T extends DocumentData>(
   const docSnap = await getDoc(docRef);
 
   // if (!docSnap.exists()) return null;
-  return docSnap.data();
+  return [docSnap.data(), docRef] as const;
 };

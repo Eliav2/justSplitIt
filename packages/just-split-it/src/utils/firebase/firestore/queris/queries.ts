@@ -46,3 +46,12 @@ export const deleteEvent = async (eventId: string) => {
   // delete the event
   await deleteDoc(eventRef);
 };
+
+export const addParticipantToEvent = async (eventId: string, participantId: string) => {
+  const [eventSnap, eventRef] = await grabDocumentById(firestore.event(), eventId);
+  if (!eventSnap || !eventRef) {
+    throw new Error("event isn't found");
+  }
+  const newParticipantsIds = [...eventSnap.participantsIds, participantId];
+  await setDoc(eventRef, { participantsIds: newParticipantsIds }, { merge: true });
+};

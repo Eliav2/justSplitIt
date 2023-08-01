@@ -70,7 +70,7 @@ export const NewExpenseDialog = (props: NewExpenseDialogProps) => {
 
   const handleCreate = async (data: ExpenseFormInput) => {
     setLoadingState('loading');
-    const payer = await grabDocumentById(firestore.user(), data.payer.id);
+    const [payer] = await grabDocumentById(firestore.user(), data.payer.id);
     await addExpense({
       amount: data.amount,
       name: data.name,

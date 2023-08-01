@@ -5,7 +5,7 @@ import {
   FullSizeCenteredFlexBoxColumn,
   FullSizeMiddleFlexContainerColumn,
 } from '@/components/styled';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { NewExpenseDialog } from '@/pages/Event/NewExpenseDialog';
 import { useGetEvent, useGetEventExpenses } from '@/utils/firebase/firestore/queris/hooks';
 import List from '@mui/material/List';
@@ -20,24 +20,32 @@ import DialogContent from '@mui/material/DialogContent';
 import { useState } from 'react';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { fbAuth } from '@/utils/firebase/firebase';
+import { addParticipantToEvent } from '@/utils/firebase/firestore/queris/queries';
+import type { User } from 'firebase/auth';
+import ConfirmDeleteDialogButton from '@/components/Dialog/ConfirmDeleteDialogButton';
+
+import { DeleteEventDialogButton } from '@/components/Dialog/DeleteEventDialogButton';
 
 function Event() {
   const [user] = useAuthState(fbAuth);
   const { eventId } = useParams();
   // const { event, loadingEvent, eventSnap } = useGetEvent(eventId as string);
   const event = useGetEvent(eventId as string);
-  const userParticipating = user && event.data?.participantsIds?.includes(user?.uid);
-  console.log(userParticipating);
+  const isUserParticipating = user && event.data?.participantsIds?.includes(user?.uid);
 
   const [expenes, loadingExpenses, expensesError] = useGetEventExpenses(eventId as string);
 
   const eventExists = event.snap?.exists();
   const eventNotExistsDialogOpen = !event.loading && !eventExists;
+
+  const isOwner = user?.uid === event.data?.ownerId;
   return (
     <>
       <Meta title={event.data?.name ?? 'Event'} description={event.data?.description} />
       <FullSizeMiddleFlexContainerColumn>
-        <JoinEventDialog open={!userParticipating} />
+        {event.ref && (
+          <JoinEventDialog open={!isUserParticipating} eventId={event.ref?.id} user={user} />
+        )}
         <QueryIndicator loading={event.loading}>
           {!eventNotExistsDialogOpen ? (
             <>
@@ -50,7 +58,21 @@ function Event() {
                   })}
                 </QueryIndicator>
               </List>
-              {event.data && <NewExpenseDialog parentEvent={event.data} />}
+              {event.data && (
+                <>
+                  <NewExpenseDialog parentEvent={event.data} />
+                  {isOwner && (
+                    <DeleteEventDialogButton
+                      event={event.data}
+                      buttonElement={(handleOpen) => (
+                        <Button onClick={handleOpen} color={'warning'}>
+                          Delete Event
+                        </Button>
+                      )}
+                    />
+                  )}
+                </>
+              )}
             </>
           ) : (
             <EventDoesNotExistDialog open={eventNotExistsDialogOpen} />
@@ -60,14 +82,40 @@ function Event() {
     </>
   );
 }
+<ConfirmDeleteDialogButton
+  handleConfirm={() => {}}
+  content={
+    <DialogContent>
+      Are you sure? <br />
+      This will delete this action cannot be undone.
+    </DialogContent>
+  }
+  buttonElement={(handleOpen) => (
+    <Button onClick={handleOpen} color={'warning'}>
+      Delete Event
+    </Button>
+  )}
+/>;
+interface JoinEventDialogProps {
+  open: boolean;
+  user: User | null;
+  eventId: string;
+}
 
-const JoinEventDialog = ({ open }: { open: boolean }) => {
-  function handleCancel() {}
+const JoinEventDialog = (props: JoinEventDialogProps) => {
+  const navigate = useNavigate();
 
-  function handleConfirm() {}
+  function handleReject() {
+    navigate('/');
+  }
+
+  function handleJoin() {
+    if (!props.user?.uid) return;
+    addParticipantToEvent(props.eventId, props.user?.uid);
+  }
 
   return (
-    <Dialog open={open} disableRestoreFocus>
+    <Dialog open={props.open} disableRestoreFocus>
       <DialogTitle>Join Event</DialogTitle>
       <DialogContent>
         You are not participating in this event <br />
@@ -75,8 +123,8 @@ const JoinEventDialog = ({ open }: { open: boolean }) => {
       </DialogContent>
 
       <DialogActions>
-        <Button onClick={handleCancel}>Cancel</Button>
-        <Button autoFocus onClick={handleConfirm}>
+        <Button onClick={handleReject}>Nope. I'm out</Button>
+        <Button autoFocus onClick={handleJoin}>
           Join
         </Button>
       </DialogActions>
