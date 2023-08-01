@@ -6,6 +6,7 @@ export interface FirestoreEvent {
   name: string;
   ownerId: string;
   participantsIds: string[];
+  description?: string;
 }
 
 export interface FirestoreEventWithId extends FirestoreEvent {

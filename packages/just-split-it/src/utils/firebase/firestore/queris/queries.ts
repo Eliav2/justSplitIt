@@ -4,16 +4,18 @@ import { fbAuth } from '@/utils/firebase/firebase';
 import { firestore } from '@/utils/firebase/firestore/client';
 import { FirestoreExpense } from '@/utils/firebase/firestore/schema';
 import { grabDocumentById } from '@/utils/firebase/firestore/queris/util';
+import { IEventForm } from '@/pages/Welcome/NewEventDialog';
 
 // add event to the events collection and to the user's events list
-export async function addEvent(eventName: string) {
+export async function addEvent(eventDetails: IEventForm) {
   if (!fbAuth.currentUser) {
     throw new Error('user not logged in');
   }
 
   // add event to the events collection
   const eventRef = await addDoc(firestore.event(), {
-    name: eventName,
+    name: eventDetails.name,
+    description: eventDetails.description,
     ownerId: fbAuth.currentUser?.uid,
     participantsIds: [fbAuth.currentUser?.uid],
   });

@@ -10,7 +10,7 @@ import { CenteredFlexBox, FlexBox } from '@/components/styled';
 import { styled } from '@mui/system';
 import IconButton from '@mui/material/IconButton';
 import Button from '@mui/material/Button';
-
+import LockIcon from '@mui/icons-material/Lock';
 interface QueryIndicatorProps {
   children: React.ReactNode;
   loading: boolean;
@@ -23,26 +23,29 @@ const QueryIndicator = ({ children, loading, error }: QueryIndicatorProps) => {
   const handleExpandClick = () => {
     setExpanded(!expanded);
   };
-
-  if (loading) return <Loading />;
   if (error)
     return (
-      <Box sx={{ textAlign: 'center' }}>
-        <Typography>Sorry... Something went wrong</Typography>
-        <Box>
+      <Box sx={{ textAlign: 'center', pt: 2 }}>
+        <LockIcon />
+
+        <Typography>
+          Sorry... <br />
+          It seems like you don't have permissions to view that
+        </Typography>
+        <Box onClick={handleExpandClick} style={{ cursor: 'pointer' }}>
           <CenteredFlexBox>
-            <Typography onClick={handleExpandClick} style={{ cursor: 'pointer' }}>
-              details
-            </Typography>
+            <Typography variant={'body2'}>details</Typography>
 
             <RotatingIconButton isRotated={expanded} />
           </CenteredFlexBox>
           <Collapse in={expanded} timeout="auto" unmountOnExit>
-            <Typography>{error.message}</Typography>
+            <Typography variant={'body2'}>{error.message}</Typography>
           </Collapse>
         </Box>
       </Box>
     );
+
+  if (loading) return <Loading />;
   return children;
 };
 

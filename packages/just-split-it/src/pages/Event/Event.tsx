@@ -12,11 +12,22 @@ import List from '@mui/material/List';
 import QueryIndicator from '@/components/QueryIndicator';
 import { EventDoesNotExistDialog } from '@/pages/Event/EventDoesNotExistDialog';
 import { ExpenseListItem } from '@/pages/Event/ExpenseListItem';
+import DialogTitle from '@mui/material/DialogTitle';
+import { DialogActions } from '@mui/material';
+import Button from '@mui/material/Button';
+import Dialog from '@mui/material/Dialog';
+import DialogContent from '@mui/material/DialogContent';
+import { useState } from 'react';
+import { useAuthState } from 'react-firebase-hooks/auth';
+import { fbAuth } from '@/utils/firebase/firebase';
 
 function Event() {
+  const [user] = useAuthState(fbAuth);
   const { eventId } = useParams();
   // const { event, loadingEvent, eventSnap } = useGetEvent(eventId as string);
   const event = useGetEvent(eventId as string);
+  const userParticipating = user && event.data?.participantsIds?.includes(user?.uid);
+  console.log(userParticipating);
 
   const [expenes, loadingExpenses, expensesError] = useGetEventExpenses(eventId as string);
 
@@ -24,15 +35,16 @@ function Event() {
   const eventNotExistsDialogOpen = !event.loading && !eventExists;
   return (
     <>
-      <Meta title="Event" />
+      <Meta title={event.data?.name ?? 'Event'} description={event.data?.description} />
       <FullSizeMiddleFlexContainerColumn>
-        <QueryIndicator loading={event.loading} error={expensesError}>
+        <JoinEventDialog open={!userParticipating} />
+        <QueryIndicator loading={event.loading}>
           {!eventNotExistsDialogOpen ? (
             <>
               <Typography variant="h3">{event.data?.name}</Typography>
 
               <List sx={{ width: '100%', maxWidth: 360, bgcolor: 'background.paper' }}>
-                <QueryIndicator loading={loadingExpenses}>
+                <QueryIndicator loading={loadingExpenses} error={expensesError}>
                   {expenes.map((expene, expenseIndex) => {
                     return <ExpenseListItem expenseId={expene.id} key={expene.id} />;
                   })}
@@ -48,6 +60,29 @@ function Event() {
     </>
   );
 }
+
+const JoinEventDialog = ({ open }: { open: boolean }) => {
+  function handleCancel() {}
+
+  function handleConfirm() {}
+
+  return (
+    <Dialog open={open} disableRestoreFocus>
+      <DialogTitle>Join Event</DialogTitle>
+      <DialogContent>
+        You are not participating in this event <br />
+        would you like to join?
+      </DialogContent>
+
+      <DialogActions>
+        <Button onClick={handleCancel}>Cancel</Button>
+        <Button autoFocus onClick={handleConfirm}>
+          Join
+        </Button>
+      </DialogActions>
+    </Dialog>
+  );
+};
 
 export default Event;
 
