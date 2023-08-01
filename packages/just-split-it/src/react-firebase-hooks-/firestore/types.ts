@@ -26,36 +26,21 @@ export type GetOptions = {
 };
 export type OnceDataOptions<T> = OnceOptions & IDOptions<T>;
 
-export type CollectionHook<T = DocumentData> = LoadingHook<
-  QuerySnapshot<T>,
-  FirestoreError
->;
-export type CollectionOnceHook<T = DocumentData> = [
-  ...CollectionHook<T>,
-  () => Promise<void>
-];
+export type CollectionHook<T = DocumentData> = LoadingHook<QuerySnapshot<T>, FirestoreError>;
+export type CollectionOnceHook<T = DocumentData> = [...CollectionHook<T>, () => Promise<void>];
 export type CollectionDataHook<T = DocumentData> = [
   ...LoadingHook<T[], FirestoreError>,
-  QuerySnapshot<T> | undefined
+  QuerySnapshot<T & { id: string }> | undefined,
 ];
 export type CollectionDataOnceHook<T = DocumentData> = [
   ...CollectionDataHook<T>,
-  () => Promise<void>
+  () => Promise<void>,
 ];
 
-export type DocumentHook<T = DocumentData> = LoadingHook<
-  DocumentSnapshot<T>,
-  FirestoreError
->;
-export type DocumentOnceHook<T = DocumentData> = [
-  ...DocumentHook<T>,
-  () => Promise<void>
-];
+export type DocumentHook<T = DocumentData> = LoadingHook<DocumentSnapshot<T>, FirestoreError>;
+export type DocumentOnceHook<T = DocumentData> = [...DocumentHook<T>, () => Promise<void>];
 export type DocumentDataHook<T = DocumentData> = [
   ...LoadingHook<T, FirestoreError>,
-  DocumentSnapshot<T> | undefined
+  DocumentSnapshot<T> | undefined,
 ];
-export type DocumentDataOnceHook<T = DocumentData> = [
-  ...DocumentDataHook<T>,
-  () => Promise<void>
-];
+export type DocumentDataOnceHook<T = DocumentData> = [...DocumentDataHook<T>, () => Promise<void>];

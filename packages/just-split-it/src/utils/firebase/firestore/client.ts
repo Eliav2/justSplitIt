@@ -116,9 +116,7 @@ export const firestore = {
     collectionType<FirestoreEvent>(collection(getFirestore(fbApp), 'event', ...pathSegments)),
   // just to show how to wrap withConverter manually (for advanced use cases)
   user: (...pathSegments: string[]) =>
-    collectionType<FirestoreUser>(
-      withConverter<FirestoreUser>(collection(getFirestore(fbApp), 'user', ...pathSegments)),
-    ),
+    collectionType<FirestoreUser>(collection(getFirestore(fbApp), 'user', ...pathSegments)),
   // // withMethods<FirestoreUser>(
   // collection(getFirestore(fbApp), 'user', ...pathSegments).withConverter({
   //   toFirestore: (user: FirestoreUser) => user,

@@ -23,7 +23,7 @@ import {
   FirestoreUserWithId,
 } from '@/utils/firebase/firestore/schema';
 import { useGetEvent } from '@/utils/firebase/firestore/queris/hooks';
-import { useGrabDocumentsById } from '@/utils/firebase/firestore/hooks/query';
+import { useGrabDocumentsByIds } from '@/utils/firebase/firestore/hooks/query';
 import { firestore } from '@/utils/firebase/firestore/client';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { fbAuth } from '@/utils/firebase/firebase';
@@ -45,19 +45,27 @@ export const NewExpenseDialog = (props: NewExpenseDialogProps) => {
   const [open, setOpen] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
   const [loadingState, setLoadingState] = useState<'idle' | 'loading'>('idle');
-  const participants = useGrabDocumentsById(firestore.user(), props.parentEvent?.participantsIds);
+  const [participants] = useGrabDocumentsByIds(
+    firestore.user(),
+    props.parentEvent?.participantsIds,
+  );
+  const participantsDocs = participants?.docs ?? [];
+  const participantsData = participantsDocs.map((p) => Object.assign({}, p.data(), { id: p.id }));
 
   const expenseForm = useForm<ExpenseFormInput>({
     defaultValues: {
       name: '',
       amount: '0',
-      payer: participants?.find((p) => p.id == user?.uid) || (null as any),
+      payer: participantsData?.find((p) => p.id == user?.uid) || (null as any),
     },
   });
 
   // set the payer to the current user by default (only when the participants are loaded)
   useEffect(() => {
-    expenseForm.setValue('payer', participants?.find((p) => p.id == user?.uid) || (null as any));
+    expenseForm.setValue(
+      'payer',
+      participantsData?.find((p) => p.id == user?.uid) || (null as any),
+    );
   }, [participants, open]);
 
   const handleClickOpen = () => {
@@ -158,7 +166,7 @@ export const NewExpenseDialog = (props: NewExpenseDialogProps) => {
               rules={{
                 validate: (value) => {
                   return (
-                    participants.some((p) => p.id == value?.id) ||
+                    participantsData.some((p) => p.id == value?.id) ||
                     'Please select a valid option from the list.'
                   );
                 },
@@ -171,11 +179,11 @@ export const NewExpenseDialog = (props: NewExpenseDialogProps) => {
                     }}
                     value={value}
                     getOptionLabel={(option) =>
-                      participants.find((p) => p.id == option.id)?.name || ''
+                      participantsData.find((p) => p.id == option.id)?.name || ''
                     }
                     isOptionEqualToValue={(option, value) => option.id == value.id}
                     disablePortal
-                    options={participants}
+                    options={participantsData}
                     sx={{ width: 300 }}
                     renderInput={(params) => (
                       <TextField

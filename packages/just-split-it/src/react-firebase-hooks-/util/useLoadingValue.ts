@@ -1,4 +1,4 @@
-import { useCallback, useMemo, useReducer } from 'react';
+import { useCallback, useEffect, useMemo, useReducer } from 'react';
 
 export type LoadingValue<T, E> = {
   error?: E;
@@ -27,38 +27,34 @@ const defaultState = (defaultValue?: any) => {
   };
 };
 
-const reducer = <E>() => (
-  state: ReducerState<E>,
-  action: ReducerAction<E>
-): ReducerState<E> => {
-  switch (action.type) {
-    case 'error':
-      return {
-        ...state,
-        error: action.error,
-        loading: false,
-        value: undefined,
-      };
-    case 'reset':
-      return defaultState(action.defaultValue);
-    case 'value':
-      return {
-        ...state,
-        error: undefined,
-        loading: false,
-        value: action.value,
-      };
-    default:
-      return state;
-  }
-};
+const reducer =
+  <E>() =>
+  (state: ReducerState<E>, action: ReducerAction<E>): ReducerState<E> => {
+    switch (action.type) {
+      case 'error':
+        return {
+          ...state,
+          error: action.error,
+          loading: false,
+          value: undefined,
+        };
+      case 'reset':
+        return defaultState(action.defaultValue);
+      case 'value':
+        return {
+          ...state,
+          error: undefined,
+          loading: false,
+          value: action.value,
+        };
+      default:
+        return state;
+    }
+  };
 
 export default <T, E>(getDefaultValue?: () => T): LoadingValue<T, E> => {
   const defaultValue = getDefaultValue ? getDefaultValue() : undefined;
-  const [state, dispatch] = useReducer(
-    reducer<E>(),
-    defaultState(defaultValue)
-  );
+  const [state, dispatch] = useReducer(reducer<E>(), defaultState(defaultValue));
 
   const reset = useCallback(() => {
     const defaultValue = getDefaultValue ? getDefaultValue() : undefined;
@@ -82,6 +78,6 @@ export default <T, E>(getDefaultValue?: () => T): LoadingValue<T, E> => {
       setValue,
       value: state.value,
     }),
-    [state.error, state.loading, reset, setError, setValue, state.value]
+    [state.error, state.loading, reset, setError, setValue, state.value],
   );
 };

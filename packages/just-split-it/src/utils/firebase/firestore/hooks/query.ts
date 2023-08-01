@@ -9,6 +9,11 @@ import type {
 } from 'firebase/firestore';
 import { doc, FirestoreError, getDoc, getDocs, onSnapshot, query, where } from 'firebase/firestore';
 import { useEffect, useState } from 'react';
+import {
+  useCollection as useFirestoreCollection,
+  useCollectionData,
+  useCollectionOnce,
+} from '@/react-firebase-hooks-/firestore/useCollection';
 
 export const useCollection = <T extends DocumentData>(
   query: Query<T, T> | undefined | null,
@@ -36,23 +41,6 @@ export const useCollection = <T extends DocumentData>(
   useEffect(() => {
     if (!query) return;
     const unsubscribe = onSnapshot(query, handleQuerySnapShot, handleQueryError);
-    // // or explicitly
-    // const unsubscribe = onSnapshot(
-    //   query,
-    //   (snapshot) => {
-    //     const docs = snapshot.docs.map((doc) => ({
-    //       ...doc.data(),
-    //       id: doc.id,
-    //     }));
-    //     setLoading(false);
-    //     setDocs(docs);
-    //     setError(null);
-    //   },
-    //   (error) => {
-    //     setError(error);
-    //     console.error(error);
-    //   },
-    // );
     return () => {
       unsubscribe();
       setLoading(true);
@@ -117,30 +105,48 @@ export const useGrabDocumentById = <T extends DocumentData>(
   return useDocument<T>(docRef, {}, [docId]);
 };
 
-export const useGrabDocumentsById = <T extends DocumentData>(
+export const useGrabDocumentsByIds = <T extends DocumentData>(
+  collection: CollectionReference<T, T>,
+  docIds: string[] | undefined | null,
+) => {
+  // const _docIds = docIds ?? [];
+  // const [snap, setSnap] = useState<QuerySnapshot<T> | null>(null);
+  // const [documents, setDocuments] = useState<(T & { id: string })[]>([]);
+  // // return docIds?.map((docId) => useGrabDocumentById<T>(collection, docId));
+  // useEffect(() => {
+  //   const docRefs = _docIds?.map((id) => doc(collection, id));
+  //   if (docRefs.length == 0) return;
+  //   const queryRef = query(collection, where('__name__', 'in', docRefs));
+  //   // Execute the query to fetch the documents
+  //   getDocs(queryRef)
+  //     .then((querySnapshot) => {
+  //       setSnap(querySnapshot);
+  //       const fetchedDocuments = querySnapshot.docs.map((doc) => {
+  //         // Extract the data from each document and store it in the array
+  //         const data = doc.data();
+  //         return { id: doc.id, ...data };
+  //       });
+  //       setDocuments(fetchedDocuments);
+  //     })
+  //     .catch((error) => {
+  //       console.error('Error fetching documents:', error);
+  //     });
+  // }, [docIds]); // Empty dependency array to run the effect only once
+  // return [snap] as const;
+
+  const _docIds = docIds ?? [];
+  const docRefs = _docIds?.map((id) => doc(collection, id));
+  const q = query(collection, where('__name__', 'in', docRefs));
+  // useFirestoreCollection(q);
+  return useFirestoreCollection(q);
+};
+
+export const useGrabDocumentsDataByIds = <T extends DocumentData>(
   collection: CollectionReference<T, T>,
   docIds: string[] | undefined | null,
 ) => {
   const _docIds = docIds ?? [];
-  const [documents, setDocuments] = useState<(T & { id: string })[]>([]);
-  // return docIds?.map((docId) => useGrabDocumentById<T>(collection, docId));
-  useEffect(() => {
-    const docRefs = _docIds?.map((id) => doc(collection, id));
-    if (docRefs.length == 0) return;
-    const queryRef = query(collection, where('__name__', 'in', docRefs));
-    // Execute the query to fetch the documents
-    getDocs(queryRef)
-      .then((querySnapshot) => {
-        const fetchedDocuments = querySnapshot.docs.map((doc) => {
-          // Extract the data from each document and store it in the array
-          const data = doc.data();
-          return { id: doc.id, ...data };
-        });
-        setDocuments(fetchedDocuments);
-      })
-      .catch((error) => {
-        console.error('Error fetching documents:', error);
-      });
-  }, [docIds]); // Empty dependency array to run the effect only once
-  return documents;
+  const docRefs = _docIds?.map((id) => doc(collection, id));
+  const q = query(collection, where('__name__', 'in', docRefs));
+  return useCollectionData(q);
 };

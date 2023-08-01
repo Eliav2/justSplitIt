@@ -29,7 +29,7 @@ import {
 export const useCollection = <T = DocumentData>(
   query?: Query<T> | null,
   options?: Options,
-  dependencies?: any[],
+  dependencies: any[] = [],
 ): CollectionHook<T> => {
   const { error, loading, reset, setError, setValue, value } = useLoadingValue<
     QuerySnapshot<T>,
@@ -43,15 +43,25 @@ export const useCollection = <T = DocumentData>(
       setValue(undefined);
       return;
     }
+    // console.log('re-subscribing');
     const unsubscribe = options?.snapshotListenOptions
       ? onSnapshot(ref.current, options.snapshotListenOptions, setValue, setError)
       : onSnapshot(ref.current, setValue, setError);
 
     return () => {
+      // console.log('unsubscribing');
       unsubscribe();
     };
   }, [ref.current, ...(dependencies ?? [])]);
 
+  const [snapshot, loadingOnce, errorOnce] = useCollectionOnce(query);
+  useEffect(() => {
+    // console.log('re-fetching snapshot because of change in dependencies');
+    if (snapshot) {
+      // console.log('setting value');
+      setValue(snapshot);
+    }
+  }, dependencies);
   return [value as QuerySnapshot<T>, loading, error];
 };
 
@@ -97,7 +107,7 @@ export const useCollectionOnce = <T = DocumentData>(
 export const useCollectionData = <T = DocumentData>(
   query?: Query<T> | null,
   options?: DataOptions<T> & InitialValueOptions<T[]>,
-): CollectionDataHook<T> => {
+) => {
   const [snapshots, loading, error] = useCollection<T>(query, options);
 
   const values = getValuesFromSnapshots<T>(
@@ -106,13 +116,13 @@ export const useCollectionData = <T = DocumentData>(
     options?.initialValue,
   );
 
-  return [values, loading, error, snapshots];
+  return [values, loading, error, snapshots] as const;
 };
 
 export const useCollectionDataOnce = <T = DocumentData>(
   query?: Query<T> | null,
   options?: OnceDataOptions<T> & InitialValueOptions<T[]>,
-): CollectionDataOnceHook<T> => {
+) => {
   const [snapshots, loading, error, reloadData] = useCollectionOnce<T>(query, options);
 
   const values = getValuesFromSnapshots<T>(
@@ -121,16 +131,18 @@ export const useCollectionDataOnce = <T = DocumentData>(
     options?.initialValue,
   );
 
-  return [values, loading, error, snapshots, reloadData];
+  return [values, loading, error, snapshots, reloadData] as const;
 };
 
 const getValuesFromSnapshots = <T>(
   snapshots: QuerySnapshot<T> | undefined,
   options?: SnapshotOptions,
   initialValue?: T[],
-): T[] | undefined => {
+): (T & { id: string })[] | undefined => {
   return useMemo(
-    () => (snapshots?.docs.map((doc) => doc.data(options)) ?? initialValue) as T[] | undefined,
+    () =>
+      (snapshots?.docs.map((doc) => Object.assign({}, doc.data(options), { id: doc.id })) ??
+        initialValue) as (T & { id: string })[] | undefined,
     [snapshots, options],
   );
 };
