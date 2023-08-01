@@ -1,30 +1,20 @@
 import Typography from '@mui/material/Typography';
 
 import Meta from '@/components/Meta';
-import {
-  FullSizeCenteredFlexBoxColumn,
-  FullSizeMiddleFlexContainerColumn,
-} from '@/components/styled';
-import { useNavigate, useParams } from 'react-router-dom';
+import { FullSizeMiddleFlexContainerColumn } from '@/components/styled';
+import { useParams } from 'react-router-dom';
 import { NewExpenseDialog } from '@/pages/Event/NewExpenseDialog';
 import { useGetEvent, useGetEventExpenses } from '@/utils/firebase/firestore/queris/hooks';
 import List from '@mui/material/List';
 import QueryIndicator from '@/components/QueryIndicator';
 import { EventDoesNotExistDialog } from '@/pages/Event/EventDoesNotExistDialog';
 import { ExpenseListItem } from '@/pages/Event/ExpenseListItem';
-import DialogTitle from '@mui/material/DialogTitle';
-import { DialogActions } from '@mui/material';
 import Button from '@mui/material/Button';
-import Dialog from '@mui/material/Dialog';
-import DialogContent from '@mui/material/DialogContent';
-import { useState } from 'react';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { fbAuth } from '@/utils/firebase/firebase';
-import { addParticipantToEvent } from '@/utils/firebase/firestore/queris/queries';
-import type { User } from 'firebase/auth';
-import ConfirmDeleteDialogButton from '@/components/Dialog/ConfirmDeleteDialogButton';
 
 import { DeleteEventDialogButton } from '@/components/Dialog/DeleteEventDialogButton';
+import { JoinEventDialog } from '@/pages/Event/JoinEventDialog';
 
 function Event() {
   const [user] = useAuthState(fbAuth);
@@ -61,12 +51,21 @@ function Event() {
               {event.data && (
                 <>
                   <NewExpenseDialog parentEvent={event.data} />
-                  {isOwner && (
+                  {isOwner ? (
                     <DeleteEventDialogButton
                       event={event.data}
                       buttonElement={(handleOpen) => (
                         <Button onClick={handleOpen} color={'warning'}>
                           Delete Event
+                        </Button>
+                      )}
+                    />
+                  ) : (
+                    <DeleteEventDialogButton
+                      event={event.data}
+                      buttonElement={(handleOpen) => (
+                        <Button onClick={handleOpen} color={'warning'}>
+                          Leave Event
                         </Button>
                       )}
                     />
@@ -82,64 +81,5 @@ function Event() {
     </>
   );
 }
-<ConfirmDeleteDialogButton
-  handleConfirm={() => {}}
-  content={
-    <DialogContent>
-      Are you sure? <br />
-      This will delete this action cannot be undone.
-    </DialogContent>
-  }
-  buttonElement={(handleOpen) => (
-    <Button onClick={handleOpen} color={'warning'}>
-      Delete Event
-    </Button>
-  )}
-/>;
-interface JoinEventDialogProps {
-  open: boolean;
-  user: User | null | undefined;
-  eventId: string;
-}
-
-const JoinEventDialog = (props: JoinEventDialogProps) => {
-  const navigate = useNavigate();
-
-  function handleReject() {
-    navigate('/');
-  }
-
-  function handleJoin() {
-    if (!props.user?.uid) return;
-    addParticipantToEvent(props.eventId, props.user?.uid);
-  }
-
-  return (
-    <Dialog open={props.open} disableRestoreFocus>
-      <DialogTitle>Join Event</DialogTitle>
-      <DialogContent>
-        You are not participating in this event <br />
-        would you like to join?
-      </DialogContent>
-
-      <DialogActions>
-        <Button onClick={handleReject}>Nope. I'm out</Button>
-        <Button autoFocus onClick={handleJoin}>
-          Join
-        </Button>
-      </DialogActions>
-    </Dialog>
-  );
-};
 
 export default Event;
-
-//
-// import * as React from 'react';
-//
-// function CheckboxList() {
-//
-//     return (
-//
-//     );
-// }

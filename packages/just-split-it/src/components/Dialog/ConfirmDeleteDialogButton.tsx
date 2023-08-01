@@ -1,12 +1,8 @@
-import { FirestoreEventWithId } from '@/utils/firebase/firestore/schema';
 import { useState } from 'react';
 import IconButton from '@mui/material/IconButton';
 import DeleteIcon from '@mui/icons-material/Delete';
-import Dialog from '@mui/material/Dialog';
-import DialogTitle from '@mui/material/DialogTitle';
 import DialogContent from '@mui/material/DialogContent';
-import { DialogActions, DialogContentText } from '@mui/material';
-import Button from '@mui/material/Button';
+import ConfirmDialogButton from '@/components/Dialog/ConfirmDialogButton';
 
 export interface ConfirmDialogButtonProps {
   handleConfirm: (close: () => void) => void;
@@ -42,15 +38,6 @@ const ConfirmDeleteDialogButton = (props: ConfirmDialogButtonProps) => {
 
   const p = {
     ...{
-      titleText: 'Delete Confirmation',
-      content: (
-        <DialogContent>
-          Are you sure? <br />
-          this action cannot be undone.
-        </DialogContent>
-      ),
-      confirmDialogButtonLabel: 'Yes',
-      cancelDialogButtonLabel: 'Cancel',
       buttonElement: (handleOpen: () => void = _handleOpen) => (
         <IconButton edge="end" aria-label="delete" onClick={handleOpen}>
           <DeleteIcon />
@@ -61,19 +48,33 @@ const ConfirmDeleteDialogButton = (props: ConfirmDialogButtonProps) => {
   };
 
   return (
-    <>
-      {p.buttonElement(_handleOpen)}
-      <Dialog open={_open} disableRestoreFocus>
-        <DialogTitle>{p.titleText}</DialogTitle>
-        {p.content}
-        <DialogActions>
-          <Button onClick={handleCancel}>{p.cancelDialogButtonLabel}</Button>
-          <Button autoFocus onClick={handleConfirm}>
-            {p.confirmDialogButtonLabel}
-          </Button>
-        </DialogActions>
-      </Dialog>
-    </>
+    <ConfirmDialogButton
+      open={_open}
+      dialogHandleConfirm={handleConfirm}
+      content={
+        <DialogContent>
+          Are you sure? <br />
+          this action cannot be undone.
+        </DialogContent>
+      }
+      titleText={'Delete Confirmation'}
+      buttonElement={p.buttonElement}
+    />
   );
+  // return (
+  //   <>
+  //     {p.buttonElement(_handleOpen)}
+  //     <Dialog open={_open} disableRestoreFocus>
+  //       <DialogTitle>{p.titleText}</DialogTitle>
+  //       {p.content}
+  //       <DialogActions>
+  //         <Button onClick={handleCancel}>{p.cancelDialogButtonLabel}</Button>
+  //         <Button autoFocus onClick={handleConfirm}>
+  //           {p.confirmDialogButtonLabel}
+  //         </Button>
+  //       </DialogActions>
+  //     </Dialog>
+  //   </>
+  // );
 };
 export default ConfirmDeleteDialogButton;
