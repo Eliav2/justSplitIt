@@ -23,7 +23,12 @@ const Layout = () => {
 // todo: change to  data browser ('createBroswerRouter')
 function AppPages() {
   return (
-    <Box sx={{ height: (theme) => getPageHeight(theme) }}>
+    <Box
+      sx={{
+        height: (theme) => getPageHeight(theme),
+        // height: '100vh',
+      }}
+    >
       <BrowserRouter>
         <Routes>
           <Route element={<Layout />}>

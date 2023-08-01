@@ -14,17 +14,17 @@ import LockIcon from '@mui/icons-material/Lock';
 interface QueryIndicatorProps {
   children: React.ReactNode;
   loading: boolean;
-  error?: FirestoreError | null;
+  errorMessage?: string | null;
 }
 
-const QueryIndicator = ({ children, loading, error }: QueryIndicatorProps) => {
+const QueryIndicator = ({ children, loading, errorMessage }: QueryIndicatorProps) => {
   const [expanded, setExpanded] = useState(false);
 
   const handleExpandClick = () => {
     setExpanded(!expanded);
   };
   // console.log(error);
-  if (error)
+  if (errorMessage)
     return (
       <Box sx={{ textAlign: 'center', pt: 2 }}>
         <LockIcon />
@@ -39,7 +39,7 @@ const QueryIndicator = ({ children, loading, error }: QueryIndicatorProps) => {
             <RotatingIconButton isRotated={expanded} />
           </CenteredFlexBox>
           <Collapse in={expanded} timeout="auto" unmountOnExit>
-            <Typography variant={'body2'}>{error.message}</Typography>
+            <Typography variant={'body2'}>{errorMessage}</Typography>
           </Collapse>
         </Box>
       </Box>

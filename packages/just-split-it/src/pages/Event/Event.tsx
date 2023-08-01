@@ -22,45 +22,68 @@ function Event() {
   const [user] = useAuthState(fbAuth);
   const { eventId } = useParams();
   // const { event, loadingEvent, eventSnap } = useGetEvent(eventId as string);
-  const event = useGetEvent(eventId as string);
-  const isUserParticipating = user && event.data?.participantsIds?.includes(user?.uid);
+  const [event, eventLoading] = useGetEvent(eventId as string);
 
-  // useEffect(() => {
-  //   console.log('event changed');
-  // }, [event]);
+  const eventData = event && Object.assign({}, event.data(), { id: event.id });
 
-  const [expenes, loadingExpenses, expensesError] = useGetEventExpenses(eventId as string);
+  const isUserParticipating = user && eventData?.participantsIds?.includes(user?.uid);
+
+  // const expensesQuery = useGetEventExpenses(eventId as string);
+  const [expenses, loading, error] = useGetEventExpenses(eventId as string, event);
+
+  // console.log(expenses);
+  // const {
+  //   docs: expenes,
+  //   loading: loadingExpenses,
+  //   error: expensesError,
+  //
+  // } = useGetEventExpenses(eventId as string);
+
+  useEffect(() => {
+    console.log('event changed', event);
+    // expensesQuery.refresh();
+    // event.refresh();
+  }, [event]);
+
   // console.log('expensesError', expensesError);
 
-  const eventExists = event.snap?.exists();
-  const eventNotExistsDialogOpen = !event.loading && !eventExists;
+  const eventExists = event?.exists();
+  const eventNotExistsDialogOpen = !eventLoading && !eventExists;
 
-  const isOwner = user?.uid === event.data?.ownerId;
+  const isOwner = user?.uid === eventData?.ownerId;
   return (
     <>
-      <Meta title={event.data?.name ?? 'Event'} description={event.data?.description} />
+      <Meta title={eventData?.name ?? 'Event'} description={eventData?.description} />
       <FullSizeMiddleFlexContainerColumn>
-        {event.ref && (
-          <JoinEventDialog open={!isUserParticipating} eventId={event.ref?.id} user={user} />
+        {event?.ref && (
+          <JoinEventDialog open={!isUserParticipating} eventId={event?.ref?.id} user={user} />
         )}
-        <QueryIndicator loading={event.loading}>
+        <QueryIndicator loading={eventLoading}>
           {!eventNotExistsDialogOpen ? (
             <>
-              <Typography variant="h3">{event.data?.name}</Typography>
+              <Typography variant="h3">{eventData?.name}</Typography>
 
               <List sx={{ width: '100%', maxWidth: 360, bgcolor: 'background.paper' }}>
-                <QueryIndicator loading={loadingExpenses} error={expensesError}>
-                  {expenes.map((expene, expenseIndex) => {
+                <QueryIndicator
+                  loading={loading}
+                  errorMessage={error?.message}
+                  // loading={expensesQuery.loading}
+                  // errorMessage={expensesQuery.error?.message}
+                >
+                  {expenses?.docs.map((expene, expenseIndex) => {
                     return <ExpenseListItem expenseId={expene.id} key={expene.id} />;
                   })}
+                  {/*{expensesQuery.docs.map((expene, expenseIndex) => {*/}
+                  {/*  retu rn <ExpenseListItem expenseId={expene.id} key={expene.id} />;*/}
+                  {/*})}*/}
                 </QueryIndicator>
               </List>
-              {event.data && (
+              {eventData && (
                 <>
-                  <NewExpenseDialog parentEvent={event.data} />
+                  <NewExpenseDialog parentEvent={eventData} />
                   {isOwner ? (
                     <DeleteEventDialogButton
-                      event={event.data}
+                      event={eventData}
                       buttonElement={(handleOpen) => (
                         <Button onClick={handleOpen} color={'warning'}>
                           Delete Event
@@ -68,7 +91,7 @@ function Event() {
                       )}
                     />
                   ) : (
-                    <ParticipantLeaveEventDialogButton eventId={event.data.id} />
+                    <ParticipantLeaveEventDialogButton eventId={event.id} />
                   )}
                 </>
               )}

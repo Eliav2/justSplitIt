@@ -6,24 +6,29 @@ import {
   DocumentReference,
   FieldPath,
   getDoc,
+  getFirestore,
   QueryDocumentSnapshot,
   SnapshotOptions,
 } from 'firebase/firestore';
-import { fbDB } from '@/utils/firebase/firebase';
+import { fbApp, fbDB } from '@/utils/firebase/firebase';
 import type { FirestoreEvent, FirestoreExpense, FirestoreUser } from './schema';
 
 const withConverter = <T extends DocumentData>(
-  collection: CollectionReference,
+  collectionRef: CollectionReference,
 ): CollectionReference<T, T> => {
-  return collection.withConverter({
+  return collectionRef.withConverter({
     toFirestore: (data: T) => data,
     fromFirestore: (
       snapshot: QueryDocumentSnapshot<T, T>,
       options: SnapshotOptions | undefined,
     ): T => {
-      return snapshot.data(options) as T;
+      return snapshot.data(options);
     },
   }) as CollectionReference<T, T>;
+};
+
+const collectionType = <T extends DocumentData>(collection: CollectionReference<any, any>) => {
+  return collection as CollectionReference<T, T>;
 };
 
 type myGetDoc<T> = <Path extends keyof T>(
@@ -105,21 +110,27 @@ const withMethods = <T extends DocumentData>(collection: CollectionReference) =>
 };
 export const firestore = {
   // use own withConverter wrapper
+  // event: (...pathSegments: string[]) => collection(getFirestore(fbApp), 'event', ...pathSegments),
   event: (...pathSegments: string[]) =>
-    withConverter<FirestoreEvent>(collection(fbDB, 'event', ...pathSegments)),
+    // withConverter<FirestoreEvent>(collection(getFirestore(fbApp), 'event', ...pathSegments)),
+    collectionType<FirestoreEvent>(collection(getFirestore(fbApp), 'event', ...pathSegments)),
   // just to show how to wrap withConverter manually (for advanced use cases)
   user: (...pathSegments: string[]) =>
-    // withMethods<FirestoreUser>(
-    collection(fbDB, 'user', ...pathSegments).withConverter({
-      toFirestore: (user: FirestoreUser) => user,
-      fromFirestore: (snapshot, options): FirestoreUser => {
-        const data = snapshot.data(options);
-        return data as FirestoreUser;
-      },
-    }),
+    collectionType<FirestoreUser>(
+      withConverter<FirestoreUser>(collection(getFirestore(fbApp), 'user', ...pathSegments)),
+    ),
+  // // withMethods<FirestoreUser>(
+  // collection(getFirestore(fbApp), 'user', ...pathSegments).withConverter({
+  //   toFirestore: (user: FirestoreUser) => user,
+  //   fromFirestore: (snapshot, options): FirestoreUser => {
+  //     const data = snapshot.data(options);
+  //     return data as FirestoreUser;
+  //   },
+  // }),
   // ),
+  // expense: collection(getFirestore(fbApp), 'expense'),
   expense: (...pathSegments: string[]) =>
-    withConverter<FirestoreExpense>(collection(fbDB, 'expense', ...pathSegments)),
+    collectionType<FirestoreExpense>(collection(getFirestore(fbApp), 'expense', ...pathSegments)),
 };
 
 // const eventRef = await addDoc(firestore.event(), {

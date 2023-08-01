@@ -1,14 +1,14 @@
-import { getDocs, doc, onSnapshot, query, where, getDoc, FirestoreError } from 'firebase/firestore';
 import type {
+  CollectionReference,
   DocumentData,
-  SnapshotListenOptions,
   DocumentReference,
   DocumentSnapshot,
-  CollectionReference,
   Query,
+  QuerySnapshot,
+  SnapshotListenOptions,
 } from 'firebase/firestore';
+import { doc, FirestoreError, getDoc, getDocs, onSnapshot, query, where } from 'firebase/firestore';
 import { useEffect, useState } from 'react';
-import { firestore } from '@/utils/firebase/firestore/client';
 
 export const useCollection = <T extends DocumentData>(
   query: Query<T, T> | undefined | null,
@@ -18,25 +18,41 @@ export const useCollection = <T extends DocumentData>(
   const [error, setError] = useState<FirestoreError | null>(null);
   const [loading, setLoading] = useState(true);
   const [docs, setDocs] = useState<(T & { id: string })[]>([]);
+
+  const handleQuerySnapShot = (snapshot: QuerySnapshot<T, T>) => {
+    const docs = snapshot.docs.map((doc) => ({
+      ...doc.data(),
+      id: doc.id,
+    }));
+    setLoading(false);
+    setDocs(docs);
+    setError(null);
+  };
+  const handleQueryError = (error: FirestoreError) => {
+    setError(error);
+    console.error(error);
+  };
+
   useEffect(() => {
     if (!query) return;
-    const unsubscribe = onSnapshot(
-      query,
-      (snapshot) => {
-        const docs = snapshot.docs.map((doc) => ({
-          ...doc.data(),
-          id: doc.id,
-        }));
-        setLoading(false);
-        setDocs(docs);
-        // console.log('snap!');
-        setError(null);
-      },
-      (error) => {
-        setError(error);
-        console.error(error);
-      },
-    );
+    const unsubscribe = onSnapshot(query, handleQuerySnapShot, handleQueryError);
+    // // or explicitly
+    // const unsubscribe = onSnapshot(
+    //   query,
+    //   (snapshot) => {
+    //     const docs = snapshot.docs.map((doc) => ({
+    //       ...doc.data(),
+    //       id: doc.id,
+    //     }));
+    //     setLoading(false);
+    //     setDocs(docs);
+    //     setError(null);
+    //   },
+    //   (error) => {
+    //     setError(error);
+    //     console.error(error);
+    //   },
+    // );
     return () => {
       unsubscribe();
       setLoading(true);
@@ -44,8 +60,21 @@ export const useCollection = <T extends DocumentData>(
       setDocs([]);
     };
   }, [options?.enable ?? true, ...dependencies]);
+
+  // can be used if permissions are changed
+  const refresh = async () => {
+    if (!query) return;
+    setLoading(true);
+    const querySnapshot = await getDocs(query)
+      .catch(handleQueryError)
+      .finally(() => setLoading(false));
+
+    if (!querySnapshot) return;
+    handleQuerySnapShot(querySnapshot);
+  };
+
   // console.log('err', error);
-  return [docs, loading, error] as const;
+  return { docs, loading, error, refresh } as const;
 };
 
 // get and watch a single document
@@ -70,7 +99,14 @@ export const useDocument = <T extends DocumentData>(
     };
   }, [options?.enable ?? true, ...dependencies]);
 
-  return { data, loading, snap, ref } as const;
+  // can be used if permissions are changed
+  const refresh = async () => {
+    if (!ref) return;
+    const docSnap = await getDoc(ref);
+    setSnap(docSnap);
+  };
+
+  return { data, loading, snap, ref, refresh } as const;
 };
 
 export const useGrabDocumentById = <T extends DocumentData>(
