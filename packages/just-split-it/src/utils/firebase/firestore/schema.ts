@@ -13,7 +13,7 @@ export interface FirestoreEventWithId extends FirestoreEvent {
 }
 
 export interface FirestoreUser {
-  // refence to the user document
+  // reference to the user document
   name: string;
   email: string;
 }

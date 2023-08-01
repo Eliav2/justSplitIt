@@ -85,6 +85,7 @@ export const NewExpenseDialog = (props: NewExpenseDialogProps) => {
         setLoadingState('idle');
         setOpen(false);
         expenseForm.reset();
+        setErrorMessage('');
       })
       .catch((e: FirestoreError) => {
         console.error(e);

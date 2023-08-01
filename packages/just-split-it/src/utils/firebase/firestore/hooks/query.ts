@@ -1,4 +1,4 @@
-import { getDocs, doc, onSnapshot, query, where, getDoc } from 'firebase/firestore';
+import { getDocs, doc, onSnapshot, query, where, getDoc, FirestoreError } from 'firebase/firestore';
 import type {
   DocumentData,
   SnapshotListenOptions,
@@ -15,24 +15,32 @@ export const useCollection = <T extends DocumentData>(
   options?: { enable?: boolean; snapshotListenOptions?: SnapshotListenOptions },
   dependencies: any[] = [],
 ) => {
+  const [error, setError] = useState<FirestoreError | null>(null);
   const [loading, setLoading] = useState(true);
   const [docs, setDocs] = useState<(T & { id: string })[]>([]);
   useEffect(() => {
     if (!query) return;
-    const unsubscribe = onSnapshot(query, (snapshot) => {
-      const docs = snapshot.docs.map((doc) => ({
-        ...doc.data(),
-        id: doc.id,
-      }));
-      setLoading(false);
-      setDocs(docs);
-    });
+    const unsubscribe = onSnapshot(
+      query,
+      (snapshot) => {
+        const docs = snapshot.docs.map((doc) => ({
+          ...doc.data(),
+          id: doc.id,
+        }));
+        setLoading(false);
+        setDocs(docs);
+      },
+      (error) => {
+        setError(error);
+        console.error(error);
+      },
+    );
     return () => {
       unsubscribe();
       setLoading(true);
     };
   }, [options?.enable ?? true, ...dependencies]);
-  return [docs, loading] as const;
+  return [docs, loading, error] as const;
 };
 
 // get and watch a single document

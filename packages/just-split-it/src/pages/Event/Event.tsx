@@ -18,7 +18,7 @@ function Event() {
   // const { event, loadingEvent, eventSnap } = useGetEvent(eventId as string);
   const event = useGetEvent(eventId as string);
 
-  const [expenes, loadingExpenses] = useGetEventExpenses(eventId as string);
+  const [expenes, loadingExpenses, expensesError] = useGetEventExpenses(eventId as string);
 
   const eventExists = event.snap?.exists();
   const eventNotExistsDialogOpen = !event.loading && !eventExists;
@@ -26,7 +26,7 @@ function Event() {
     <>
       <Meta title="Event" />
       <FullSizeMiddleFlexContainerColumn>
-        <QueryIndicator loading={event.loading}>
+        <QueryIndicator loading={event.loading} error={expensesError}>
           {!eventNotExistsDialogOpen ? (
             <>
               <Typography variant="h3">{event.data?.name}</Typography>

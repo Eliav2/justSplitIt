@@ -21,6 +21,7 @@ import { FirestoreEvent, FirestoreEventWithId } from '@/utils/firebase/firestore
 import ConfirmDeleteDialogButton, {
   ConfirmDialogButtonProps,
 } from '@/components/Dialog/ConfirmDeleteDialogButton';
+import QueryIndicator from '@/components/QueryIndicator';
 
 interface DeleteEventDialogButtonProps {
   event: FirestoreEventWithId;
@@ -51,7 +52,7 @@ const DeleteEventDialogButton = (props: DeleteEventDialogButtonProps) => {
 };
 
 export const EventsSubmenu = () => {
-  const [events, loading] = useGetUserEvents();
+  const [events, loading, error] = useGetUserEvents();
   const [isSidebarOpen, sidebarActions] = useSidebar();
 
   const { eventId } = useParams();
@@ -61,22 +62,24 @@ export const EventsSubmenu = () => {
       {/*<AlertDialog />*/}
       <ListSubheader sx={{ pt: 2 }}>Events</ListSubheader>
       <List sx={{ width: 250 }}>
-        {events.map((event) => (
-          <ListItem
-            sx={{ p: 0 }}
-            key={event.id}
-            secondaryAction={<DeleteEventDialogButton event={event} />}
-          >
-            <ListItemButton
-              component={Link}
-              to={`/event/${event.id}`}
-              onClick={sidebarActions.close}
+        <QueryIndicator loading={loading} error={error}>
+          {events.map((event) => (
+            <ListItem
+              sx={{ p: 0 }}
+              key={event.id}
+              secondaryAction={<DeleteEventDialogButton event={event} />}
             >
-              <ListItemIcon>{<DefaultIcon />}</ListItemIcon>
-              <ListItemText>{event.name}</ListItemText>
-            </ListItemButton>
-          </ListItem>
-        ))}
+              <ListItemButton
+                component={Link}
+                to={`/event/${event.id}`}
+                onClick={sidebarActions.close}
+              >
+                <ListItemIcon>{<DefaultIcon />}</ListItemIcon>
+                <ListItemText>{event.name}</ListItemText>
+              </ListItemButton>
+            </ListItem>
+          ))}
+        </QueryIndicator>
       </List>
     </>
   );

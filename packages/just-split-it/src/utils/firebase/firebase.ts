@@ -1,6 +1,6 @@
 // Import the functions you need from the SDKs you need
 import { initializeApp } from 'firebase/app';
-import { getAnalytics } from 'firebase/analytics';
+import { getAnalytics, Analytics } from 'firebase/analytics';
 import { connectAuthEmulator, getAuth } from 'firebase/auth';
 import { connectFirestoreEmulator, getFirestore } from 'firebase/firestore';
 import { isDev } from '@/utils/isDev';
@@ -25,7 +25,7 @@ export const fbApp = initializeApp(firebaseConfig);
 export const fbAuth = getAuth(fbApp);
 export const fbDB = getFirestore(fbApp);
 
-const analytics = getAnalytics(fbApp);
+let _analytics: Analytics | undefined;
 
 // if (isDev) {
 //   connectFirestoreEmulator(fbDB, '127.0.0.1', 8080);
@@ -35,4 +35,7 @@ const analytics = getAnalytics(fbApp);
 if (isDev) {
   connectAuthEmulator(fbAuth, 'http://127.0.0.1:9099');
   connectFirestoreEmulator(fbDB, '127.0.0.1', 8080);
+} else {
+  _analytics = getAnalytics(fbApp);
 }
+const analytics = _analytics;
