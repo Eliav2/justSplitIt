@@ -8,13 +8,17 @@ import RequireAuth from '@/components/ProtectedRoute/RequireAuth';
 import Header from '@/sections/Header';
 import Sidebar from '@/sections/Sidebar';
 import Footer from '@/sections/Footer';
+import Container from '@mui/material/Container';
+import { FullSizeMiddleFlexContainerColumn } from '@/components/styled';
 
 const Layout = () => {
   return (
     <>
       <Header />
       <Sidebar />
-      <Outlet />
+      <FullSizeMiddleFlexContainerColumn>
+        <Outlet />
+      </FullSizeMiddleFlexContainerColumn>
       <Footer />
     </>
   );

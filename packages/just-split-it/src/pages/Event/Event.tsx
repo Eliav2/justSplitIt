@@ -37,53 +37,51 @@ function Event() {
   return (
     <>
       <Meta title={eventData?.name ?? 'Event'} description={eventData?.description} />
-      <FullSizeMiddleFlexContainerColumn>
-        {event?.ref && (
-          <JoinEventDialog open={!isUserParticipating} eventId={event?.ref?.id} user={user} />
-        )}
-        <QueryIndicator loading={eventLoading}>
-          {!eventNotExistsDialogOpen ? (
-            <>
-              <Typography variant="h3">{eventData?.name}</Typography>
+      {event?.ref && (
+        <JoinEventDialog open={!isUserParticipating} eventId={event?.ref?.id} user={user} />
+      )}
+      <QueryIndicator loading={eventLoading}>
+        {!eventNotExistsDialogOpen ? (
+          <>
+            <Typography variant="h3">{eventData?.name}</Typography>
 
-              <List sx={{ width: '100%', maxWidth: 360, bgcolor: 'background.paper' }}>
-                <QueryIndicator
-                  loading={loading}
-                  errorMessage={error?.message}
-                  // loading={expensesQuery.loading}
-                  // errorMessage={expensesQuery.error?.message}
-                >
-                  {expenses?.docs.map((expene, expenseIndex) => {
-                    return <ExpenseListItem expenseId={expene.id} key={expene.id} />;
-                  })}
-                  {/*{expensesQuery.docs.map((expene, expenseIndex) => {*/}
-                  {/*  retu rn <ExpenseListItem expenseId={expene.id} key={expene.id} />;*/}
-                  {/*})}*/}
-                </QueryIndicator>
-              </List>
-              {eventData && (
-                <>
-                  <NewExpenseDialog parentEvent={eventData} />
-                  {isOwner ? (
-                    <DeleteEventDialogButton
-                      event={eventData}
-                      buttonElement={(handleOpen) => (
-                        <Button onClick={handleOpen} color={'warning'}>
-                          Delete Event
-                        </Button>
-                      )}
-                    />
-                  ) : (
-                    <ParticipantLeaveEventDialogButton eventId={event.id} />
-                  )}
-                </>
-              )}
-            </>
-          ) : (
-            <EventDoesNotExistDialog open={eventNotExistsDialogOpen} />
-          )}
-        </QueryIndicator>
-      </FullSizeMiddleFlexContainerColumn>
+            <List sx={{ width: '100%', maxWidth: 360, bgcolor: 'background.paper' }}>
+              <QueryIndicator
+                loading={loading}
+                errorMessage={error?.message}
+                // loading={expensesQuery.loading}
+                // errorMessage={expensesQuery.error?.message}
+              >
+                {expenses?.docs.map((expene, expenseIndex) => {
+                  return <ExpenseListItem expenseId={expene.id} key={expene.id} />;
+                })}
+                {/*{expensesQuery.docs.map((expene, expenseIndex) => {*/}
+                {/*  retu rn <ExpenseListItem expenseId={expene.id} key={expene.id} />;*/}
+                {/*})}*/}
+              </QueryIndicator>
+            </List>
+            {eventData && (
+              <>
+                <NewExpenseDialog parentEvent={eventData} />
+                {isOwner ? (
+                  <DeleteEventDialogButton
+                    event={eventData}
+                    buttonElement={(handleOpen) => (
+                      <Button onClick={handleOpen} color={'warning'}>
+                        Delete Event
+                      </Button>
+                    )}
+                  />
+                ) : (
+                  <ParticipantLeaveEventDialogButton eventId={event.id} />
+                )}
+              </>
+            )}
+          </>
+        ) : (
+          <EventDoesNotExistDialog open={eventNotExistsDialogOpen} />
+        )}
+      </QueryIndicator>
     </>
   );
 }

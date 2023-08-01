@@ -72,7 +72,6 @@ export const ExpenseListItem = (props: ExpenseProps) => {
             <ListItemText
               id={expense.data.id}
               primary={`${expense.data.name}`}
-              // secondary={`${expense.data.amount}₪`}
               secondary={
                 <Typography variant={'body2'} color="textSecondary">
                   {expense.data.amount}₪{' '}

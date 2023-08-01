@@ -6,9 +6,9 @@ import { Routes } from './types';
 
 export const routes = {
   Welcome: {
-    component: asyncComponentLoader(() => import('@/pages/Welcome')),
+    component: asyncComponentLoader(() => import('@/pages/Home/Home')),
     path: '/',
-    title: 'Welcome',
+    title: 'Home',
     icon: HomeIcon,
   },
   Login: {
@@ -25,12 +25,6 @@ export const routes = {
 } as const satisfies Routes;
 
 export const protectedRoutes = {
-  Home: {
-    component: asyncComponentLoader(() => import('@/pages/Home')),
-    path: '/Home',
-    title: 'Home',
-    icon: HomeIcon,
-  },
   User: {
     component: asyncComponentLoader(() => import('@/pages/User')),
     path: '/user',
