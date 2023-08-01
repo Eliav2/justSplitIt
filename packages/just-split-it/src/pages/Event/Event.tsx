@@ -98,7 +98,7 @@ function Event() {
 />;
 interface JoinEventDialogProps {
   open: boolean;
-  user: User | null;
+  user: User | null | undefined;
   eventId: string;
 }
 
