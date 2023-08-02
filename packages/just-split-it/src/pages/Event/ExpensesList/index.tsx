@@ -1,2 +1,2 @@
-import ExpensesDetails from './ExpensesDetails';
-export default ExpensesDetails;
+import ExpensesList from './ExpensesList';
+export default ExpensesList;

@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
-import { addEvent } from '@/utils/firebase/firestore/queris/queries';
+import { addEvent } from '@/utils/firebase/firestore/queris/set';
 import { FirestoreError } from 'firebase/firestore';
 import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';

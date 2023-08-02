@@ -1,4 +1,4 @@
-import { useExpense } from '@/utils/firebase/firestore/queris/hooks';
+import { useExpense } from '@/utils/firebase/firestore/queris/get';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { fbAuth } from '@/utils/firebase/firebase';
 import QueryIndicator from '@/components/QueryIndicator';
@@ -7,13 +7,13 @@ import ListItemIcon from '@mui/material/ListItemIcon';
 import Checkbox from '@mui/material/Checkbox';
 import ListItemText from '@mui/material/ListItemText';
 import ConfirmDeleteDialogButton from '@/pages/Event/ExpensesList/ExpenseListItem/ConfirmDeleteDialogButton';
-import { deleteExpense } from '@/utils/firebase/firestore/queris/queries';
+import { deleteExpense } from '@/utils/firebase/firestore/queris/set';
 import { updateDoc } from 'firebase/firestore';
 import * as React from 'react';
 import Typography from '@mui/material/Typography';
 import { FirestoreEvent } from '@/utils/firebase/firestore/schema';
 import { Chip } from '@mui/material';
-import { EditExpenseDialogListItemButton } from '@/pages/Event/ExpensesList/ExpenseListItem/EditExpenseDialogListItemButton';
+import { EditExpenseDialogListItemButton } from '@/pages/Event/ExpensesList/ExpenseListItem/ExpenseParticipantsDetails/EditExpenseDialogListItemButton';
 
 interface ExpenseProps {
   expenseId: string;

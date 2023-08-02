@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useForm, UseFormReturn } from 'react-hook-form';
-import { addExpense } from '@/utils/firebase/firestore/queris/queries';
+import { addExpense } from '@/utils/firebase/firestore/queris/set';
 import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
 import DialogTitle from '@mui/material/DialogTitle';

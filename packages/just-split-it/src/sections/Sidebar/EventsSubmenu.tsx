@@ -1,4 +1,4 @@
-import { useGetUserEvents } from '@/utils/firebase/firestore/queris/hooks';
+import { useGetUserEvents } from '@/utils/firebase/firestore/queris/get';
 import useSidebar from '@/store/sidebar';
 import { ListSubheader } from '@mui/material';
 import List from '@mui/material/List';

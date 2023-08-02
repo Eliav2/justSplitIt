@@ -12,9 +12,10 @@ import Dialog from '@mui/material/Dialog';
 import DialogTitle from '@mui/material/DialogTitle';
 import QueryIndicator from '@/components/QueryIndicator';
 import DialogContent from '@mui/material/DialogContent';
-import { DialogActions, DialogContentText, FormHelperText } from '@mui/material';
+import { DialogActions, FormHelperText } from '@mui/material';
 import Button from '@mui/material/Button';
 import QueryButton from '@/components/Button/QueryButton';
+import { ExpenseParticipantsDetails } from '@/pages/Event/ExpensesList/ExpenseListItem/ExpenseParticipantsDetails/ExpenseParticipantsDetails';
 
 interface EditExpenseDialogListItemButtonProps extends ListItemButtonProps {
   expense: FirestoreExpense;
@@ -34,6 +35,7 @@ export const EditExpenseDialogListItemButton = ({
     firestore.user(),
     expense.payerId,
   );
+  // console.log(participantsInExpense);
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -83,12 +85,13 @@ export const EditExpenseDialogListItemButton = ({
                 return (
                   <form onSubmit={formHook.handleSubmit(handleCreateExpense)}>
                     <DialogContent>
-                      <DialogContentText>Hit Update after edits</DialogContentText>
                       {formContent}
                       {createErrorMessage && (
                         <FormHelperText error>{createErrorMessage}</FormHelperText>
                       )}
                     </DialogContent>
+                    <ExpenseParticipantsDetails expense={expense} />
+
                     <DialogActions>
                       <Button onClick={handleCancel}>Cancel</Button>
                       <QueryButton type={'submit'} loading={createLoading}>

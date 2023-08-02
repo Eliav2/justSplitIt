@@ -1,31 +1,15 @@
 // get all events a user participates in
-import {
-  collection,
-  doc,
-  DocumentSnapshot,
-  getFirestore,
-  limit,
-  query,
-  where,
-} from 'firebase/firestore';
+import { doc, limit, query, where } from 'firebase/firestore';
 import { firestore } from '@/utils/firebase/firestore/client';
 import {
-  useGrabDocumentById,
   useGrabDocumentDataById,
-  // useCollection,
-  // useDocument,
-  // useGrabDocumentById,
-  useGrabDocumentsByIds,
   useGrabDocumentsDataByIds,
 } from '@/utils/firebase/firestore/hooks/query';
 import { useAuthState } from 'react-firebase-hooks/auth';
-import { fbApp, fbAuth } from '@/utils/firebase/firebase';
-import {
-  useCollection as useFirestoreCollection,
-  useCollectionData,
-} from '@/react-firebase-hooks/firestore/useCollection';
+import { fbAuth } from '@/utils/firebase/firebase';
+import { useCollection as useFirestoreCollection } from '@/react-firebase-hooks/firestore/useCollection';
 import { useDocument as useFirestoreDocument } from '@/react-firebase-hooks/firestore/useDocument';
-import { FirestoreEvent } from '@/utils/firebase/firestore/schema';
+import { FirestoreExpense } from '@/utils/firebase/firestore/schema';
 
 export function useGetUserEvents() {
   const [user] = useAuthState(fbAuth);
@@ -66,4 +50,8 @@ export const useExpense = (expenseId: string) => {
 
 export const useParticipantsByIds = (participantsId: string[] | undefined) => {
   return useGrabDocumentsDataByIds(firestore.user(), participantsId ?? []);
+};
+
+export const useParticipantsInExpense = (expense: FirestoreExpense) => {
+  return useParticipantsByIds(expense?.participantsIds);
 };

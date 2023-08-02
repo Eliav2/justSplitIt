@@ -2,7 +2,7 @@ import { DocumentSnapshot } from 'firebase/firestore';
 import { FirestoreEvent } from '@/utils/firebase/firestore/schema';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { fbAuth } from '@/utils/firebase/firebase';
-import { useGetEventExpenses, useParticipantsByIds } from '@/utils/firebase/firestore/queris/hooks';
+import { useGetEventExpenses, useParticipantsByIds } from '@/utils/firebase/firestore/queris/get';
 import Typography from '@mui/material/Typography';
 import List from '@mui/material/List';
 import QueryIndicator from '@/components/QueryIndicator';
@@ -16,18 +16,19 @@ import ListItem from '@mui/material/ListItem';
 import ListItemText from '@mui/material/ListItemText';
 import Paper from '@mui/material/Paper';
 import { UserNotParticipating } from '@/pages/Event/ExpensesList/UserNotParticipating';
+import Divider from '@mui/material/Divider';
+import { CenteredFlexBox, FlexBox } from '@/components/styled';
 
-interface ExpensesDetailsProps {
+interface ExpensesListProps {
   event: DocumentSnapshot<FirestoreEvent>;
 }
 
-const ExpensesDetails = ({ event }: ExpensesDetailsProps) => {
+const ExpensesList = ({ event }: ExpensesListProps) => {
   const [user, loadingUser] = useAuthState(fbAuth);
   const eventData = event && Object.assign({}, event.data(), { id: event.id });
   const isUserParticipating = user && eventData?.participantsIds?.includes(user?.uid);
   // console.log('number of participants', eventData.participantsIds.length);
   const isOwner = user?.uid === eventData?.ownerId;
-  console.log(isOwner);
 
   const [expenses, loading, error] = useGetEventExpenses(event.id as string, [isUserParticipating]);
   const [participants, loadingParticipants, errorParticipants] = useParticipantsByIds(
@@ -55,11 +56,6 @@ const ExpensesDetails = ({ event }: ExpensesDetailsProps) => {
       }, 0)) ??
     [];
 
-  // const rerender = useRerender();
-  // useEffect(() => {
-  //   rerender();
-  // }, [isUserParticipating]);
-
   const userTotalExpense = round(sumArray(userShouldPay.map((expense) => expense.amount)));
 
   const userBalance = round(userPayedFor - userTotalExpense);
@@ -74,7 +70,9 @@ const ExpensesDetails = ({ event }: ExpensesDetailsProps) => {
       <Typography variant="h3">{eventData?.name}</Typography>
 
       {isUserParticipating ? (
-        <>
+        <Paper sx={{ p: 2 }}>
+          <Typography>Expenses</Typography>
+
           <List sx={{ width: '100%', maxWidth: 360, bgcolor: 'background.paper' }}>
             <QueryIndicator loading={loading} errorMessage={error?.message}>
               {expenses?.docs.map((expene, expenseIndex) => {
@@ -105,33 +103,37 @@ const ExpensesDetails = ({ event }: ExpensesDetailsProps) => {
             </ListItem>
           </List>
 
-          <NewExpenseDialogButton parentEvent={eventData} />
+          <CenteredFlexBox>
+            <NewExpenseDialogButton parentEvent={eventData} />
+          </CenteredFlexBox>
 
           {/* list participants in this event*/}
-          <Paper sx={{ p: 2, m: 3 }}>
-            <Typography variant={'h3'}>participants</Typography>
-            <List>
-              {participants?.map((participant) => (
-                <ListItem key={participant.id}>
-                  <ListItemText primary={participant.name} />
-                </ListItem>
-              ))}
-            </List>
-          </Paper>
+          <Divider sx={{ m: 2 }} />
 
-          {isOwner ? (
-            <DeleteEventDialogButton
-              event={eventData}
-              buttonElement={(handleOpen) => (
-                <Button onClick={handleOpen} color={'error'}>
-                  Delete Event
-                </Button>
-              )}
-            />
-          ) : (
-            <ParticipantLeaveEventDialogButton eventId={event.id} />
-          )}
-        </>
+          <Typography>participants</Typography>
+          <List dense>
+            {participants?.map((participant) => (
+              <ListItem key={participant.id}>
+                <ListItemText primary={participant.name} />
+              </ListItem>
+            ))}
+          </List>
+
+          <CenteredFlexBox>
+            {isOwner ? (
+              <DeleteEventDialogButton
+                event={eventData}
+                buttonElement={(handleOpen) => (
+                  <Button onClick={handleOpen} color={'error'}>
+                    Delete Event
+                  </Button>
+                )}
+              />
+            ) : (
+              <ParticipantLeaveEventDialogButton eventId={event.id} />
+            )}
+          </CenteredFlexBox>
+        </Paper>
       ) : (
         <UserNotParticipating />
       )}
@@ -139,4 +141,4 @@ const ExpensesDetails = ({ event }: ExpensesDetailsProps) => {
   );
 };
 
-export default ExpensesDetails;
+export default ExpensesList;

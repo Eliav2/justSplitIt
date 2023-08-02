@@ -51,10 +51,11 @@ export const ExpenseForm = ({
 
   // set the payer to the current user by default (only when the participants are loaded)
   useEffect(() => {
-    expenseForm.setValue(
-      'payer',
-      participantsData?.find((p) => p.id == user?.uid) || (null as any),
-    );
+    if (!expenseForm.getValues('payer'))
+      expenseForm.setValue(
+        'payer',
+        participantsData?.find((p) => p.id == user?.uid) || (null as any),
+      );
   }, [participants, open]);
 
   return (

@@ -1,12 +1,14 @@
 import Meta from '@/components/Meta';
 import { useParams } from 'react-router-dom';
-import { useGetEvent } from '@/utils/firebase/firestore/queris/hooks';
+import { useGetEvent } from '@/utils/firebase/firestore/queris/get';
 import QueryIndicator from '@/components/QueryIndicator';
 import { EventDoesNotExistDialog } from '@/pages/Event/EventDoesNotExistDialog';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { fbAuth } from '@/utils/firebase/firebase';
 import { JoinEventDialog } from '@/pages/Event/JoinEventDialog';
 import ExpensesList from './ExpensesList';
+import React from 'react';
+import EventContext from './EventContext';
 
 function Event() {
   const [user] = useAuthState(fbAuth);
@@ -27,7 +29,9 @@ function Event() {
       )}
       <QueryIndicator loading={eventLoading}>
         {!eventNotExistsDialogOpen && event ? (
-          <ExpensesList event={event} />
+          <EventContext.Provider value={eventData}>
+            <ExpensesList event={event} />
+          </EventContext.Provider>
         ) : (
           <EventDoesNotExistDialog open={eventNotExistsDialogOpen} />
         )}
