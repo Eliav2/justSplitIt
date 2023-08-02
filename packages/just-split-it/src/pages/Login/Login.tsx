@@ -12,11 +12,18 @@ import { useLoginUser } from '@/utils/login/useLoginUser';
 function Login() {
   const [user, loading, error] = useAuthState(fbAuth);
   const { signInWithGoogle } = useLoginUser();
+  const returnUrl = new URLSearchParams(location.search).get('fallback');
 
   // if authenticated, redirect to root page
   if (user) {
+    // If there's a returnURL, navigate to it after login
+    if (returnUrl) {
+      return <Navigate to={returnUrl} />;
+    }
+    // If no returnURL, navigate to Home Page
     return <Navigate to="/" />;
   }
+
   return (
     <>
       <Meta title="Login" />

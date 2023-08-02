@@ -7,11 +7,11 @@ import Typography from '@mui/material/Typography';
 import List from '@mui/material/List';
 import QueryIndicator from '@/components/QueryIndicator';
 import { ExpenseListItem } from '@/pages/Event/ExpenseListItem';
-import { NewExpenseDialog } from '@/pages/Event/NewExpenseDialog';
+import { NewExpenseDialogButton } from '@/pages/Event/NewExpenseDialogButton';
 import { DeleteEventDialogButton } from '@/components/Dialog/DeleteEventDialogButton';
 import Button from '@mui/material/Button';
 import ParticipantLeaveEventDialogButton from '@/components/Dialog/ParticipantLeaveEventDialogButton';
-import { sumArray } from '@/utils/math';
+import { round, sumArray } from '@/utils/math';
 import { useRerender } from '@/utils/hooks';
 import { useEffect } from 'react';
 import ListItem from '@mui/material/ListItem';
@@ -27,6 +27,7 @@ const ExpensesDetails = ({ event }: ExpensesDetailsProps) => {
   const eventData = event && Object.assign({}, event.data(), { id: event.id });
   const isUserParticipating = user && eventData?.participantsIds?.includes(user?.uid);
   // console.log('number of participants', eventData.participantsIds.length);
+  const isOwner = user?.uid === eventData?.ownerId;
 
   const [expenses, loading, error] = useGetEventExpenses(event.id as string, [isUserParticipating]);
   const [participants, loadingParticipants, errorParticipants] = useParticipantsByIds(
@@ -35,15 +36,15 @@ const ExpensesDetails = ({ event }: ExpensesDetailsProps) => {
 
   const expensesData = expenses?.docs.map((expense) => expense.data());
   const eventTotalExpense = sumArray(expensesData?.map((expense) => expense.amount) ?? []);
-  const isOwner = user?.uid === eventData?.ownerId;
 
-  const userPayedFor =
+  const userPayedFor = round(
     expensesData?.reduce((acc, expense) => {
       if (expense.payerId === user?.uid) {
         return acc + expense.amount;
       }
       return acc;
-    }, 0) ?? 0;
+    }, 0) ?? 0,
+  );
 
   const userShouldPay =
     (user &&
@@ -59,9 +60,9 @@ const ExpensesDetails = ({ event }: ExpensesDetailsProps) => {
   //   rerender();
   // }, [isUserParticipating]);
 
-  const userTotalExpense = sumArray(userShouldPay.map((expense) => expense.amount));
+  const userTotalExpense = round(sumArray(userShouldPay.map((expense) => expense.amount)));
 
-  const userBalance = userPayedFor - userTotalExpense;
+  const userBalance = round(userPayedFor - userTotalExpense);
 
   // console.log(userExpenses);
   // console.log(userTotalExpense);
@@ -77,31 +78,34 @@ const ExpensesDetails = ({ event }: ExpensesDetailsProps) => {
           <List sx={{ width: '100%', maxWidth: 360, bgcolor: 'background.paper' }}>
             <QueryIndicator loading={loading} errorMessage={error?.message}>
               {expenses?.docs.map((expene, expenseIndex) => {
-                return <ExpenseListItem expenseId={expene.id} key={expene.id} />;
+                return (
+                  <ExpenseListItem eventData={eventData} expenseId={expene.id} key={expene.id} />
+                );
               })}
             </QueryIndicator>
           </List>
-          <Typography sx={{}} variant={'body1'}>
-            Total Expanses:{eventTotalExpense}
-          </Typography>
+          <List dense>
+            <ListItem>
+              <ListItemText sx={{}}>Total Expenses: {eventTotalExpense}₪</ListItemText>
+            </ListItem>
+            <ListItem>
+              <ListItemText sx={{}}>You Should Pay back: {userTotalExpense}₪</ListItemText>
+            </ListItem>
+            <ListItem>
+              <ListItemText sx={{}}>You Paid for: {userPayedFor}₪</ListItemText>
+            </ListItem>
+            <ListItem>
+              <ListItemText sx={{}}>
+                {userBalance > 0 ? (
+                  <span style={{ color: owedColor }}>You are owed {userBalance}</span>
+                ) : (
+                  <span style={{ color: ownColor }}>You owe {userBalance * -1}</span>
+                )}
+              </ListItemText>
+            </ListItem>
+          </List>
 
-          <Typography sx={{}} variant={'body1'}>
-            You Paid for:{userPayedFor}
-          </Typography>
-
-          <Typography sx={{}} variant={'body1'}>
-            You Should Pay back:{userTotalExpense}
-          </Typography>
-
-          <Typography sx={{}} variant={'body1'}>
-            {userBalance > 0 ? (
-              <span style={{ color: owedColor }}>You are owed {userBalance}</span>
-            ) : (
-              <span style={{ color: ownColor }}>You owe {userBalance * -1}</span>
-            )}
-          </Typography>
-
-          <NewExpenseDialog parentEvent={eventData} />
+          <NewExpenseDialogButton parentEvent={eventData} />
 
           {/* list participants in this event*/}
           <Paper sx={{ p: 2, m: 3 }}>
@@ -119,7 +123,7 @@ const ExpensesDetails = ({ event }: ExpensesDetailsProps) => {
             <DeleteEventDialogButton
               event={eventData}
               buttonElement={(handleOpen) => (
-                <Button onClick={handleOpen} color={'warning'}>
+                <Button onClick={handleOpen} color={'error'}>
                   Delete Event
                 </Button>
               )}
@@ -141,6 +145,11 @@ const UserNotParticipating = () => {
       <Typography variant={'body1'}>You are not participating in this event</Typography>
     </>
   );
+};
+
+interface ExpenseEditDialogButtonProps {}
+const ExpenseEditDialogButton = (props: ExpenseEditDialogButtonProps) => {
+  return <div></div>;
 };
 
 export default ExpensesDetails;

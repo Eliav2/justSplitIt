@@ -26,7 +26,7 @@ function Home() {
 
   return (
     <>
-      <Meta title="JustSplitIt" />
+      <Meta title="Home" />
       <FullSizeCenteredFlexBoxColumn>
         <ColumnFlexBox>
           {/*<Typography variant={'h1'}>JustSplitIt</Typography>*/}

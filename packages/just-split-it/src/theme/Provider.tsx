@@ -7,6 +7,7 @@ import type { CustomThemeProviderProps } from './types';
 
 function CustomThemeProvider({ children }: CustomThemeProviderProps) {
   const [theme] = useTheme();
+  theme;
 
   return <ThemeProvider theme={createTheme(themes[theme])}>{children}</ThemeProvider>;
 }

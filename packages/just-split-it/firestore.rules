@@ -1,15 +1,15 @@
 rules_version = '2';
 
-// service cloud.firestore {
-//   match /databases/{database}/documents {
-//     match /{document=**} {
-//       allow read, write: if true; 
-//     }
-//   }
-// }
 
 service cloud.firestore {
     match /databases/{database}/documents {
+
+        // debug only, allow everything
+        match /{document=**} {
+            allow read, write: if true;
+        }
+
+
         // Allow write access to the 'event' collection only for authenticated users
         match /event/{eventId} {
             allow read: if true;
@@ -23,7 +23,7 @@ service cloud.firestore {
 
         // user can only read/write expenses of events he is a participant of
         match /expense/{expenseId} {
-            allow create: if request.auth.uid in get(/databases/$(database)/documents/event/$(request.resource.data.parentEventId)).data.participantsIds;
+            allow create,update: if request.auth.uid in get(/databases/$(database)/documents/event/$(request.resource.data.parentEventId)).data.participantsIds;
             allow delete,update,read: if request.auth.uid in get(/databases/$(database)/documents/event/$(resource.data.parentEventId)).data.participantsIds;
         }
 

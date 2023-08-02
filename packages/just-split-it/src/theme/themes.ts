@@ -2,6 +2,7 @@ import { ThemeOptions } from '@mui/material/styles';
 import { deepmerge } from '@mui/utils';
 
 import { Themes } from './types';
+import { DeepmergeOptions } from '@mui/utils/deepmerge';
 
 const sharedTheme = {
   typography: {
@@ -51,8 +52,9 @@ const sharedTheme = {
 } as ThemeOptions; // the reason for this casting is deepmerge return type
 // TODO (Suren): replace mui-utils-deepmerge with lodash or ramda deepmerge
 
-const themes: Record<Themes, ThemeOptions> = {
-  light: deepmerge(sharedTheme, {
+const _deepmerge = deepmerge as <T, K>(target: T, source: K, options?: DeepmergeOptions) => T & K;
+const themes = {
+  light: _deepmerge(sharedTheme, {
     palette: {
       mode: 'light',
       background: {
@@ -61,11 +63,13 @@ const themes: Record<Themes, ThemeOptions> = {
       },
       primary: {
         main: '#863fb5',
+        mainLight: '#f1c8ff',
       },
     },
+    userOwnExpenseColor: '#f6f0ff',
   }),
 
-  dark: deepmerge(sharedTheme, {
+  dark: _deepmerge(sharedTheme, {
     palette: {
       mode: 'dark',
       background: {
@@ -76,7 +80,10 @@ const themes: Record<Themes, ThemeOptions> = {
         main: '#f1c8ff',
       },
     },
+    userOwnExpenseColor: '#302c34',
   }),
-};
+} as const satisfies Record<Themes, ThemeOptions>;
+
+export type AppTheme = (typeof themes)[keyof typeof themes];
 
 export default themes;

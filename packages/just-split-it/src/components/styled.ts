@@ -16,8 +16,8 @@ export const ColumnFlexBox = styled(FlexBox)({
 });
 
 const FullSizeCenteredFlexBox = styled(CenteredFlexBox)({
-  width: '100%',
-  height: '100%',
+  minWidth: '100%',
+  minHeight: '100%',
 });
 export const FullSizeCenteredFlexBoxColumn = styled(FullSizeCenteredFlexBox)({
   flexDirection: 'column',
@@ -26,8 +26,8 @@ export const FullSizeMiddleFlexContainerColumn = styled(Container)({
   display: 'flex',
   flexDirection: 'column',
   alignItems: 'center',
-  width: '100%',
-  height: '100%',
+  minWidth: '100%',
+  minHeight: '100%',
 });
 
 export { FlexBox, CenteredFlexBox, FullSizeCenteredFlexBox };

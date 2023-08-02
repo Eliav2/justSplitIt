@@ -34,6 +34,7 @@ const ParticipantLeaveEventDialogButton = (props: ParticipantLeaveEventDialogBut
         }
         close();
 
+        // console.log(eventId, user?.uid);
         await participantLeavesEvent(eventId, user?.uid);
       }}
       buttonElement={(handleOpen) => (

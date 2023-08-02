@@ -52,6 +52,17 @@ export const participantJoinsToEvent = async (eventId: string, participantId: st
   if (!eventSnap || !eventRef) {
     throw new Error("event isn't found");
   }
+
+  // // add the participant to the every expense of the event
+  // const expensesQuery = query(firestore.expense(), where('parentEventId', '==', eventId));
+  // const expenses = await getDocs(expensesQuery);
+  // await Promise.all(
+  //   expenses.docs.map(async (doc) => {
+  //     const newParticipantsIds = [...doc.data().participantsIds, participantId];
+  //     await setDoc(doc.ref, { participantsIds: newParticipantsIds }, { merge: true });
+  //   }),
+  // );
+
   const newParticipantsIds = [...eventSnap.participantsIds, participantId];
   await setDoc(eventRef, { participantsIds: newParticipantsIds }, { merge: true });
 };
@@ -61,6 +72,28 @@ export const participantLeavesEvent = async (eventId: string, participantId: str
   if (!eventSnap || !eventRef) {
     throw new Error("event isn't found");
   }
+
+  // remove the expenses created by this user
+  console.log('1', participantId);
+  const userExpensesQuery = query(firestore.expense(), where('payerId', '==', participantId));
+  const userExpenses = await getDocs(userExpensesQuery);
+  console.log(userExpenses);
+  await Promise.all(userExpenses.docs.map(async (doc) => await deleteExpense(doc.id)));
+  // the participant leaves every expense he participated in
+  const userParticipatedInExpensesQuery = query(
+    firestore.expense(),
+    where('participantsIds', 'array-contains', participantId),
+  );
+  const userParticipatedInExpenses = await getDocs(userParticipatedInExpensesQuery);
+  await Promise.all(
+    userParticipatedInExpenses.docs.map(async (doc) => {
+      const newParticipantsIds = doc
+        .data()
+        .participantsIds.filter((id: string) => id !== participantId);
+      await setDoc(doc.ref, { participantsIds: newParticipantsIds }, { merge: true });
+    }),
+  );
+  // remove from the participant's list of the event
   const newParticipantsIds = eventSnap.participantsIds.filter((id) => id !== participantId);
   await setDoc(eventRef, { participantsIds: newParticipantsIds }, { merge: true });
 };
