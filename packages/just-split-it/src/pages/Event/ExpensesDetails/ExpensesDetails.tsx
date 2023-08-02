@@ -97,9 +97,9 @@ const ExpensesDetails = ({ event }: ExpensesDetailsProps) => {
             <ListItem>
               <ListItemText sx={{}}>
                 {userBalance > 0 ? (
-                  <span style={{ color: owedColor }}>You are owed {userBalance}</span>
+                  <span style={{ color: owedColor }}>You are owed {userBalance}₪</span>
                 ) : (
-                  <span style={{ color: ownColor }}>You owe {userBalance * -1}</span>
+                  <span style={{ color: ownColor }}>You owe {userBalance * -1}₪</span>
                 )}
               </ListItemText>
             </ListItem>
