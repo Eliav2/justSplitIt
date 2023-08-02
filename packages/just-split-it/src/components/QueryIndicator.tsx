@@ -11,14 +11,26 @@ import { styled } from '@mui/system';
 import IconButton from '@mui/material/IconButton';
 import Button from '@mui/material/Button';
 import LockIcon from '@mui/icons-material/Lock';
+import CircularProgress from '@mui/material/CircularProgress';
 interface QueryIndicatorProps {
-  children: React.ReactNode;
+  children: React.ReactElement;
   loading: boolean;
   errorMessage?: string | null;
+  loadingIndicator?: React.ReactNode;
 }
 
-const QueryIndicator = ({ children, loading, errorMessage }: QueryIndicatorProps) => {
+const QueryIndicator = ({
+  children,
+  loading,
+  errorMessage,
+  loadingIndicator = <Loading />,
+}: QueryIndicatorProps) => {
   const [expanded, setExpanded] = useState(false);
+  // const [childrenDimensions, setChildrenDimensions] = useState<null | ReturnType<typeof window>>(
+  //   null,
+  // );
+
+  // console.log(children);
 
   const handleExpandClick = () => {
     setExpanded(!expanded);
@@ -45,7 +57,7 @@ const QueryIndicator = ({ children, loading, errorMessage }: QueryIndicatorProps
       </Box>
     );
 
-  if (loading) return <Loading />;
+  if (loading) return loadingIndicator;
   return children;
 };
 

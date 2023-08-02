@@ -12,7 +12,7 @@ import { DeleteEventDialogButton } from '@/components/Dialog/DeleteEventDialogBu
 import Button from '@mui/material/Button';
 import ParticipantLeaveEventDialogButton from '@/components/Dialog/ParticipantLeaveEventDialogButton';
 import { round, sumArray } from '@/utils/math';
-import { useRerender } from '@/utils/hooks';
+import { useRerender } from '@/utils/hooks/hooks';
 import { useEffect } from 'react';
 import ListItem from '@mui/material/ListItem';
 import ListItemText from '@mui/material/ListItemText';
