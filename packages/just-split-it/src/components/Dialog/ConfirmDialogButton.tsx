@@ -32,29 +32,23 @@ type ConfirmDialogButtonBaseProps = {
   open?: boolean;
   titleText?: string;
   content?: React.ReactNode;
-  buttonElement?: (handleOpen: (e: React.BaseSyntheticEvent) => void) => React.ReactNode;
+  buttonElement?: (handleOpen: () => void) => React.ReactNode;
 
   dialogConfirmButtonLabel?: string;
   dialogCancelButtonLabel?: string;
 };
 export type ConfirmDialogButtonProps = ConfirmDialogButtonBaseProps &
-  (
-    | { dialogHandleConfirm: (close: (e: React.BaseSyntheticEvent) => void) => void }
-    | { dialogConfirmButton: React.ReactNode }
-  );
+  ({ dialogHandleConfirm: (close: () => void) => void } | { dialogConfirmButton: React.ReactNode });
 
 const ConfirmDeleteDialogButton = (props: ConfirmDialogButtonProps) => {
   const [open, setOpen] = useState(false);
   const _open = props.open ?? open;
 
-  const handleCancel = (e: React.BaseSyntheticEvent) => {
-    e?.stopPropagation();
+  const handleCancel = () => {
     setOpen(false);
   };
 
-  const _handleOpen = (e: React.BaseSyntheticEvent) => {
-    e?.stopPropagation();
-
+  const _handleOpen = () => {
     setOpen(true);
   };
 
@@ -70,7 +64,7 @@ const ConfirmDeleteDialogButton = (props: ConfirmDialogButtonProps) => {
       content: <DialogContent>Are you sure?</DialogContent>,
       dialogConfirmButtonLabel: 'Yes',
       dialogCancelButtonLabel: 'Cancel',
-      buttonElement: (handleOpen: (e: React.BaseSyntheticEvent) => void = _handleOpen) => (
+      buttonElement: (handleOpen: () => void = _handleOpen) => (
         <Button onClick={handleOpen}>Confirm Dialog</Button>
       ),
     } satisfies ConfirmDialogButtonBaseProps),

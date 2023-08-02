@@ -14,7 +14,7 @@ import { fbAuth } from '@/utils/firebase/firebase';
 import { grabDocumentById } from '@/utils/firebase/firestore/queris/util';
 import { useAsyncHandler } from '@/utils/hooks/hooks';
 import QueryButton from '@/components/Button/QueryButton';
-import { ExpenseForm, ExpenseFormInput } from '@/pages/Event/ExpenseForm';
+import { ExpenseForm, ExpenseFormInput } from '@/pages/Event/ExpensesList/ExpenseForm';
 
 interface NewExpenseDialogButtonProps {
   parentEvent: FirestoreEventWithId;

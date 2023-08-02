@@ -6,8 +6,8 @@ import { useGetEventExpenses, useParticipantsByIds } from '@/utils/firebase/fire
 import Typography from '@mui/material/Typography';
 import List from '@mui/material/List';
 import QueryIndicator from '@/components/QueryIndicator';
-import { ExpenseListItem } from '@/pages/Event/ExpenseListItem';
-import { NewExpenseDialogButton } from '@/pages/Event/NewExpenseDialogButton';
+import { ExpenseListItem } from '@/pages/Event/ExpensesList/ExpenseListItem/ExpenseListItem';
+import { NewExpenseDialogButton } from '@/pages/Event/ExpensesList/NewExpenseDialogButton';
 import { DeleteEventDialogButton } from '@/components/Dialog/DeleteEventDialogButton';
 import Button from '@mui/material/Button';
 import ParticipantLeaveEventDialogButton from '@/components/Dialog/ParticipantLeaveEventDialogButton';
@@ -15,7 +15,7 @@ import { round, sumArray } from '@/utils/math';
 import ListItem from '@mui/material/ListItem';
 import ListItemText from '@mui/material/ListItemText';
 import Paper from '@mui/material/Paper';
-import { UserNotParticipating } from '@/pages/Event/ExpensesDetails/UserNotParticipating';
+import { UserNotParticipating } from '@/pages/Event/ExpensesList/UserNotParticipating';
 
 interface ExpensesDetailsProps {
   event: DocumentSnapshot<FirestoreEvent>;
@@ -27,6 +27,7 @@ const ExpensesDetails = ({ event }: ExpensesDetailsProps) => {
   const isUserParticipating = user && eventData?.participantsIds?.includes(user?.uid);
   // console.log('number of participants', eventData.participantsIds.length);
   const isOwner = user?.uid === eventData?.ownerId;
+  console.log(isOwner);
 
   const [expenses, loading, error] = useGetEventExpenses(event.id as string, [isUserParticipating]);
   const [participants, loadingParticipants, errorParticipants] = useParticipantsByIds(

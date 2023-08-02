@@ -6,7 +6,7 @@ import { EventDoesNotExistDialog } from '@/pages/Event/EventDoesNotExistDialog';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { fbAuth } from '@/utils/firebase/firebase';
 import { JoinEventDialog } from '@/pages/Event/JoinEventDialog';
-import ExpensesDetails from './ExpensesDetails';
+import ExpensesList from './ExpensesList';
 
 function Event() {
   const [user] = useAuthState(fbAuth);
@@ -27,7 +27,7 @@ function Event() {
       )}
       <QueryIndicator loading={eventLoading}>
         {!eventNotExistsDialogOpen && event ? (
-          <ExpensesDetails event={event} />
+          <ExpensesList event={event} />
         ) : (
           <EventDoesNotExistDialog open={eventNotExistsDialogOpen} />
         )}
