@@ -10,7 +10,7 @@ import React, { useRef } from 'react';
  *
  * @param children - child of the component
  */
-export const usePassChildrenRef = <T extends any = any>(children): React.RefObject<T> => {
+export const usePassChildrenRef = <T extends any = any>(children: any): React.RefObject<T> => {
   return usePassRef<T>(children.ref);
 };
 
