@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Controller, useForm } from 'react-hook-form';
+import { Controller, FieldValues, useForm, UseFormReturn } from 'react-hook-form';
 import { addExpense } from '@/utils/firebase/firestore/queris/queries';
 import { doc, FirestoreError, query, where } from 'firebase/firestore';
 import Button from '@mui/material/Button';
@@ -28,7 +28,7 @@ import { firestore } from '@/utils/firebase/firestore/client';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { fbAuth } from '@/utils/firebase/firebase';
 import { grabDocumentById } from '@/utils/firebase/firestore/queris/util';
-import { User } from '@firebase/auth';
+import { User } from 'firebase/auth';
 
 type ExpenseForm = Pick<FirestoreExpense, 'name'>;
 
@@ -113,96 +113,116 @@ export const NewExpenseDialogButton = (props: NewExpenseDialogButtonProps) => {
         Create new Expense
       </Button>
       <Dialog open={open} onClose={handleCancel}>
-        <ExpenseForm participantsData={participantsData} user={user} />
+        <DialogTitle>New Expense</DialogTitle>
+        <ExpenseForm
+          onSubmit={expenseForm.handleSubmit(handleCreate)}
+          user={user}
+          participantsData={participantsData}
+          formHook={expenseForm}
+          renderFormContent={(formContent) => (
+            <>
+              <DialogContent>
+                <DialogContentText>Provide a name for the new expense.</DialogContentText>
+                {formContent}
+              </DialogContent>
+              <DialogActions>
+                <Button onClick={handleCancel}>Cancel</Button>
+                <Button type={'submit'}>{loadingState == 'idle' ? 'Create' : <Loading />}</Button>
+              </DialogActions>
+            </>
+          )}
+        />
         {/*<form onSubmit={expenseForm.handleSubmit(handleCreate)}>*/}
-        {/*  <DialogTitle>New Expense</DialogTitle>*/}
         {/*  <DialogContent>*/}
         {/*    <DialogContentText>Provide a name for the new expense.</DialogContentText>*/}
-        {/*    <Controller*/}
-        {/*      name={'name'}*/}
-        {/*      control={expenseForm.control}*/}
-        {/*      render={({ field: { onChange, value }, fieldState: { error }, formState }) => (*/}
-        {/*        <TextField*/}
-        {/*          helperText={error ? error.message : null}*/}
-        {/*          error={!!error}*/}
-        {/*          size="small"*/}
-        {/*          onChange={onChange}*/}
-        {/*          value={value}*/}
-        {/*          fullWidth*/}
-        {/*          label={'Expense Name'}*/}
-        {/*          autoFocus*/}
-        {/*          margin="dense"*/}
-        {/*          type="text"*/}
-        {/*          variant="standard"*/}
-        {/*          required*/}
-        {/*        />*/}
-        {/*      )}*/}
-        {/*    />*/}
-        {/*    <Controller*/}
-        {/*      name={'amount'}*/}
-        {/*      control={expenseForm.control}*/}
-        {/*      render={({ field: { onChange, value }, fieldState: { error }, formState }) => (*/}
-        {/*        <TextField*/}
-        {/*          helperText={error ? error.message : null}*/}
-        {/*          type="number"*/}
-        {/*          error={!!error}*/}
-        {/*          size="small"*/}
-        {/*          onChange={onChange}*/}
-        {/*          value={value}*/}
-        {/*          fullWidth*/}
-        {/*          label={'Amount'}*/}
-        {/*          InputProps={{*/}
-        {/*            startAdornment: <InputAdornment position="start">₪</InputAdornment>,*/}
-        {/*          }}*/}
-        {/*          autoFocus*/}
-        {/*          margin="dense"*/}
-        {/*          variant="standard"*/}
-        {/*          required*/}
-        {/*        />*/}
-        {/*      )}*/}
-        {/*    />*/}
-        {/*    <Controller*/}
-        {/*      name={'payer'}*/}
-        {/*      control={expenseForm.control}*/}
-        {/*      // defaultValue={undefined}*/}
-        {/*      rules={{*/}
-        {/*        validate: (value) => {*/}
-        {/*          return (*/}
-        {/*            participantsData.some((p) => p.id == value?.id) ||*/}
-        {/*            'Please select a valid option from the list.'*/}
-        {/*          );*/}
-        {/*        },*/}
-        {/*      }}*/}
-        {/*      render={({ field: { onChange, value }, fieldState: { error } }) => {*/}
-        {/*        return (*/}
-        {/*          <Autocomplete*/}
-        {/*            onChange={(event, value) => {*/}
-        {/*              onChange(value);*/}
-        {/*            }}*/}
+
+        {/*    <>*/}
+        {/*      <Controller*/}
+        {/*        name={'name'}*/}
+        {/*        control={expenseForm.control}*/}
+        {/*        render={({ field: { onChange, value }, fieldState: { error }, formState }) => (*/}
+        {/*          <TextField*/}
+        {/*            helperText={error ? error.message : null}*/}
+        {/*            error={!!error}*/}
+        {/*            size="small"*/}
+        {/*            onChange={onChange}*/}
         {/*            value={value}*/}
-        {/*            getOptionLabel={(option) =>*/}
-        {/*              participantsData.find((p) => p.id == option.id)?.name || ''*/}
-        {/*            }*/}
-        {/*            isOptionEqualToValue={(option, value) => option.id == value.id}*/}
-        {/*            disablePortal*/}
-        {/*            options={participantsData}*/}
-        {/*            sx={{ width: 300 }}*/}
-        {/*            renderInput={(params) => (*/}
-        {/*              <TextField*/}
-        {/*                {...params}*/}
-        {/*                margin="dense"*/}
-        {/*                label="Payed by"*/}
-        {/*                variant="standard"*/}
-        {/*                error={!!error}*/}
-        {/*                helperText={error ? error.message : null}*/}
-        {/*                required*/}
-        {/*              />*/}
-        {/*            )}*/}
+        {/*            fullWidth*/}
+        {/*            label={'Expense Name'}*/}
+        {/*            autoFocus*/}
+        {/*            margin="dense"*/}
+        {/*            type="text"*/}
+        {/*            variant="standard"*/}
+        {/*            required*/}
         {/*          />*/}
-        {/*        );*/}
-        {/*      }}*/}
-        {/*    />*/}
-        {/*    {errorMessage && <FormHelperText error>{errorMessage}</FormHelperText>}*/}
+        {/*        )}*/}
+        {/*      />*/}
+        {/*      <Controller*/}
+        {/*        name={'amount'}*/}
+        {/*        control={expenseForm.control}*/}
+        {/*        render={({ field: { onChange, value }, fieldState: { error }, formState }) => (*/}
+        {/*          <TextField*/}
+        {/*            helperText={error ? error.message : null}*/}
+        {/*            type="number"*/}
+        {/*            error={!!error}*/}
+        {/*            size="small"*/}
+        {/*            onChange={onChange}*/}
+        {/*            value={value}*/}
+        {/*            fullWidth*/}
+        {/*            label={'Amount'}*/}
+        {/*            InputProps={{*/}
+        {/*              startAdornment: <InputAdornment position="start">₪</InputAdornment>,*/}
+        {/*            }}*/}
+        {/*            autoFocus*/}
+        {/*            margin="dense"*/}
+        {/*            variant="standard"*/}
+        {/*            required*/}
+        {/*          />*/}
+        {/*        )}*/}
+        {/*      />*/}
+        {/*      <Controller*/}
+        {/*        name={'payer'}*/}
+        {/*        control={expenseForm.control}*/}
+        {/*        // defaultValue={undefined}*/}
+        {/*        rules={{*/}
+        {/*          validate: (value) => {*/}
+        {/*            return (*/}
+        {/*              participantsData.some((p) => p.id == value?.id) ||*/}
+        {/*              'Please select a valid option from the list.'*/}
+        {/*            );*/}
+        {/*          },*/}
+        {/*        }}*/}
+        {/*        render={({ field: { onChange, value }, fieldState: { error } }) => {*/}
+        {/*          return (*/}
+        {/*            <Autocomplete*/}
+        {/*              onChange={(event, value) => {*/}
+        {/*                onChange(value);*/}
+        {/*              }}*/}
+        {/*              value={value}*/}
+        {/*              getOptionLabel={(option) =>*/}
+        {/*                participantsData.find((p) => p.id == option.id)?.name || ''*/}
+        {/*              }*/}
+        {/*              isOptionEqualToValue={(option, value) => option.id == value.id}*/}
+        {/*              disablePortal*/}
+        {/*              options={participantsData}*/}
+        {/*              sx={{ width: 300 }}*/}
+        {/*              renderInput={(params) => (*/}
+        {/*                <TextField*/}
+        {/*                  {...params}*/}
+        {/*                  margin="dense"*/}
+        {/*                  label="Payed by"*/}
+        {/*                  variant="standard"*/}
+        {/*                  error={!!error}*/}
+        {/*                  helperText={error ? error.message : null}*/}
+        {/*                  required*/}
+        {/*                />*/}
+        {/*              )}*/}
+        {/*            />*/}
+        {/*          );*/}
+        {/*        }}*/}
+        {/*      />*/}
+        {/*      {errorMessage && <FormHelperText error>{errorMessage}</FormHelperText>}*/}
+        {/*    </>*/}
         {/*  </DialogContent>*/}
         {/*  <DialogActions>*/}
         {/*    <Button onClick={handleCancel}>Cancel</Button>*/}
@@ -214,114 +234,140 @@ export const NewExpenseDialogButton = (props: NewExpenseDialogButtonProps) => {
   );
 };
 
-interface ExpenseFormProps {}
+// interface ExpenseFormProps {}
 
-interface ExpenseFormProps {
+interface ExpenseFormProps<T extends FieldValues> {
+  formHook: UseFormReturn<T>;
   participantsData: FirestoreUserWithId[];
   user: User | null | undefined;
   errorMessage?: string;
-  onSubmit?: React.FormEventHandler<HTMLFormElement>;
+  onSubmit: React.FormEventHandler<HTMLFormElement>;
+  // getValues: () => ExpenseFormInput;
+  // Layout: React.ComponentType<any>;
+  renderFormContent: (formContent: React.ReactNode) => React.ReactNode;
 }
 
-const ExpenseForm = ({ participantsData, user, errorMessage, onSubmit }: ExpenseFormProps) => {
+const ExpenseForm = <T extends UseFormReturn>({
+  participantsData,
+  // user,
+  errorMessage,
+  onSubmit,
+  formHook,
+  // getValues,
+  renderFormContent,
+}: ExpenseFormProps<T>) => {
   // const [errorMessage, setErrorMessage] = useState('');
   // const [loadingState, setLoadingState] = useState<'idle' | 'loading'>('idle');
 
-  const expenseForm = useForm<ExpenseFormInput>({
-    defaultValues: {
-      name: '',
-      amount: '0',
-      payer: participantsData?.find((p) => p.id == user?.uid) || (null as any),
-    },
-  });
+  // const expenseForm = useForm<ExpenseFormInput>({
+  //   defaultValues: {
+  //     name: '',
+  //     amount: '0',
+  //     payer: participantsData?.find((p) => p.id == user?.uid) || (null as any),
+  //   },
+  // });
+  // expenseForm.
 
   return (
     <form onSubmit={onSubmit}>
-      <Controller
-        name={'name'}
-        control={expenseForm.control}
-        render={({ field: { onChange, value }, fieldState: { error }, formState }) => (
-          <TextField
-            helperText={error ? error.message : null}
-            error={!!error}
-            size="small"
-            onChange={onChange}
-            value={value}
-            fullWidth
-            label={'Expense Name'}
-            autoFocus
-            margin="dense"
-            type="text"
-            variant="standard"
-            required
+      {/*<Layout/>*/}
+      {/*<ExpenseForm*/}
+      {/*  participantsData={participantsData}*/}
+      {/*  user={user}*/}
+      {/*  errorMessage={errorMessage}*/}
+      {/*  onSubmit={expenseForm.handleSubmit(handleCreate)}*/}
+      {/*  formHook={expenseForm}*/}
+      {/*/>*/}
+
+      {renderFormContent(
+        <>
+          <Controller
+            name={'name'}
+            control={formHook.control}
+            render={({ field: { onChange, value }, fieldState: { error }, formState }) => (
+              <TextField
+                helperText={error ? error.message : null}
+                error={!!error}
+                size="small"
+                onChange={onChange}
+                value={value}
+                fullWidth
+                label={'Expense Name'}
+                autoFocus
+                margin="dense"
+                type="text"
+                variant="standard"
+                required
+              />
+            )}
           />
-        )}
-      />
-      <Controller
-        name={'amount'}
-        control={expenseForm.control}
-        render={({ field: { onChange, value }, fieldState: { error }, formState }) => (
-          <TextField
-            helperText={error ? error.message : null}
-            type="number"
-            error={!!error}
-            size="small"
-            onChange={onChange}
-            value={value}
-            fullWidth
-            label={'Amount'}
-            InputProps={{
-              startAdornment: <InputAdornment position="start">₪</InputAdornment>,
+          <Controller
+            name={'amount'}
+            control={formHook.control}
+            render={({ field: { onChange, value }, fieldState: { error }, formState }) => (
+              <TextField
+                helperText={error ? error.message : null}
+                type="number"
+                error={!!error}
+                size="small"
+                onChange={onChange}
+                value={value}
+                fullWidth
+                label={'Amount'}
+                InputProps={{
+                  startAdornment: <InputAdornment position="start">₪</InputAdornment>,
+                }}
+                autoFocus
+                margin="dense"
+                variant="standard"
+                required
+              />
+            )}
+          />
+          <Controller
+            name={'payer'}
+            control={formHook.control}
+            // defaultValue={undefined}
+            rules={{
+              validate: (value) => {
+                return (
+                  participantsData.some((p) => p.id == value?.id) ||
+                  'Please select a valid option from the list.'
+                );
+              },
             }}
-            autoFocus
-            margin="dense"
-            variant="standard"
-            required
-          />
-        )}
-      />
-      <Controller
-        name={'payer'}
-        control={expenseForm.control}
-        // defaultValue={undefined}
-        rules={{
-          validate: (value) => {
-            return (
-              participantsData.some((p) => p.id == value?.id) ||
-              'Please select a valid option from the list.'
-            );
-          },
-        }}
-        render={({ field: { onChange, value }, fieldState: { error } }) => {
-          return (
-            <Autocomplete
-              onChange={(event, value) => {
-                onChange(value);
-              }}
-              value={value}
-              getOptionLabel={(option) =>
-                participantsData.find((p) => p.id == option.id)?.name || ''
-              }
-              isOptionEqualToValue={(option, value) => option.id == value.id}
-              disablePortal
-              options={participantsData}
-              sx={{ width: 300 }}
-              renderInput={(params) => (
-                <TextField
-                  {...params}
-                  margin="dense"
-                  label="Payed by"
-                  variant="standard"
-                  error={!!error}
-                  helperText={error ? error.message : null}
-                  required
+            render={({ field: { onChange, value }, fieldState: { error } }) => {
+              return (
+                <Autocomplete
+                  onChange={(event, value) => {
+                    onChange(value);
+                  }}
+                  value={value}
+                  getOptionLabel={(option) =>
+                    participantsData.find((p) => p.id == option.id)?.name || ''
+                  }
+                  isOptionEqualToValue={(option, value) => option.id == value.id}
+                  disablePortal
+                  options={participantsData}
+                  sx={{ width: 300 }}
+                  renderInput={(params) => (
+                    <TextField
+                      {...params}
+                      margin="dense"
+                      label="Payed by"
+                      variant="standard"
+                      error={!!error}
+                      helperText={error ? error.message : null}
+                      required
+                    />
+                  )}
                 />
-              )}
-            />
-          );
-        }}
-      />
-      {errorMessage && <FormHelperText error>{errorMessage}</FormHelperText>}
+              );
+            }}
+          />
+          {errorMessage && <FormHelperText error>{errorMessage}</FormHelperText>}
+        </>,
+      )}
     </form>
   );
 };
