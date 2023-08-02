@@ -33,7 +33,7 @@ export const ExpenseParticipantsDetails = (props: ExpenseParticipantsDetailsProp
                 <CheckIcon />
                 {/*</Avatar>*/}
               </ListItemAvatar>
-              <ListItemText primary={p.name} secondary="Jan 9, 2014" />
+              <ListItemText primary={p.name} />
             </ListItem>
           );
         })}
