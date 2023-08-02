@@ -58,13 +58,6 @@ export const ExpenseListItem = (props: ExpenseProps) => {
       {expense.data && (
         <>
           <ListItem
-            // sx={
-            //   isOwner
-            //     ? (theme: any) => {
-            //         return { background: theme.userOwnExpenseColor };
-            //       }
-            //     : {}
-            // }
             key={expense.data?.id}
             secondaryAction={
               <ConfirmDeleteDialogButton
