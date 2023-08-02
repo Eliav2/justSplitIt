@@ -165,6 +165,6 @@ export const useGrabDocumentsDataByIds = <T extends DocumentData>(
 ) => {
   const _docIds = docIds ?? [];
   const docRefs = _docIds?.map((id) => doc(collection, id));
-  const q = query(collection, where('__name__', 'in', docRefs));
+  const q = docRefs.length > 0 ? query(collection, where('__name__', 'in', docRefs)) : null;
   return useCollectionData(q);
 };

@@ -32,7 +32,7 @@ const SignOut = () => {
   );
 };
 
-function User() {
+function UserPage() {
   const [user, loading, error] = useAuthState(fbAuth);
 
   if (loading) {
@@ -55,4 +55,4 @@ function User() {
   );
 }
 
-export default User;
+export default UserPage;

@@ -3,7 +3,7 @@ import { ColumnFlexBox, FullSizeCenteredFlexBoxColumn } from '@/components/style
 import useOrientation from '@/hooks/useOrientation';
 
 import { useNavigate } from 'react-router-dom';
-import { NewEventDialog } from '@/pages/Home/NewEventDialog';
+import { NewEventDialog } from '@/pages/HomePage/NewEventDialog';
 import Typography from '@mui/material/Typography';
 import { fbAuth } from '@/utils/firebase/firebase';
 import { useAuthState } from 'react-firebase-hooks/auth';
@@ -14,7 +14,7 @@ import { keyframes } from '@emotion/react';
 import { makeStyles, useTheme } from '@mui/material/styles';
 import { styled } from '@mui/system';
 
-function Home() {
+function HomePage() {
   // const [user, loading, error] = useAuthState(fbAuth);
   // console.log('user', user);
   const isPortrait = useOrientation();
@@ -77,7 +77,7 @@ const CrazyHugeHeader = () => {
   };
 
   return (
-    <Typography variant="h1" style={headerStyles}>
+    <Typography variant="h1" style={headerStyles as any}>
       JustSplitIt
     </Typography>
   );
@@ -174,4 +174,4 @@ const CrazyHugeHeader = () => {
 //   return <StyledHeader variant="h1">JustSplitIt</StyledHeader>;
 // };
 
-export default Home;
+export default HomePage;

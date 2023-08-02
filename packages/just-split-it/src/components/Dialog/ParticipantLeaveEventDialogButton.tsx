@@ -1,6 +1,6 @@
 import { FirestoreEventWithId } from '@/utils/firebase/firestore/schema';
 import { useNavigate, useParams } from 'react-router-dom';
-import ConfirmDeleteDialogButton from '@/pages/Event/ExpensesList/ExpenseListItem/ConfirmDeleteDialogButton';
+import ConfirmDeleteDialogButton from '@/pages/EventPage/Event/ExpenseListItem/ConfirmDeleteDialogButton';
 import DialogContent from '@mui/material/DialogContent';
 import { deleteEvent, participantLeavesEvent } from '@/utils/firebase/firestore/queris/set';
 import ConfirmDialogButton from '@/components/Dialog/ConfirmDialogButton';

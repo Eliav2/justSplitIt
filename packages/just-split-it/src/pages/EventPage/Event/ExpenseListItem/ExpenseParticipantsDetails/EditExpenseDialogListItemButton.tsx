@@ -6,7 +6,7 @@ import { BaseSyntheticEvent, useState } from 'react';
 import { useGrabDocumentDataById } from '@/utils/firebase/firestore/hooks/query';
 import { firestore } from '@/utils/firebase/firestore/client';
 import { useAsyncHandler } from '@/utils/hooks/hooks';
-import { ExpenseForm, ExpenseFormInput } from '@/pages/Event/ExpensesList/ExpenseForm';
+import { ExpenseForm, ExpenseFormInput } from '@/pages/EventPage/Event/ExpenseForm';
 import { UseFormReturn } from 'react-hook-form';
 import Dialog from '@mui/material/Dialog';
 import DialogTitle from '@mui/material/DialogTitle';
@@ -15,7 +15,7 @@ import DialogContent from '@mui/material/DialogContent';
 import { DialogActions, FormHelperText } from '@mui/material';
 import Button from '@mui/material/Button';
 import QueryButton from '@/components/Button/QueryButton';
-import { ExpenseParticipantsDetails } from '@/pages/Event/ExpensesList/ExpenseListItem/ExpenseParticipantsDetails/ExpenseParticipantsDetails';
+import { ExpenseParticipantsDetails } from '@/pages/EventPage/Event/ExpenseListItem/ExpenseParticipantsDetails/ExpenseParticipantsDetails';
 
 interface EditExpenseDialogListItemButtonProps extends ListItemButtonProps {
   expense: FirestoreExpense;

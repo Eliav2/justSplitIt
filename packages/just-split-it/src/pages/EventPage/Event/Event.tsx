@@ -6,8 +6,8 @@ import { useGetEventExpenses, useParticipantsByIds } from '@/utils/firebase/fire
 import Typography from '@mui/material/Typography';
 import List from '@mui/material/List';
 import QueryIndicator from '@/components/QueryIndicator';
-import { ExpenseListItem } from '@/pages/Event/ExpensesList/ExpenseListItem/ExpenseListItem';
-import { NewExpenseDialogButton } from '@/pages/Event/ExpensesList/NewExpenseDialogButton';
+import { ExpenseListItem } from '@/pages/EventPage/Event/ExpenseListItem/ExpenseListItem';
+import { NewExpenseDialogButton } from '@/pages/EventPage/Event/NewExpenseDialogButton';
 import { DeleteEventDialogButton } from '@/components/Dialog/DeleteEventDialogButton';
 import Button from '@mui/material/Button';
 import ParticipantLeaveEventDialogButton from '@/components/Dialog/ParticipantLeaveEventDialogButton';
@@ -15,25 +15,28 @@ import { round, sumArray } from '@/utils/math';
 import ListItem from '@mui/material/ListItem';
 import ListItemText from '@mui/material/ListItemText';
 import Paper from '@mui/material/Paper';
-import { UserNotParticipating } from '@/pages/Event/ExpensesList/UserNotParticipating';
+import { UserNotParticipating } from '@/pages/EventPage/Event/UserNotParticipating';
 import Divider from '@mui/material/Divider';
 import { CenteredFlexBox, FlexBox } from '@/components/styled';
+import React from 'react';
 
 interface ExpensesListProps {
-  event: DocumentSnapshot<FirestoreEvent>;
+  eventSnap: DocumentSnapshot<FirestoreEvent>;
 }
 
-const ExpensesList = ({ event }: ExpensesListProps) => {
+const Event = ({ eventSnap }: ExpensesListProps) => {
   const [user, loadingUser] = useAuthState(fbAuth);
-  const eventData = event && Object.assign({}, event.data(), { id: event.id });
+  const eventData = eventSnap && Object.assign({}, eventSnap.data(), { id: eventSnap.id });
   const isUserParticipating = user && eventData?.participantsIds?.includes(user?.uid);
-  // console.log('number of participants', eventData.participantsIds.length);
+
+  const [participants, loadingParticipants, errorParticipants] = useParticipantsByIds(
+    eventData?.participantsIds,
+  );
   const isOwner = user?.uid === eventData?.ownerId;
 
-  const [expenses, loading, error] = useGetEventExpenses(event.id as string, [isUserParticipating]);
-  const [participants, loadingParticipants, errorParticipants] = useParticipantsByIds(
-    eventData.participantsIds,
-  );
+  const [expenses, loading, error] = useGetEventExpenses(eventSnap.id as string, [
+    isUserParticipating,
+  ]);
 
   const expensesData = expenses?.docs.map((expense) => expense.data());
   const eventTotalExpense = sumArray(expensesData?.map((expense) => expense.amount) ?? []);
@@ -130,7 +133,7 @@ const ExpensesList = ({ event }: ExpensesListProps) => {
                 )}
               />
             ) : (
-              <ParticipantLeaveEventDialogButton eventId={event.id} />
+              <ParticipantLeaveEventDialogButton eventId={eventSnap.id} />
             )}
           </CenteredFlexBox>
         </Paper>
@@ -141,4 +144,4 @@ const ExpensesList = ({ event }: ExpensesListProps) => {
   );
 };
 
-export default ExpensesList;
+export default Event;

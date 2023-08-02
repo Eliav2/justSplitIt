@@ -9,7 +9,7 @@ import Button from '@mui/material/Button';
 import QueryIndicator from '@/components/QueryIndicator';
 import { useLoginUser } from '@/utils/login/useLoginUser';
 
-function Login() {
+function LoginPage() {
   const [user, loading, error] = useAuthState(fbAuth);
   const { signInWithGoogle } = useLoginUser();
   const returnUrl = new URLSearchParams(location.search).get('fallback');
@@ -37,4 +37,4 @@ function Login() {
   );
 }
 
-export default Login;
+export default LoginPage;

@@ -8,7 +8,10 @@ import {
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { fbAuth } from '@/utils/firebase/firebase';
 import { useCollection as useFirestoreCollection } from '@/react-firebase-hooks/firestore/useCollection';
-import { useDocument as useFirestoreDocument } from '@/react-firebase-hooks/firestore/useDocument';
+import {
+  useDocument as useFirestoreDocument,
+  useDocumentData,
+} from '@/react-firebase-hooks/firestore/useDocument';
 import { FirestoreExpense } from '@/utils/firebase/firestore/schema';
 
 export function useGetUserEvents() {
@@ -27,7 +30,7 @@ export function useGetUserEvents() {
 
 export function useGetEvent(eventId: string) {
   const eventRef = doc(firestore.event(), eventId);
-  return useFirestoreDocument(eventRef);
+  return useDocumentData(eventRef);
   // const eventRef = doc(firestore.event(), eventId);
   // return useDocument(eventRef, {}, [eventId]);
 }

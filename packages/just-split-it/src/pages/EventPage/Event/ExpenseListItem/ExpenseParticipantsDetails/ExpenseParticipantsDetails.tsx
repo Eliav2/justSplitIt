@@ -7,19 +7,19 @@ import * as React from 'react';
 import CheckIcon from '@mui/icons-material/Check';
 import { Avatar, ListItemAvatar } from '@mui/material';
 import ListItemText from '@mui/material/ListItemText';
-import { useEventContext } from '@/pages/Event/EventContext';
+import { useEventContext } from '@/pages/EventPage/EventContext';
 
 interface ExpenseParticipantsDetailsProps {
   expense: FirestoreExpense;
 }
 
 export const ExpenseParticipantsDetails = (props: ExpenseParticipantsDetailsProps) => {
-  // const [participantsInExpense] = useParticipantsInExpense(props.expense);
+  const [participantsInExpense] = useParticipantsInExpense(props.expense);
   const event = useEventContext();
-  const userIdsParticipatingInEvent = props.expense.participantsIds;
-  const userIdsNotParticipatingInEvent = event?.participantsIds.filter(
-    (id) => !userIdsParticipatingInEvent.includes(id),
-  );
+  // const userIdsParticipatingInEvent = props.expense.participantsIds;
+  // const userIdsNotParticipatingInEvent = event?.participantsIds.filter(
+  //   (id) => !userIdsParticipatingInEvent.includes(id),
+  // );
 
   return (
     <DialogContent>
