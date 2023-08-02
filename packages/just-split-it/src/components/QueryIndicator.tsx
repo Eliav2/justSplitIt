@@ -13,7 +13,7 @@ import Button from '@mui/material/Button';
 import LockIcon from '@mui/icons-material/Lock';
 import CircularProgress from '@mui/material/CircularProgress';
 interface QueryIndicatorProps {
-  children: React.ReactElement;
+  children: React.ReactNode;
   loading: boolean;
   errorMessage?: string | null;
   loadingIndicator?: React.ReactNode;
