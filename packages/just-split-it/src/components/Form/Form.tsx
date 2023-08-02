@@ -1,15 +1,12 @@
-import React, { useState } from 'react';
-import type { FieldValues, UseFormReturn } from 'react-hook-form';
+import { FieldValues, UseFormReturn } from 'react-hook-form';
 
 interface FormProps<T extends FieldValues> {
-  formHook: UseFormReturn<T, any, undefined>;
-  handleAsyncSubmit: (data: T) => Promise<void>;
+  renderFormContent: (formContent: React.ReactNode, formHook: UseFormReturn<T>) => React.ReactNode;
+  children: React.ReactNode;
+  formHook: UseFormReturn<T>;
 }
-const Form = <T extends UseFormReturn<T>>(props: T) => {
-  const [errorMessage, setErrorMessage] = useState('');
-  const [loadingState, setLoadingState] = useState<'idle' | 'loading'>('idle');
 
-  return <form></form>;
+const Form = <T extends FieldValues>({ renderFormContent, formHook, children }: FormProps<T>) => {
+  return renderFormContent(children, formHook);
 };
-
 export default Form;
