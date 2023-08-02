@@ -2,20 +2,29 @@ import { useExpense } from '@/utils/firebase/firestore/queris/hooks';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { fbAuth } from '@/utils/firebase/firebase';
 import QueryIndicator from '@/components/QueryIndicator';
-import ListItem from '@mui/material/ListItem';
-import ListItemButton from '@mui/material/ListItemButton';
+import ListItem, { ListItemProps } from '@mui/material/ListItem';
+import ListItemButton, { ListItemButtonProps } from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import Checkbox from '@mui/material/Checkbox';
 import ListItemText from '@mui/material/ListItemText';
 import ConfirmDeleteDialogButton from '@/components/Dialog/ConfirmDeleteDialogButton';
 import { deleteExpense } from '@/utils/firebase/firestore/queris/queries';
-import { DocumentSnapshot, updateDoc } from 'firebase/firestore';
+import { DocumentReference, updateDoc } from 'firebase/firestore';
 import * as React from 'react';
+import { BaseSyntheticEvent, useState } from 'react';
 import Typography from '@mui/material/Typography';
-import ExpensesDetailsProps from '@/pages/Event/ExpensesDetails/ExpensesDetails';
-import { FirestoreEvent } from '@/utils/firebase/firestore/schema';
-import { AppTheme } from '@/theme/themes';
-import { Chip } from '@mui/material';
+import { FirestoreEvent, FirestoreExpense } from '@/utils/firebase/firestore/schema';
+import { Chip, DialogActions, DialogContentText, FormHelperText } from '@mui/material';
+import { useAsyncHandler } from '@/utils/hooks/hooks';
+import { ExpenseForm, ExpenseFormInput } from '@/pages/Event/ExpenseForm';
+import { firestore } from '@/utils/firebase/firestore/client';
+import { UseFormReturn } from 'react-hook-form';
+import Button from '@mui/material/Button';
+import Dialog from '@mui/material/Dialog';
+import DialogTitle from '@mui/material/DialogTitle';
+import DialogContent from '@mui/material/DialogContent';
+import QueryButton from '@/components/Button/QueryButton';
+import { useGrabDocumentDataById } from '@/utils/firebase/firestore/hooks/query';
 
 interface ExpenseProps {
   expenseId: string;
@@ -27,50 +36,63 @@ interface Theme {
 }
 
 export const ExpenseListItem = (props: ExpenseProps) => {
-  const expense = useExpense(props.expenseId);
+  const [expense, expenseLoading, expenseError, expenseSnap] = useExpense(props.expenseId);
   const [user] = useAuthState(fbAuth);
-  const isOwner = user?.uid === expense.data?.payerId;
+  const isOwner = user?.uid === expense?.payerId;
 
   function handleToggle(name: string) {
     return undefined;
   }
 
-  const includedInExpense = expense.data?.participantsIds.includes(user!.uid);
+  // console.log(expense);
+  const includedInExpense = expense?.participantsIds?.includes(user!.uid);
 
   const handleCheckToggle = async (
     event: React.ChangeEvent<HTMLInputElement>,
     checked: boolean,
   ) => {
-    if (!expense.ref || !expense.data) return;
+    if (!expenseSnap?.ref || !expense) return;
+
     if (checked) {
-      await updateDoc(expense.ref, {
-        participantsIds: [...expense.data.participantsIds, user!.uid],
+      await updateDoc(expenseSnap?.ref, {
+        participantsIds: [...expense?.participantsIds, user!.uid],
       });
     } else {
-      await updateDoc(expense.ref, {
-        participantsIds: expense.data.participantsIds.filter((id) => id !== user!.uid),
+      await updateDoc(expenseSnap?.ref, {
+        participantsIds: expense?.participantsIds.filter((id) => id !== user!.uid),
       });
     }
   };
 
   return (
-    <QueryIndicator loading={expense.loading}>
-      {expense.data && (
+    <QueryIndicator loading={expenseLoading}>
+      {expense && expenseSnap && (
         <>
           <ListItem
-            key={expense.data?.id}
+            key={expense.id}
             secondaryAction={
               <ConfirmDeleteDialogButton
                 handleConfirm={async (close) => {
-                  await deleteExpense(expense.data!.id);
+                  await deleteExpense(expense.id);
                   close();
                 }}
               />
             }
             disablePadding
           >
-            <ListItemButton role={undefined} onClick={handleToggle(expense.data.name)} dense>
-              <ListItemIcon>
+            <EditExpenseDialogListItemButton
+              expense={expense}
+              expenseRef={expenseSnap.ref}
+              parentEvent={props.eventData}
+              role={undefined}
+              onClick={handleToggle(expense?.name)}
+              dense
+            >
+              <ListItemIcon
+                onClick={(e) => {
+                  e.stopPropagation();
+                }}
+              >
                 <Checkbox
                   edge="start"
                   // checked={checked[expense.name]?.selected}
@@ -81,10 +103,10 @@ export const ExpenseListItem = (props: ExpenseProps) => {
                 />
               </ListItemIcon>
               <ListItemText
-                id={expense.data.id}
+                id={expense?.id}
                 primary={
                   <>
-                    {expense.data.name}
+                    {expense?.name}
 
                     {isOwner && (
                       <Chip
@@ -99,7 +121,7 @@ export const ExpenseListItem = (props: ExpenseProps) => {
                 }
                 secondary={
                   <Typography variant={'body2'} color="textSecondary">
-                    {expense.data.amount}₪{' '}
+                    {expense?.amount}₪{' '}
                     <Typography
                       variant={'caption'}
                       color="textSecondary"
@@ -107,14 +129,104 @@ export const ExpenseListItem = (props: ExpenseProps) => {
                     >
                       payed by
                     </Typography>{' '}
-                    {expense.data.payerName}
+                    {expense?.payerName}
                   </Typography>
                 }
               />
-            </ListItemButton>
+            </EditExpenseDialogListItemButton>
           </ListItem>
         </>
       )}
     </QueryIndicator>
+  );
+};
+
+interface EditExpenseDialogListItemButtonProps extends ListItemButtonProps {
+  expense: FirestoreExpense;
+  expenseRef: DocumentReference<FirestoreExpense>;
+  parentEvent: FirestoreEvent & { id: string };
+}
+
+export const EditExpenseDialogListItemButton = ({
+  expense,
+  parentEvent,
+  expenseRef,
+  ...props
+}: EditExpenseDialogListItemButtonProps) => {
+  const [open, setOpen] = useState(false);
+
+  const [payer, loadingPayer, errorPayer] = useGrabDocumentDataById(
+    firestore.user(),
+    expense.payerId,
+  );
+
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
+  const handleCancel = (e: BaseSyntheticEvent) => {
+    e.stopPropagation();
+    setOpen(false);
+  };
+
+  const [createExpenseHandler, createLoading, createErrorMessage] = useAsyncHandler(
+    async (data: ExpenseFormInput) => {
+      updateDoc(expenseRef, {
+        amount: Number(data.amount),
+        name: data.name,
+        payerId: data.payer.id,
+        payerName: payer!.name,
+      });
+    },
+
+    {
+      onSuccess: (asd, formHook: UseFormReturn<ExpenseFormInput>) => {
+        setOpen(false);
+        formHook.reset();
+      },
+      onError: (e) => {
+        console.error(e);
+      },
+    },
+  );
+
+  return (
+    <ListItemButton {...props} onClick={handleClickOpen}>
+      {props.children}
+      <Dialog open={open} onClose={handleCancel}>
+        <DialogTitle>Edit Expense</DialogTitle>
+        <QueryIndicator loading={loadingPayer} errorMessage={errorPayer?.message}>
+          {payer && (
+            <ExpenseForm
+              defaultValues={{
+                name: expense.name,
+                amount: expense.amount.toString(),
+                payer: payer,
+              }}
+              parentEvent={parentEvent}
+              renderFormContent={(formContent, formHook) => {
+                const handleCreateExpense = createExpenseHandler(formHook);
+                return (
+                  <form onSubmit={formHook.handleSubmit(handleCreateExpense)}>
+                    <DialogContent>
+                      <DialogContentText>Hit Update after edits</DialogContentText>
+                      {formContent}
+                      {createErrorMessage && (
+                        <FormHelperText error>{createErrorMessage}</FormHelperText>
+                      )}
+                    </DialogContent>
+                    <DialogActions>
+                      <Button onClick={handleCancel}>Cancel</Button>
+                      <QueryButton type={'submit'} loading={createLoading}>
+                        Update
+                      </QueryButton>
+                    </DialogActions>
+                  </form>
+                );
+              }}
+            />
+          )}
+        </QueryIndicator>
+      </Dialog>
+    </ListItemButton>
   );
 };

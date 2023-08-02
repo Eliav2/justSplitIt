@@ -12,11 +12,10 @@ import { DeleteEventDialogButton } from '@/components/Dialog/DeleteEventDialogBu
 import Button from '@mui/material/Button';
 import ParticipantLeaveEventDialogButton from '@/components/Dialog/ParticipantLeaveEventDialogButton';
 import { round, sumArray } from '@/utils/math';
-import { useRerender } from '@/utils/hooks/hooks';
-import { useEffect } from 'react';
 import ListItem from '@mui/material/ListItem';
 import ListItemText from '@mui/material/ListItemText';
 import Paper from '@mui/material/Paper';
+import { UserNotParticipating } from '@/pages/Event/ExpensesDetails/UserNotParticipating';
 
 interface ExpensesDetailsProps {
   event: DocumentSnapshot<FirestoreEvent>;
@@ -137,19 +136,6 @@ const ExpensesDetails = ({ event }: ExpensesDetailsProps) => {
       )}
     </QueryIndicator>
   );
-};
-
-const UserNotParticipating = () => {
-  return (
-    <>
-      <Typography variant={'body1'}>You are not participating in this event</Typography>
-    </>
-  );
-};
-
-interface ExpenseEditDialogButtonProps {}
-const ExpenseEditDialogButton = (props: ExpenseEditDialogButtonProps) => {
-  return <div></div>;
 };
 
 export default ExpensesDetails;

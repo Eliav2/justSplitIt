@@ -13,7 +13,8 @@ import {
   useCollection as useFirestoreCollection,
   useCollectionData,
   useCollectionOnce,
-} from '@/react-firebase-hooks-/firestore/useCollection';
+} from '@/react-firebase-hooks/firestore/useCollection';
+import { useDocument, useDocumentData } from '@/react-firebase-hooks/firestore';
 
 export const useCollection = <T extends DocumentData>(
   query: Query<T, T> | undefined | null,
@@ -65,45 +66,46 @@ export const useCollection = <T extends DocumentData>(
   return { docs, loading, error, refresh } as const;
 };
 
-// get and watch a single document
-export const useDocument = <T extends DocumentData>(
-  ref: DocumentReference<T, T> | undefined | null,
-  options?: { enable?: boolean; snapshotListenOptions?: SnapshotListenOptions },
-  dependencies: any[] = [],
-) => {
-  const [loading, setLoading] = useState(true);
-  const [snap, setSnap] = useState<DocumentSnapshot>();
-  const [data, setData] = useState<T & { id: string }>();
-  useEffect(() => {
-    if (!ref) return;
-    const unsubscribe = onSnapshot(ref, (snapshot) => {
-      setLoading(false);
-      setSnap(snapshot);
-      setData({ ...snapshot.data(), id: ref.id } as T & { id: string });
-    });
-    return () => {
-      unsubscribe();
-      setLoading(true);
-    };
-  }, [options?.enable ?? true, ...dependencies]);
+// old implementation
+// // get and watch a single document
+// export const useDocument = <T extends DocumentData>(
+//   ref: DocumentReference<T, T> | undefined | null,
+//   options?: { enable?: boolean; snapshotListenOptions?: SnapshotListenOptions },
+//   dependencies: any[] = [],
+// ) => {
+//   const [loading, setLoading] = useState(true);
+//   const [snap, setSnap] = useState<DocumentSnapshot>();
+//   const [data, setData] = useState<T & { id: string }>();
+//   useEffect(() => {
+//     if (!ref) return;
+//     const unsubscribe = onSnapshot(ref, (snapshot) => {
+//       setLoading(false);
+//       setSnap(snapshot);
+//       setData({ ...snapshot.data(), id: ref.id } as T & { id: string });
+//     });
+//     return () => {
+//       unsubscribe();
+//       setLoading(true);
+//     };
+//   }, [options?.enable ?? true, ...dependencies]);
+//
+//   // can be used if permissions are changed
+//   const refresh = async () => {
+//     if (!ref) return;
+//     const docSnap = await getDoc(ref);
+//     setSnap(docSnap);
+//   };
+//
+//   return { data, loading, snap, ref, refresh } as const;
+// };
 
-  // can be used if permissions are changed
-  const refresh = async () => {
-    if (!ref) return;
-    const docSnap = await getDoc(ref);
-    setSnap(docSnap);
-  };
-
-  return { data, loading, snap, ref, refresh } as const;
-};
-
-export const useGrabDocumentById = <T extends DocumentData>(
-  collection: CollectionReference<T, T>,
-  docId: string,
-) => {
-  const docRef = doc(collection, docId);
-  return useDocument<T>(docRef, {}, [docId]);
-};
+// export const useGrabDocumentById = <T extends DocumentData>(
+//   collection: CollectionReference<T, T>,
+//   docId: string,
+// ) => {
+//   const docRef = doc(collection, docId);
+//   return useDocument<T>(docRef, {}, [docId]);
+// };
 
 export const useGrabDocumentsByIds = <T extends DocumentData>(
   collection: CollectionReference<T, T>,
@@ -139,6 +141,22 @@ export const useGrabDocumentsByIds = <T extends DocumentData>(
   const q = query(collection, where('__name__', 'in', docRefs));
   // useFirestoreCollection(q);
   return useFirestoreCollection(q);
+};
+
+export const useGrabDocumentById = <T extends DocumentData>(
+  collection: CollectionReference<T, T>,
+  docId: string | undefined | null,
+) => {
+  const docRef = doc(collection, docId ?? '');
+  return useDocument(docRef);
+};
+
+export const useGrabDocumentDataById = <T extends DocumentData>(
+  collection: CollectionReference<T, T>,
+  docId: string,
+) => {
+  const docRef = doc(collection, docId);
+  return useDocumentData<T>(docRef, {});
 };
 
 export const useGrabDocumentsDataByIds = <T extends DocumentData>(

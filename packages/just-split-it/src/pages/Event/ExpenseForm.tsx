@@ -28,16 +28,21 @@ interface ExpenseFormProps {
     formHook: UseFormReturn<ExpenseFormInput>,
   ) => React.ReactNode;
   parentEvent: FirestoreEventWithId;
+  defaultValues?: ExpenseFormInput;
 }
 
-export const ExpenseForm = ({ renderFormContent, parentEvent }: ExpenseFormProps) => {
+export const ExpenseForm = ({
+  renderFormContent,
+  parentEvent,
+  defaultValues,
+}: ExpenseFormProps) => {
   const [user] = useAuthState(fbAuth);
   const [participants] = useGrabDocumentsByIds(firestore.user(), parentEvent?.participantsIds);
   const participantsDocs = participants?.docs ?? [];
   const participantsData = participantsDocs.map((p) => Object.assign({}, p.data(), { id: p.id }));
 
   const expenseForm = useForm<ExpenseFormInput>({
-    defaultValues: {
+    defaultValues: defaultValues ?? {
       name: '',
       amount: '0',
       payer: participantsData?.find((p) => p.id == user?.uid) || (null as any),

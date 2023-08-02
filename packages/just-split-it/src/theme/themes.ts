@@ -29,9 +29,9 @@ const sharedTheme = {
   },
   components: {
     MuiButtonBase: {
-      defaultProps: {
-        disableRipple: true,
-      },
+      // defaultProps: {
+      //   disableRipple: true,
+      // },
     },
     MuiDivider: {
       styleOverrides: {

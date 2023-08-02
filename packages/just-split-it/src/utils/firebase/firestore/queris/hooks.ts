@@ -10,9 +10,11 @@ import {
 } from 'firebase/firestore';
 import { firestore } from '@/utils/firebase/firestore/client';
 import {
+  useGrabDocumentById,
+  useGrabDocumentDataById,
   // useCollection,
   // useDocument,
-  useGrabDocumentById,
+  // useGrabDocumentById,
   useGrabDocumentsByIds,
   useGrabDocumentsDataByIds,
 } from '@/utils/firebase/firestore/hooks/query';
@@ -21,8 +23,8 @@ import { fbApp, fbAuth } from '@/utils/firebase/firebase';
 import {
   useCollection as useFirestoreCollection,
   useCollectionData,
-} from '@/react-firebase-hooks-/firestore/useCollection';
-import { useDocument as useFirestoreDocument } from '@/react-firebase-hooks-/firestore/useDocument';
+} from '@/react-firebase-hooks/firestore/useCollection';
+import { useDocument as useFirestoreDocument } from '@/react-firebase-hooks/firestore/useDocument';
 import { FirestoreEvent } from '@/utils/firebase/firestore/schema';
 
 export function useGetUserEvents() {
@@ -59,7 +61,7 @@ export const useGetEventExpenses = (eventId: string, dependencies?: any[]) => {
 };
 
 export const useExpense = (expenseId: string) => {
-  return useGrabDocumentById(firestore.expense(), expenseId);
+  return useGrabDocumentDataById(firestore.expense(), expenseId);
 };
 
 export const useParticipantsByIds = (participantsId: string[] | undefined) => {
