@@ -1,4 +1,5 @@
 import {
+  FirestoreEventWithId,
   FirestoreExpense,
   FirestoreUser,
   FirestoreUserWithId,
@@ -9,6 +10,10 @@ import { Autocomplete, InputAdornment, TextField } from '@mui/material';
 import Form from '@/components/Form/Form';
 import { useEffect } from 'react';
 import { QuerySnapshot } from 'firebase/firestore';
+import { useGrabDocumentsByIds } from '@/utils/firebase/firestore/hooks/query';
+import { firestore } from '@/utils/firebase/firestore/client';
+import { useAuthState } from 'react-firebase-hooks/auth';
+import { fbAuth } from '@/utils/firebase/firebase';
 
 type ExpenseForm = Pick<FirestoreExpense, 'name'>;
 
@@ -18,21 +23,19 @@ export type ExpenseFormInput = ExpenseForm & {
 };
 
 interface ExpenseFormProps {
-  participantsData: FirestoreUserWithId[];
-  user: User | null | undefined;
   renderFormContent: (
     formContent: React.ReactNode,
     formHook: UseFormReturn<ExpenseFormInput>,
   ) => React.ReactNode;
-  participants: QuerySnapshot<FirestoreUser> | undefined;
+  parentEvent: FirestoreEventWithId;
 }
 
-export const ExpenseForm = ({
-  participantsData,
-  user,
-  renderFormContent,
-  participants,
-}: ExpenseFormProps) => {
+export const ExpenseForm = ({ renderFormContent, parentEvent }: ExpenseFormProps) => {
+  const [user] = useAuthState(fbAuth);
+  const [participants] = useGrabDocumentsByIds(firestore.user(), parentEvent?.participantsIds);
+  const participantsDocs = participants?.docs ?? [];
+  const participantsData = participantsDocs.map((p) => Object.assign({}, p.data(), { id: p.id }));
+
   const expenseForm = useForm<ExpenseFormInput>({
     defaultValues: {
       name: '',

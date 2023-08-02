@@ -21,30 +21,7 @@ interface NewExpenseDialogButtonProps {
 }
 
 export const NewExpenseDialogButton = (props: NewExpenseDialogButtonProps) => {
-  const [user] = useAuthState(fbAuth);
   const [open, setOpen] = useState(false);
-  const [participants] = useGrabDocumentsByIds(
-    firestore.user(),
-    props.parentEvent?.participantsIds,
-  );
-  const participantsDocs = participants?.docs ?? [];
-  const participantsData = participantsDocs.map((p) => Object.assign({}, p.data(), { id: p.id }));
-
-  // const expenseForm = useForm<ExpenseFormInput>({
-  //   defaultValues: {
-  //     name: '',
-  //     amount: '0',
-  //     payer: participantsData?.find((p) => p.id == user?.uid) || (null as any),
-  //   },
-  // });
-
-  // // set the payer to the current user by default (only when the participants are loaded)
-  // useEffect(() => {
-  //   expenseForm.setValue(
-  //     'payer',
-  //     participantsData?.find((p) => p.id == user?.uid) || (null as any),
-  //   );
-  // }, [participants, open]);
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -91,9 +68,7 @@ export const NewExpenseDialogButton = (props: NewExpenseDialogButtonProps) => {
       <Dialog open={open} onClose={handleCancel}>
         <DialogTitle>New Expense</DialogTitle>
         <ExpenseForm
-          participants={participants}
-          user={user}
-          participantsData={participantsData}
+          parentEvent={props.parentEvent}
           renderFormContent={(formContent, formHook) => {
             const handleCreateExpense = createExpenseHandler(formHook);
             return (
