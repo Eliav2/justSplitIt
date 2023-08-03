@@ -2,8 +2,16 @@
 import { initializeApp } from 'firebase/app';
 import { getAnalytics, Analytics } from 'firebase/analytics';
 import { connectAuthEmulator, getAuth } from 'firebase/auth';
-import { connectFirestoreEmulator, getFirestore } from 'firebase/firestore';
+import {
+  connectFirestoreEmulator,
+  getFirestore,
+  initializeFirestore,
+  persistentLocalCache,
+  persistentSingleTabManager,
+  persistentMultipleTabManager,
+} from 'firebase/firestore';
 import { isDev } from '@/utils/isDev';
+import firebase from 'firebase/app';
 
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
@@ -23,9 +31,22 @@ const firebaseConfig = {
 // Initialize Firebase
 export const fbApp = initializeApp(firebaseConfig);
 export const fbAuth = getAuth(fbApp);
-export const fbDB = getFirestore(fbApp);
 
 let _analytics: Analytics | undefined;
+
+// const db = firebase.firestore();
+
+// Use multi-tab IndexedDb persistence.
+initializeFirestore(fbApp, {
+  localCache: persistentLocalCache(/*settings*/ { tabManager: persistentMultipleTabManager() }),
+});
+export const fbDB = getFirestore(fbApp);
+
+// Same as `initializeFirestore(app, {localCache: persistentLocalCache(/*settings*/{})})`,
+// but more explicit about tab management.
+// initializeFirestore(fbApp, {
+//   localCache: persistentLocalCache(/*settings*/ { tabManager: persistentSingleTabManager() }),
+// });
 
 // console.log('isDev', isDev);
 if (isDev) {

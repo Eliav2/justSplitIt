@@ -26,6 +26,8 @@ export const ExpenseParticipantsDetails = (props: ExpenseParticipantsDetailsProp
       participants
       <List dense>
         {participantsInExpense?.map((p) => {
+          const isPayer = props.expense.payerId == p.id;
+          const extraProp = isPayer ? { secondary: 'payer' } : {};
           return (
             <ListItem key={p.id}>
               <ListItemAvatar>
@@ -33,7 +35,7 @@ export const ExpenseParticipantsDetails = (props: ExpenseParticipantsDetailsProp
                 <CheckIcon />
                 {/*</Avatar>*/}
               </ListItemAvatar>
-              <ListItemText primary={p.name} />
+              <ListItemText primary={p.name} {...extraProp} />
             </ListItem>
           );
         })}

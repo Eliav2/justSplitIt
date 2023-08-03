@@ -62,6 +62,7 @@ const Event = ({ eventSnap }: ExpensesListProps) => {
   const userTotalExpense = round(sumArray(userShouldPay.map((expense) => expense.amount)));
 
   const userBalance = round(userPayedFor - userTotalExpense);
+  const eventOwner = participants?.find((p) => p.id == eventData.ownerId);
 
   // console.log(userExpenses);
   // console.log(userTotalExpense);
@@ -70,20 +71,37 @@ const Event = ({ eventSnap }: ExpensesListProps) => {
   const ownColor = '#CC8900';
   return (
     <QueryIndicator loading={loadingUser}>
-      <Typography variant="h3">{eventData?.name}</Typography>
+      <Typography variant="h2" sx={{ m: 1, mb: 2 }}>
+        {eventData?.name}
+      </Typography>
 
       {isUserParticipating ? (
-        <Paper sx={{ p: 2 }}>
+        <Paper
+          sx={{
+            p: 2,
+            // minWidth: '60%',
+          }}
+        >
           <Typography>Expenses</Typography>
 
           <List sx={{ width: '100%', maxWidth: 360, bgcolor: 'background.paper' }}>
-            <QueryIndicator loading={loading} errorMessage={error?.message}>
-              {expenses?.docs.map((expene, expenseIndex) => {
-                return (
-                  <ExpenseListItem eventData={eventData} expenseId={expene.id} key={expene.id} />
-                );
-              })}
-            </QueryIndicator>
+            {(expenses?.docs.length ?? 0) > 0 ? (
+              <QueryIndicator loading={loading} errorMessage={error?.message}>
+                {expenses?.docs.map((expene, expenseIndex) => {
+                  return (
+                    <ExpenseListItem eventData={eventData} expenseId={expene.id} key={expene.id} />
+                  );
+                })}
+              </QueryIndicator>
+            ) : (
+              <ListItem>
+                <ListItemText>
+                  <Typography variant={'caption'} color={'textSecondary'}>
+                    No Expenses in this Event
+                  </Typography>
+                </ListItemText>
+              </ListItem>
+            )}
           </List>
           <List dense>
             <ListItem>
@@ -121,6 +139,12 @@ const Event = ({ eventSnap }: ExpensesListProps) => {
               </ListItem>
             ))}
           </List>
+          {eventOwner && (
+            <>
+              <Typography variant={'body2'}>event created by</Typography>
+              <Typography>{eventOwner?.name}</Typography>
+            </>
+          )}
 
           <CenteredFlexBox>
             {isOwner ? (
