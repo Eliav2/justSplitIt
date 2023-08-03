@@ -3,7 +3,7 @@ import { ColumnFlexBox, FullSizeCenteredFlexBoxColumn } from '@/components/style
 import useOrientation from '@/hooks/useOrientation';
 
 import { useNavigate } from 'react-router-dom';
-import { NewEventDialog } from '@/pages/HomePage/NewEventDialog';
+import { NewEventDialog } from '@/pages/EventPage/Event/NewEventDialog';
 import Typography from '@mui/material/Typography';
 import { fbAuth } from '@/utils/firebase/firebase';
 import { useAuthState } from 'react-firebase-hooks/auth';

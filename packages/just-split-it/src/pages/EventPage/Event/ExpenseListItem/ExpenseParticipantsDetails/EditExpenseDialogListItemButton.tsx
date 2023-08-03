@@ -45,7 +45,7 @@ export const EditExpenseDialogListItemButton = ({
     setOpen(false);
   };
 
-  const [createExpenseHandler, createLoading, createErrorMessage] = useAsyncHandler(
+  const [updateExpenseHandler, createLoading, createErrorMessage] = useAsyncHandler(
     async (data: ExpenseFormInput) => {
       updateDoc(expenseRef, {
         amount: Number(data.amount),
@@ -81,9 +81,9 @@ export const EditExpenseDialogListItemButton = ({
               }}
               parentEvent={parentEvent}
               renderFormContent={(formContent, formHook) => {
-                const handleCreateExpense = createExpenseHandler(formHook);
+                const handleUpdateExpense = updateExpenseHandler(formHook);
                 return (
-                  <form onSubmit={formHook.handleSubmit(handleCreateExpense)}>
+                  <form onSubmit={formHook.handleSubmit(handleUpdateExpense)}>
                     <DialogContent>
                       {formContent}
                       {createErrorMessage && (

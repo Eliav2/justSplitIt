@@ -4,7 +4,7 @@ import { fbAuth } from '@/utils/firebase/firebase';
 import { firestore } from '@/utils/firebase/firestore/client';
 import { FirestoreExpense } from '@/utils/firebase/firestore/schema';
 import { grabDocumentById } from '@/utils/firebase/firestore/queris/util';
-import { IEventForm } from '@/pages/HomePage/NewEventDialog';
+import { IEventForm } from '@/pages/EventPage/Event/NewEventDialog';
 
 // add event to the events collection and to the user's events list
 export async function addEvent(eventDetails: IEventForm) {
@@ -13,17 +13,21 @@ export async function addEvent(eventDetails: IEventForm) {
   }
 
   // add event to the events collection
-  const eventRef = await addDoc(firestore.event(), {
+  // (adding this way to allow offline support,
+  // see https://stackoverflow.com/questions/49829714/firebase-firestore-get-document-id-after-adding-data-offline
+  // )
+  const eventDoc = doc(firestore.event());
+  setDoc(eventDoc, {
     name: eventDetails.name,
     description: eventDetails.description,
     ownerId: fbAuth.currentUser?.uid,
     participantsIds: [fbAuth.currentUser?.uid],
   });
-  return eventRef;
+  return eventDoc;
 }
 
 export const addExpense = async (data: FirestoreExpense) => {
-  return await addDoc(firestore.expense(), data);
+  return addDoc(firestore.expense(), data);
 };
 
 export const deleteExpense = async (expenseId: string) => {

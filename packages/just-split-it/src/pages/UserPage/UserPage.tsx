@@ -19,11 +19,8 @@ const SignOut = () => {
   return (
     <>
       <Button
-        onClick={async () => {
-          const success = await signOut();
-          if (success) {
-            console.log('signed out');
-          }
+        onClick={() => {
+          signOut();
         }}
       >
         Sign out

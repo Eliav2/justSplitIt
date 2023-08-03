@@ -21,13 +21,13 @@ export const DeleteEventDialogButton = (props: DeleteEventDialogButtonProps) => 
           this action cannot be undone. Are you sure you want to delete this event?
         </DialogContent>
       }
-      handleConfirm={async (close) => {
+      handleConfirm={(close) => {
         if (eventId === props.event.id) {
           navigate('/');
         }
         close();
 
-        await deleteEvent(props.event.id);
+        deleteEvent(props.event.id);
       }}
       buttonElement={props.buttonElement}
     />

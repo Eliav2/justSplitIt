@@ -12,11 +12,14 @@ import IconButton from '@mui/material/IconButton';
 import Button from '@mui/material/Button';
 import LockIcon from '@mui/icons-material/Lock';
 import CircularProgress from '@mui/material/CircularProgress';
+import { FIRESTORE_PERSISTENT_ENABLED } from '@/utils/firebase/firebase';
+
 interface QueryIndicatorProps {
   children: React.ReactNode;
   loading: boolean;
   errorMessage?: string | null;
   loadingIndicator?: React.ReactNode;
+  skipLoadingIndicator?: boolean;
 }
 
 const QueryIndicator = ({
@@ -24,7 +27,8 @@ const QueryIndicator = ({
   loading,
   errorMessage,
   loadingIndicator = <Loading />,
-}: QueryIndicatorProps) => {
+}: // skipLoadingIndicator = FIRESTORE_PERSISTENT_ENABLED,
+QueryIndicatorProps) => {
   const [expanded, setExpanded] = useState(false);
   // const [childrenDimensions, setChildrenDimensions] = useState<null | ReturnType<typeof window>>(
   //   null,
@@ -56,7 +60,7 @@ const QueryIndicator = ({
         </Box>
       </Box>
     );
-
+  console.log(loading);
   if (loading) return loadingIndicator;
   return children;
 };

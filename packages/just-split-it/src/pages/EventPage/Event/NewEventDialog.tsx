@@ -10,6 +10,8 @@ import { DialogActions, DialogContentText, FormHelperText, TextField } from '@mu
 import Loading from '@/components/Loading';
 import { useNavigate } from 'react-router-dom';
 import { FirestoreEvent } from '@/utils/firebase/firestore/schema';
+import { useAsyncHandler } from '@/utils/hooks/hooks';
+import QueryButton from '@/components/Button/QueryButton';
 
 export type IEventForm = Pick<FirestoreEvent, 'name' | 'description'>;
 
@@ -34,21 +36,37 @@ export const NewEventDialog = () => {
     setOpen(false);
   };
 
-  const handleCreate = async (data: IEventForm) => {
-    setLoadingState('loading');
-    await addEvent(data)
-      .then((eventRef) => {
-        setLoadingState('idle');
-        setOpen(false);
+  // const handleCreate = async (data: IEventForm) => {
+  //   setLoadingState('loading');
+  //   addEvent(data)
+  //     .then((eventRef) => {
+  //       setLoadingState('idle');
+  //       setOpen(false);
+  //       eventForm.reset();
+  //       navigate(`/event/${eventRef.id}`);
+  //     })
+  //     .catch((e: FirestoreError) => {
+  //       console.error(e);
+  //       setLoadingState('idle');
+  //       setErrorMessage(e.message);
+  //     });
+  // };
+
+  const [createEventHandler, createLoading, createErrorMessage] = useAsyncHandler(
+    async (data: IEventForm) => {
+      return addEvent(data);
+    },
+    {
+      onSuccess: async (eventRef) => {
+        // console.log(eventRef.id);
+        console.log(eventRef);
         eventForm.reset();
-        navigate(`/event/${eventRef.id}`);
-      })
-      .catch((e: FirestoreError) => {
-        console.error(e);
-        setLoadingState('idle');
-        setErrorMessage(e.message);
-      });
-  };
+        setOpen(false);
+        if (eventRef.id) navigate(`/event/${eventRef.id}`);
+      },
+    },
+  );
+  // console.log();
 
   return (
     <div>
@@ -56,7 +74,7 @@ export const NewEventDialog = () => {
         Create new Event
       </Button>
       <Dialog open={open} onClose={handleCancel} disableRestoreFocus>
-        <form onSubmit={eventForm.handleSubmit(handleCreate)}>
+        <form onSubmit={eventForm.handleSubmit(createEventHandler())}>
           <DialogTitle>New Event</DialogTitle>
           <DialogContent>
             <DialogContentText>Provide a name for the new event.</DialogContentText>
@@ -103,7 +121,10 @@ export const NewEventDialog = () => {
           </DialogContent>
           <DialogActions>
             <Button onClick={handleCancel}>Cancel</Button>
-            <Button type={'submit'}>{loadingState == 'idle' ? 'Create' : <Loading />}</Button>
+            <QueryButton loading={createLoading} type={'submit'}>
+              Create
+            </QueryButton>
+            {/*<Button type={'submit'}>{loadingState == 'idle' ? 'Create' : <Loading />}</Button>*/}
           </DialogActions>
         </form>
       </Dialog>

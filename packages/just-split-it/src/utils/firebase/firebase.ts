@@ -36,10 +36,14 @@ let _analytics: Analytics | undefined;
 
 // const db = firebase.firestore();
 
-// Use multi-tab IndexedDb persistence.
-initializeFirestore(fbApp, {
-  localCache: persistentLocalCache(/*settings*/ { tabManager: persistentMultipleTabManager() }),
-});
+export const FIRESTORE_PERSISTENT_ENABLED = true;
+
+if (FIRESTORE_PERSISTENT_ENABLED) {
+  // Use multi-tab IndexedDb persistence.
+  initializeFirestore(fbApp, {
+    localCache: persistentLocalCache(/*settings*/ { tabManager: persistentMultipleTabManager() }),
+  });
+}
 export const fbDB = getFirestore(fbApp);
 
 // Same as `initializeFirestore(app, {localCache: persistentLocalCache(/*settings*/{})})`,

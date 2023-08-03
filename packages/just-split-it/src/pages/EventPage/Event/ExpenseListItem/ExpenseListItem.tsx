@@ -43,11 +43,11 @@ export const ExpenseListItem = (props: ExpenseProps) => {
     if (!expenseSnap?.ref || !expense) return;
 
     if (checked) {
-      await updateDoc(expenseSnap?.ref, {
+      updateDoc(expenseSnap?.ref, {
         participantsIds: [...expense?.participantsIds, user!.uid],
       });
     } else {
-      await updateDoc(expenseSnap?.ref, {
+      updateDoc(expenseSnap?.ref, {
         participantsIds: expense?.participantsIds.filter((id) => id !== user!.uid),
       });
     }
@@ -62,7 +62,7 @@ export const ExpenseListItem = (props: ExpenseProps) => {
             secondaryAction={
               <ConfirmDeleteDialogButton
                 handleConfirm={async (close) => {
-                  await deleteExpense(expense.id);
+                  deleteExpense(expense.id);
                   close();
                 }}
               />
