@@ -4,7 +4,7 @@ import { PathRouteProps } from 'react-router-dom';
 import type { SvgIconProps } from '@mui/material/SvgIcon';
 
 interface PathRouteCustomProps extends PathRouteProps {
-  title?: string;
+  title?: React.ReactNode;
   component: FC;
   icon?: FC<SvgIconProps>;
   showInSidebar?: boolean; //default true

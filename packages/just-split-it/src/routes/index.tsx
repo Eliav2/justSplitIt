@@ -3,18 +3,30 @@ import HomeIcon from '@mui/icons-material/Home';
 import asyncComponentLoader from '@/utils/loader';
 
 import { Routes } from './types';
+import English from '@/components/Language/English';
+import Hebrew from '@/components/Language/Hebrew';
 
 export const routes = {
   Welcome: {
     component: asyncComponentLoader(() => import('@/pages/HomePage/HomePage')),
     path: '/',
-    title: 'Home',
+    title: (
+      <>
+        <English>Home</English>
+        <Hebrew>דף הבית</Hebrew>
+      </>
+    ),
     icon: HomeIcon,
   },
   Login: {
     component: asyncComponentLoader(() => import('@/pages/LoginPage/LoginPage')),
     path: '/login',
-    title: 'Login',
+    title: (
+      <>
+        <English>Login</English>
+        <Hebrew>התחבר</Hebrew>
+      </>
+    ),
     icon: HomeIcon,
     showInSidebar: false,
   },
@@ -28,7 +40,12 @@ export const protectedRoutes = {
   User: {
     component: asyncComponentLoader(() => import('@/pages/UserPage/UserPage')),
     path: '/user',
-    title: 'User',
+    title: (
+      <>
+        <English>User</English>
+        <Hebrew>החשבון שלי</Hebrew>
+      </>
+    ),
     icon: HomeIcon,
     showInSidebar: false,
   },

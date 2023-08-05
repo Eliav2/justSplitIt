@@ -23,6 +23,8 @@ import Box from '@mui/material/Box';
 import { useState } from 'react';
 import { FormControl, InputLabel, MenuItem, Select, SelectChangeEvent } from '@mui/material';
 import useLanguage, { LanguageMode } from '@/store/theme/useThemeLanguage';
+import English from '@/components/Language/English';
+import Hebrew from '@/components/Language/Hebrew';
 
 const SelectLanguage = () => {
   const [languageInput, setLanguageInput] = useState('');
@@ -88,11 +90,15 @@ const LoginOrAddEventButton = () => {
       ) : (
         <QueryIndicator loading={loading} errorMessage={error?.message}>
           <Button variant="contained" onClick={signInWithGoogle}>
-            Login
+            <English>Login</English>
+            <Hebrew>התחבר</Hebrew>
           </Button>
-          <Typography variant={'body2'}>
-            In order to add events, <br />
-            You need to log in
+          <Typography variant={'caption'} sx={{ p: 1 }}>
+            <English>
+              In order to add events, <br />
+              You need to log in
+            </English>
+            <Hebrew>עליך להתחבר על מנת להוסיף אירועים</Hebrew>
           </Typography>
         </QueryIndicator>
       )}

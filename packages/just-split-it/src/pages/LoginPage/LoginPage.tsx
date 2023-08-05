@@ -8,6 +8,8 @@ import { fbAuth } from '@/utils/firebase/firebase';
 import Button from '@mui/material/Button';
 import QueryIndicator from '@/components/QueryIndicator';
 import { useLoginUser } from '@/utils/login/useLoginUser';
+import English from '@/components/Language/English';
+import Hebrew from '@/components/Language/Hebrew';
 
 function LoginPage() {
   const [user, loading, error] = useAuthState(fbAuth);
@@ -29,8 +31,11 @@ function LoginPage() {
       <Meta title="Login" />
       <FullSizeCenteredFlexBoxColumn>
         <QueryIndicator loading={loading} errorMessage={error?.message}>
-          <Typography>You are not logged in.</Typography>
-          <Button onClick={signInWithGoogle}>Sign in</Button>
+          <Typography>
+            <English>You are not logged in.</English>
+            <Hebrew>אתה לא מחובר</Hebrew>
+          </Typography>
+          <Button onClick={signInWithGoogle}>התחבר</Button>
         </QueryIndicator>
       </FullSizeCenteredFlexBoxColumn>
     </>

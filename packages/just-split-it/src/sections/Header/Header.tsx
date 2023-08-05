@@ -40,6 +40,8 @@ import MoreVertIcon from '@mui/icons-material/MoreVert';
 import { useRef, useState } from 'react';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
+import English from '@/components/Language/English';
+import Hebrew from '@/components/Language/Hebrew';
 
 function Header() {
   const [, sidebarActions] = useSidebar();
@@ -100,30 +102,36 @@ function Header() {
           </FlexBox>
           <CenteredFlexBox>
             <QueryIndicator loading={userLoading}>
-              {user && (
-                <>
-                  <Typography sx={{ textAlign: 'end' }}>{user.displayName}</Typography>
-                  <IconButton
-                    onClick={() => {
-                      navigate(protectedRoutes.User.path);
-                    }}
-                    size="large"
-                    edge="start"
-                    color="primary"
-                    aria-label="menu"
-                    sx={{ ml: 1 }}
-                  >
-                    <AccountCircleIcon />
-                  </IconButton>
-                </>
-              )}
+              <>
+                {user && <Typography sx={{ textAlign: 'end' }}>{user.displayName}</Typography>}
+                <IconButton
+                  onClick={() => {
+                    navigate(protectedRoutes.User.path);
+                  }}
+                  size="large"
+                  edge="start"
+                  color="primary"
+                  aria-label="menu"
+                  sx={{ ml: 1 }}
+                >
+                  <AccountCircleIcon />
+                </IconButton>
+              </>
             </QueryIndicator>
             {isSmallScreen ? (
               <CollapsedMenu />
             ) : (
               <>
                 <Divider orientation="vertical" flexItem />
-                <Tooltip title="It's open source" arrow>
+                <Tooltip
+                  title={
+                    <>
+                      <English>It's open source!</English>
+                      <Hebrew>זה Open-Source!</Hebrew>
+                    </>
+                  }
+                  arrow
+                >
                   <IconButton
                     color="primary"
                     size="large"
@@ -135,7 +143,15 @@ function Header() {
                   </IconButton>
                 </Tooltip>
                 <Divider orientation="vertical" flexItem />
-                <Tooltip title="Switch theme" arrow>
+                <Tooltip
+                  title={
+                    <>
+                      <English>Switch Theme</English>
+                      <Hebrew>שנה סגנון</Hebrew>
+                    </>
+                  }
+                  arrow
+                >
                   <IconButton color="primary" edge="end" size="large" onClick={themeActions.toggle}>
                     <ThemeIcon />
                   </IconButton>

@@ -12,6 +12,8 @@ import { useNavigate } from 'react-router-dom';
 import { FirestoreEvent } from '@/utils/firebase/firestore/schema';
 import { useAsyncHandler } from '@/utils/hooks/useAsyncHandler';
 import QueryButton from '@/components/Button/QueryButton';
+import English from '@/components/Language/English';
+import Hebrew from '@/components/Language/Hebrew';
 
 export type IEventForm = Pick<FirestoreEvent, 'name' | 'description'>;
 
@@ -70,7 +72,8 @@ export const NewEventDialog = () => {
   return (
     <div>
       <Button variant="outlined" onClick={handleClickOpen}>
-        Create new Event
+        <English>Create new Event</English>
+        <Hebrew>צור אירוע חדש</Hebrew>
       </Button>
       <Dialog open={open} onClose={handleCancel} disableRestoreFocus>
         <form onSubmit={eventForm.handleSubmit(createEventHandler())}>

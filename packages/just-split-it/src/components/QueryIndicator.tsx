@@ -7,6 +7,8 @@ import { useState } from 'react';
 import { CenteredFlexBox } from '@/components/styled';
 import LockIcon from '@mui/icons-material/Lock';
 import useDelayedAction from '@/utils/hooks/useDelayedAction';
+import English from '@/components/Language/English';
+import Hebrew from '@/components/Language/Hebrew';
 
 interface QueryIndicatorProps {
   children: React.ReactNode;
@@ -36,8 +38,14 @@ QueryIndicatorProps) => {
         <LockIcon />
 
         <Typography>
-          Sorry... <br />
-          It seems like you don't have permissions to view that
+          <English>
+            Sorry... <br />
+            It seems like you don't have permissions to view that
+          </English>
+          <Hebrew>
+            סורי... <br />
+            נראה שאין לך הרשאה לראות את תוכן זה
+          </Hebrew>
         </Typography>
         <Box onClick={handleExpandClick} style={{ cursor: 'pointer' }}>
           <CenteredFlexBox>
