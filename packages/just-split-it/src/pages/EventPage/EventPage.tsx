@@ -31,21 +31,23 @@ function EventPage() {
   const eventNotExistsDialogOpen = !eventLoading && !eventExists;
 
   return (
-    <FullSizeMiddleFlexContainerColumn>
+    <>
       <Meta title={event?.name ?? 'Event'} description={event?.description} />
-      {eventSnap?.ref && (
-        <JoinEventDialog open={!isUserParticipating} eventId={eventSnap?.ref?.id} user={user} />
-      )}
-      <QueryIndicator loading={eventLoading}>
-        {!eventNotExistsDialogOpen && event && eventSnap ? (
-          <EventContext.Provider value={event}>
-            <Event eventSnap={eventSnap} />
-          </EventContext.Provider>
-        ) : (
-          <EventDoesNotExistDialog open={eventNotExistsDialogOpen} />
+      <FullSizeMiddleFlexContainerColumn>
+        {eventSnap?.ref && (
+          <JoinEventDialog open={!isUserParticipating} eventId={eventSnap?.ref?.id} user={user} />
         )}
-      </QueryIndicator>
-    </FullSizeMiddleFlexContainerColumn>
+        <QueryIndicator loading={eventLoading}>
+          {!eventNotExistsDialogOpen && event && eventSnap ? (
+            <EventContext.Provider value={event}>
+              <Event eventSnap={eventSnap} />
+            </EventContext.Provider>
+          ) : (
+            <EventDoesNotExistDialog open={eventNotExistsDialogOpen} />
+          )}
+        </QueryIndicator>
+      </FullSizeMiddleFlexContainerColumn>
+    </>
   );
 }
 

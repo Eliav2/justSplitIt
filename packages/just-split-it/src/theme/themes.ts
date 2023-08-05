@@ -6,7 +6,7 @@ import { rtlConfig } from '@/theme/rtl';
 import { ThemeMode } from '@/store/theme/useThemeMode';
 
 const sharedTheme = {
-  direction: rtlConfig.direction,
+  // direction: rtlConfig.direction,
   typography: {
     // fontFamily: 'Assistant, sans-serif',
     // fontFamily: [

@@ -1,6 +1,7 @@
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import useThemeMode from '@/store/theme/useThemeMode';
 import themes from './themes';
+import useLanguage, { useShouldUseRTL } from '@/store/theme/useThemeLanguage';
 
 export type CustomThemeProviderProps = {
   children: JSX.Element;
@@ -8,7 +9,10 @@ export type CustomThemeProviderProps = {
 
 function CustomThemeProvider({ children }: CustomThemeProviderProps) {
   const [theme] = useThemeMode();
-  return <ThemeProvider theme={createTheme(themes[theme])}>{children}</ThemeProvider>;
+  const shouldUseRTL = useShouldUseRTL();
+  const finalTheme = { ...createTheme(themes[theme]), direction: shouldUseRTL ? 'rtl' : 'ltr' };
+
+  return <ThemeProvider theme={finalTheme}>{children}</ThemeProvider>;
 }
 
 export default CustomThemeProvider;

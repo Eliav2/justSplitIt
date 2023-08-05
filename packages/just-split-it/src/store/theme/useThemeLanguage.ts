@@ -9,7 +9,7 @@ export enum LanguageMode {
 
 const languageState = atom({
   key: 'theme-language-mode',
-  default: 'hebraw' as LanguageMode,
+  default: LanguageMode.Hebrew,
   effects: [synchronizeLanguageWithLocalStorage],
 });
 
@@ -23,11 +23,16 @@ function useLanguage() {
   const [languageMode, setThemeMode] = useRecoilState(languageState);
 
   function setLanguage(language: LanguageMode) {
-    setThemeMode((language: LanguageMode) => language);
+    setThemeMode(language);
   }
   const actions = { setLanguage };
 
   return [languageMode, actions] as const;
 }
+
+export const useShouldUseRTL = () => {
+  const [appLanguage] = useLanguage();
+  return appLanguage === LanguageMode.Hebrew;
+};
 
 export default useLanguage;

@@ -2,6 +2,7 @@ import rtlPlugin from 'stylis-plugin-rtl';
 import { CacheProvider } from '@emotion/react';
 import createCache from '@emotion/cache';
 import { prefixer } from 'stylis';
+import useLanguage from '@/store/theme/useThemeLanguage';
 
 // Create rtl cache
 const cacheRtl = createCache({
@@ -14,10 +15,23 @@ export function RTLSupport(props: any) {
   return <CacheProvider value={cacheRtl}>{props.children}</CacheProvider>;
 }
 
+export function RTLProvider(props: any) {
+  const [language] = useLanguage();
+  console.log(language);
+  if (language == 'hebrew') {
+    document.dir = 'rtl';
+
+    return <RTLSupport>{props.children}</RTLSupport>;
+  } else {
+    document.dir = 'ltr';
+    return <>{props.children}</>;
+  }
+}
+
 export type rtlConfigType = {
   direction: 'ltr' | 'rtl';
 };
 
 export const rtlConfig: rtlConfigType = {
-  direction: 'ltr',
+  direction: 'rtl',
 };
