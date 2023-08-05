@@ -71,7 +71,7 @@ const Event = ({ eventSnap }: ExpensesListProps) => {
   const ownColor = '#CC8900';
   return (
     <QueryIndicator loading={loadingUser}>
-      <Typography variant="h2" sx={{ m: 1, mb: 2 }}>
+      <Typography variant="h2" sx={{ m: 1, mb: 2, textAlign: 'center' }}>
         {eventData?.name}
       </Typography>
 
