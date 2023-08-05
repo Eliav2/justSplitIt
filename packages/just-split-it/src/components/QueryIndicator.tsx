@@ -1,18 +1,12 @@
 import Loading from '@/components/Loading';
-import { FirestoreError } from 'firebase/firestore';
 import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
-import { Accordion, AccordionSummary, Collapse, Theme } from '@mui/material';
+import { Collapse } from '@mui/material';
 import KeyboardArrowLeftIcon from '@mui/icons-material/KeyboardArrowLeft';
-import ExpandLessIcon from '@mui/icons-material/ExpandLess';
 import { useState } from 'react';
-import { CenteredFlexBox, FlexBox } from '@/components/styled';
-import { styled } from '@mui/system';
-import IconButton from '@mui/material/IconButton';
-import Button from '@mui/material/Button';
+import { CenteredFlexBox } from '@/components/styled';
 import LockIcon from '@mui/icons-material/Lock';
-import CircularProgress from '@mui/material/CircularProgress';
-import { FIRESTORE_PERSISTENT_ENABLED } from '@/utils/firebase/firebase';
+import useDelayedAction from '@/utils/hooks/useDelayedAction';
 
 interface QueryIndicatorProps {
   children: React.ReactNode;
@@ -30,11 +24,7 @@ const QueryIndicator = ({
 }: // skipLoadingIndicator = FIRESTORE_PERSISTENT_ENABLED,
 QueryIndicatorProps) => {
   const [expanded, setExpanded] = useState(false);
-  // const [childrenDimensions, setChildrenDimensions] = useState<null | ReturnType<typeof window>>(
-  //   null,
-  // );
-
-  // console.log(children);
+  const delayed = useDelayedAction(300);
 
   const handleExpandClick = () => {
     setExpanded(!expanded);
@@ -60,8 +50,11 @@ QueryIndicatorProps) => {
         </Box>
       </Box>
     );
-  console.log(loading);
-  if (loading) return loadingIndicator;
+
+  if (loading) {
+    if (delayed) return loadingIndicator;
+    return null;
+  }
   return children;
 };
 

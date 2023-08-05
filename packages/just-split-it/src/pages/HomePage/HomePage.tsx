@@ -67,8 +67,8 @@ const CrazyHugeHeader = () => {
   const theme = useTheme();
 
   const headerStyles = {
-    fontSize: '6rem', // Adjust the font size to make it huge
-    fontWeight: 'bold', // To make it bold and stand out
+    // fontSize: '6rem', // Adjust the font size to make it huge
+    // fontWeight: 'bold', // To make it bold and stand out
     color: theme.palette.primary.main, // A fun and pretty color
     textShadow: '4px 4px 8px rgba(0, 0, 0, 0.3)', // Add a subtle text shadow for a cool effect
     textAlign: 'center', // Center the text
@@ -77,7 +77,7 @@ const CrazyHugeHeader = () => {
   };
 
   return (
-    <Typography variant="h1" style={headerStyles as any}>
+    <Typography variant="h2" style={headerStyles as any}>
       JustSplitIt
     </Typography>
   );

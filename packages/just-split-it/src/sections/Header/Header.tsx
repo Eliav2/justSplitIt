@@ -25,13 +25,32 @@ import Typography from '@mui/material/Typography';
 import { redirect } from 'react-router-dom';
 import { protectedRoutes, routes } from '@/routes';
 import { useNavigate } from 'react-router-dom';
+import {
+  Menu,
+  MenuItem,
+  MenuList,
+  Popover,
+  PopoverProps,
+  Theme,
+  useMediaQuery,
+} from '@mui/material';
+import QueryIndicator from '@/components/QueryIndicator';
+import SettingsIcon from '@mui/icons-material/Settings';
+import MoreVertIcon from '@mui/icons-material/MoreVert';
+import { useRef, useState } from 'react';
+import ListItemIcon from '@mui/material/ListItemIcon';
+import ListItemText from '@mui/material/ListItemText';
 
 function Header() {
   const [, sidebarActions] = useSidebar();
   const [, themeActions] = useTheme();
   const [, notificationsActions] = useNotifications();
+  // const isSmallScreen = useMediaQuery((theme: Theme) =>
+  //   theme.breakpoints.down('(min-width:600px)'),
+  // );
+  const isSmallScreen = useMediaQuery('(max-width:500px)');
 
-  const [user] = useAuthState(fbAuth);
+  const [user, userLoading, userError] = useAuthState(fbAuth);
   const navigate = useNavigate();
 
   function showNotification() {
@@ -81,38 +100,122 @@ function Header() {
           </FlexBox>
           <FlexBox>
             <CenteredFlexBox>
-              {user && <Typography>{user.displayName}</Typography>}
-              <IconButton
-                onClick={() => {
-                  navigate(protectedRoutes.User.path);
-                }}
-                size="large"
-                edge="start"
-                color="info"
-                aria-label="menu"
-                sx={{ ml: 1 }}
-              >
-                <AccountCircleIcon />
-              </IconButton>
+              <QueryIndicator loading={userLoading}>
+                {user && <Typography>{user.displayName}</Typography>}
+                <IconButton
+                  onClick={() => {
+                    navigate(protectedRoutes.User.path);
+                  }}
+                  size="large"
+                  edge="start"
+                  color="primary"
+                  aria-label="menu"
+                  sx={{ ml: 1 }}
+                >
+                  <AccountCircleIcon />
+                </IconButton>
+              </QueryIndicator>
             </CenteredFlexBox>
 
-            <Divider orientation="vertical" flexItem />
-            <Tooltip title="It's open source" arrow>
-              <IconButton color="info" size="large" component="a" href={repository} target="_blank">
-                <GitHubIcon />
-              </IconButton>
-            </Tooltip>
-            <Divider orientation="vertical" flexItem />
-            <Tooltip title="Switch theme" arrow>
-              <IconButton color="info" edge="end" size="large" onClick={themeActions.toggle}>
-                <ThemeIcon />
-              </IconButton>
-            </Tooltip>
+            {isSmallScreen ? (
+              <CollapsedMenu />
+            ) : (
+              <>
+                <Divider orientation="vertical" flexItem />
+                <Tooltip title="It's open source" arrow>
+                  <IconButton
+                    color="primary"
+                    size="large"
+                    component="a"
+                    href={repository}
+                    target="_blank"
+                  >
+                    <GitHubIcon />
+                  </IconButton>
+                </Tooltip>
+                <Divider orientation="vertical" flexItem />
+                <Tooltip title="Switch theme" arrow>
+                  <IconButton color="primary" edge="end" size="large" onClick={themeActions.toggle}>
+                    <ThemeIcon />
+                  </IconButton>
+                </Tooltip>
+              </>
+            )}
           </FlexBox>
         </Toolbar>
       </AppBar>
     </Box>
   );
 }
+
+const CollapsedMenu = () => {
+  const [, themeActions] = useTheme();
+
+  return (
+    <ButtonMenu
+      renderButton={(handleToggle, buttonRef) => {
+        return (
+          <IconButton ref={buttonRef} onClick={handleToggle}>
+            <MoreVertIcon />
+          </IconButton>
+        );
+      }}
+      anchorOrigin={{
+        vertical: 'bottom',
+        horizontal: 'left',
+      }}
+    >
+      <MenuList>
+        <MenuItem onClick={themeActions.toggle}>
+          <ListItemIcon>
+            <ThemeIcon color={'primary'} />
+          </ListItemIcon>
+          <ListItemText>Toggle Theme</ListItemText>
+        </MenuItem>
+        <MenuItem component={'a'} href={repository} target="_blank" rel="noopener noreferrer">
+          <ListItemIcon>
+            <GitHubIcon color={'primary'} />
+          </ListItemIcon>
+          <ListItemText>Source code</ListItemText>
+        </MenuItem>
+      </MenuList>
+    </ButtonMenu>
+  );
+};
+
+interface ButtonMenuProps extends Omit<PopoverProps, 'open'> {
+  open?: boolean;
+  renderButton?: (handleToggle: () => void, ref: React.MutableRefObject<any>) => JSX.Element;
+}
+
+const ButtonMenu = ({ children, renderButton, open, ...props }: ButtonMenuProps) => {
+  const [managedOpen, setManagedOpen] = useState(false);
+  const handleToggle = () => {
+    return setManagedOpen(!managedOpen);
+  };
+
+  const buttonRef = useRef<any>(null);
+
+  const _open = open ?? managedOpen;
+
+  const _renderButton =
+    renderButton ??
+    ((_handleToggle = handleToggle, _buttonRef = buttonRef) => {
+      return (
+        <Button ref={_buttonRef} variant="contained" onClick={_handleToggle}>
+          Open Popover
+        </Button>
+      );
+    });
+
+  return (
+    <>
+      {_renderButton(handleToggle, buttonRef)}
+      <Menu {...props} open={_open} anchorEl={buttonRef.current} onClose={handleToggle}>
+        {children}
+      </Menu>
+    </>
+  );
+};
 
 export default Header;

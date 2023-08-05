@@ -10,7 +10,7 @@ import { DialogActions, DialogContentText, FormHelperText, TextField } from '@mu
 import Loading from '@/components/Loading';
 import { useNavigate } from 'react-router-dom';
 import { FirestoreEvent } from '@/utils/firebase/firestore/schema';
-import { useAsyncHandler } from '@/utils/hooks/hooks';
+import { useAsyncHandler } from '@/utils/hooks/useAsyncHandler';
 import QueryButton from '@/components/Button/QueryButton';
 
 export type IEventForm = Pick<FirestoreEvent, 'name' | 'description'>;

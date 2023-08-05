@@ -5,7 +5,7 @@ import * as React from 'react';
 import { BaseSyntheticEvent, useState } from 'react';
 import { useGrabDocumentDataById } from '@/utils/firebase/firestore/hooks/query';
 import { firestore } from '@/utils/firebase/firestore/client';
-import { useAsyncHandler } from '@/utils/hooks/hooks';
+import { useAsyncHandler } from '@/utils/hooks/useAsyncHandler';
 import { ExpenseForm, ExpenseFormInput } from '@/pages/EventPage/Event/ExpenseForm';
 import { UseFormReturn } from 'react-hook-form';
 import Dialog from '@mui/material/Dialog';
