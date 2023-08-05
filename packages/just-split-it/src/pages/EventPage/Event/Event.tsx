@@ -65,7 +65,6 @@ const Event = ({ eventSnap }: ExpensesListProps) => {
   const eventOwner = participants?.find((p) => p.id == eventData.ownerId);
 
   // console.log(userExpenses);
-  // console.log(userTotalExpense);
 
   const owedColor = '#1ECC00';
   const ownColor = '#CC8900';
