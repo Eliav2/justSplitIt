@@ -6,6 +6,8 @@ import DialogContent from '@mui/material/DialogContent';
 import { DialogActions } from '@mui/material';
 import Button from '@mui/material/Button';
 import { User } from 'firebase/auth';
+import English from '@/components/Language/English';
+import Hebrew from '@/components/Language/Hebrew';
 
 interface JoinEventDialogProps {
   open: boolean;
@@ -27,16 +29,29 @@ export const JoinEventDialog = (props: JoinEventDialogProps) => {
 
   return (
     <Dialog open={props.open} disableRestoreFocus>
-      <DialogTitle>Join Event</DialogTitle>
+      <DialogTitle>
+        <English>Join Event</English>
+        <Hebrew>הצטרף לאירוע</Hebrew>
+      </DialogTitle>
       <DialogContent>
-        You are not participating in this event <br />
-        would you like to join?
+        <English>
+          You are not participating in this event <br />
+          would you like to join?
+        </English>
+        <Hebrew>
+          אתה לא משתתף באירוע הזה <br />
+          תרצה להצטרף?
+        </Hebrew>
       </DialogContent>
 
       <DialogActions>
-        <Button onClick={handleReject}>Nope. I'm out</Button>
+        <Button onClick={handleReject}>
+          <English>Nope. I'm out</English>
+          <Hebrew>נעע, לא תודה</Hebrew>
+        </Button>
         <Button autoFocus onClick={handleJoin}>
-          Join
+          <English>Join</English>
+          <Hebrew>צרף אותי!</Hebrew>
         </Button>
       </DialogActions>
     </Dialog>

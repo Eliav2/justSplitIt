@@ -8,7 +8,7 @@ import {
 import useOrientation from '@/hooks/useOrientation';
 
 import { useNavigate } from 'react-router-dom';
-import { NewEventDialog } from '@/pages/EventPage/Event/NewEventDialog';
+import { NewEventDialog } from '@/pages/EventPage/NewEventDialog';
 import Typography from '@mui/material/Typography';
 import { fbAuth } from '@/utils/firebase/firebase';
 import { useAuthState } from 'react-firebase-hooks/auth';
@@ -62,6 +62,8 @@ function HomePage() {
 
   const width = isPortrait ? '40%' : '30%';
   const height = isPortrait ? '30%' : '40%';
+
+  // console.log('navigator.language', navigator.language);
 
   return (
     <>

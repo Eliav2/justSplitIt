@@ -16,6 +16,8 @@ import { DialogActions, FormHelperText } from '@mui/material';
 import Button from '@mui/material/Button';
 import QueryButton from '@/components/Button/QueryButton';
 import { ExpenseParticipantsDetails } from '@/pages/EventPage/Event/ExpenseListItem/ExpenseParticipantsDetails/ExpenseParticipantsDetails';
+import English from '@/components/Language/English';
+import Hebrew from '@/components/Language/Hebrew';
 
 interface EditExpenseDialogListItemButtonProps extends ListItemButtonProps {
   expense: FirestoreExpense;
@@ -70,7 +72,7 @@ export const EditExpenseDialogListItemButton = ({
     <ListItemButton {...props} onClick={handleClickOpen}>
       {props.children}
       <Dialog open={open} onClose={handleCancel}>
-        <DialogTitle>Edit Expense</DialogTitle>
+        <DialogTitle>ערוך הוצאה</DialogTitle>
         <QueryIndicator loading={loadingPayer} errorMessage={errorPayer?.message}>
           {payer && (
             <ExpenseForm
@@ -91,11 +93,14 @@ export const EditExpenseDialogListItemButton = ({
                       )}
                     </DialogContent>
                     <ExpenseParticipantsDetails expense={expense} />
-
                     <DialogActions>
-                      <Button onClick={handleCancel}>Cancel</Button>
+                      <Button onClick={handleCancel}>
+                        <English>Cancel</English>
+                        <Hebrew>בטל</Hebrew>
+                      </Button>
                       <QueryButton type={'submit'} loading={createLoading}>
-                        Update
+                        <English>Update</English>
+                        <Hebrew>עדכן</Hebrew>
                       </QueryButton>
                     </DialogActions>
                   </form>

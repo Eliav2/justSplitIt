@@ -4,6 +4,8 @@ import DialogTitle from '@mui/material/DialogTitle';
 import DialogContent from '@mui/material/DialogContent';
 import { DialogActions } from '@mui/material';
 import Button from '@mui/material/Button';
+import English from '@/components/Language/English';
+import Hebrew from '@/components/Language/Hebrew';
 
 interface EventDoesNotExistDialogProps {
   open: boolean;
@@ -17,10 +19,19 @@ export const EventDoesNotExistDialog = (props: EventDoesNotExistDialogProps) => 
   return (
     <>
       <Dialog open={open}>
-        <DialogTitle>Event does not exists</DialogTitle>
+        <DialogTitle>
+          <English>Event does not exists</English>
+          <Hebrew>אירוע זה לא קיים</Hebrew>
+        </DialogTitle>
         <DialogContent>
-          This Event does not seem to exists. <br />
-          you can create new event at home page.
+          <English>
+            This Event does not seem to exists. <br />
+            you can create new event at home page.
+          </English>
+          <Hebrew>
+            נראה שאת\ה מנסה לגשת לאירוע שלא קיים. יתכן כי נמחק. <br />
+            את\ה יכול\ה לייצר אירוע חדש בעמוד הבית.
+          </Hebrew>
         </DialogContent>
         <DialogActions>
           <Button

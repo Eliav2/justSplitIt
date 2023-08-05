@@ -14,6 +14,9 @@ import { useGrabDocumentsByIds } from '@/utils/firebase/firestore/hooks/query';
 import { firestore } from '@/utils/firebase/firestore/client';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { fbAuth } from '@/utils/firebase/firebase';
+import English from '@/components/Language/English';
+import Hebrew from '@/components/Language/Hebrew';
+import { useLanguageSentence } from '@/components/Language';
 
 type ExpenseForm = Pick<FirestoreExpense, 'name'>;
 
@@ -57,6 +60,10 @@ export const ExpenseForm = ({
         participantsData?.find((p) => p.id == user?.uid) || (null as any),
       );
   }, [participants, open]);
+  const userSelectErrorMesseage = useLanguageSentence({
+    hebrew: 'אנא בחר אופציה מהרשימה.',
+    english: 'Please select a valid option from the list.',
+  });
 
   return (
     <Form renderFormContent={renderFormContent} formHook={expenseForm}>
@@ -71,7 +78,12 @@ export const ExpenseForm = ({
             onChange={onChange}
             value={value}
             fullWidth
-            label={'Expense Name'}
+            label={
+              <>
+                <English>Expense Name</English>
+                <Hebrew>שם ההוצאה</Hebrew>
+              </>
+            }
             autoFocus
             margin="dense"
             type="text"
@@ -92,7 +104,12 @@ export const ExpenseForm = ({
             onChange={onChange}
             value={value}
             fullWidth
-            label={'Amount'}
+            label={
+              <>
+                <English>Amount</English>
+                <Hebrew>סכום</Hebrew>
+              </>
+            }
             InputProps={{
               startAdornment: <InputAdornment position="start">₪</InputAdornment>,
             }}
@@ -109,10 +126,7 @@ export const ExpenseForm = ({
         // defaultValue={undefined}
         rules={{
           validate: (value) => {
-            return (
-              participantsData.some((p) => p.id == value?.id) ||
-              'Please select a valid option from the list.'
-            );
+            return participantsData.some((p) => p.id == value?.id) || userSelectErrorMesseage;
           },
         }}
         render={({ field: { onChange, value }, fieldState: { error } }) => {
@@ -133,7 +147,12 @@ export const ExpenseForm = ({
                 <TextField
                   {...params}
                   margin="dense"
-                  label="Payed by"
+                  label={
+                    <>
+                      <English>Payed by</English>
+                      <Hebrew>שולם ע"י</Hebrew>
+                    </>
+                  }
                   variant="standard"
                   error={!!error}
                   helperText={error ? error.message : null}

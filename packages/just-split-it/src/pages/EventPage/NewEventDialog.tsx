@@ -77,9 +77,15 @@ export const NewEventDialog = () => {
       </Button>
       <Dialog open={open} onClose={handleCancel} disableRestoreFocus>
         <form onSubmit={eventForm.handleSubmit(createEventHandler())}>
-          <DialogTitle>New Event</DialogTitle>
+          <DialogTitle>
+            <English>New Event</English>
+            <Hebrew>אירוע חדש</Hebrew>
+          </DialogTitle>
           <DialogContent>
-            <DialogContentText>Provide a name for the new event.</DialogContentText>
+            <DialogContentText>
+              <English>Provide a name for the new event.</English>
+              <Hebrew>בחר שם לאירוע שיווצר.</Hebrew>
+            </DialogContentText>
             <Controller
               name={'name'}
               control={eventForm.control}
@@ -93,7 +99,12 @@ export const NewEventDialog = () => {
                   onChange={onChange}
                   value={value}
                   fullWidth
-                  label={'Event name'}
+                  label={
+                    <>
+                      <English>Event name</English>
+                      <Hebrew>שם האירוע</Hebrew>
+                    </>
+                  }
                   margin="dense"
                   type="text"
                   variant="standard"
@@ -109,7 +120,12 @@ export const NewEventDialog = () => {
                   onChange={onChange}
                   value={value}
                   fullWidth
-                  label={'Description'}
+                  label={
+                    <>
+                      <English>Description</English>
+                      <Hebrew>תיאור(לא חובה)</Hebrew>
+                    </>
+                  }
                   margin="dense"
                   type="text"
                   variant="standard"
@@ -122,9 +138,15 @@ export const NewEventDialog = () => {
             {errorMessage && <FormHelperText error>{errorMessage}</FormHelperText>}
           </DialogContent>
           <DialogActions>
-            <Button onClick={handleCancel}>Cancel</Button>
+            <Button onClick={handleCancel}>
+              <>
+                <English>Cancel</English>
+                <Hebrew>בטל</Hebrew>
+              </>
+            </Button>
             <QueryButton loading={createLoading} type={'submit'}>
-              Create
+              <English>Create</English>
+              <Hebrew>צור</Hebrew>
             </QueryButton>
             {/*<Button type={'submit'}>{loadingState == 'idle' ? 'Create' : <Loading />}</Button>*/}
           </DialogActions>

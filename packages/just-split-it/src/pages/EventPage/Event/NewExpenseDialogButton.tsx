@@ -12,6 +12,8 @@ import { grabDocumentById } from '@/utils/firebase/firestore/queris/util';
 import { useAsyncHandler } from '@/utils/hooks/useAsyncHandler';
 import QueryButton from '@/components/Button/QueryButton';
 import { ExpenseForm, ExpenseFormInput } from '@/pages/EventPage/Event/ExpenseForm';
+import English from '@/components/Language/English';
+import Hebrew from '@/components/Language/Hebrew';
 
 interface NewExpenseDialogButtonProps {
   parentEvent: FirestoreEventWithId;
@@ -60,10 +62,14 @@ export const NewExpenseDialogButton = (props: NewExpenseDialogButtonProps) => {
   return (
     <div>
       <Button variant="outlined" onClick={handleClickOpen}>
-        Create new Expense
+        <English>Create new Expense</English>
+        <Hebrew>צור הוצאה חדשה</Hebrew>
       </Button>
       <Dialog open={open} onClose={handleCancel}>
-        <DialogTitle>New Expense</DialogTitle>
+        <DialogTitle>
+          <English>New Expense</English>
+          <Hebrew>הוצאה חדשה</Hebrew>
+        </DialogTitle>
         <ExpenseForm
           parentEvent={props.parentEvent}
           renderFormContent={(formContent, formHook) => {
@@ -71,16 +77,23 @@ export const NewExpenseDialogButton = (props: NewExpenseDialogButtonProps) => {
             return (
               <form onSubmit={formHook.handleSubmit(handleCreateExpense)}>
                 <DialogContent>
-                  <DialogContentText>Provide a name for the new expense.</DialogContentText>
+                  <DialogContentText>
+                    <English>Provide a name for the new expense.</English>
+                    <Hebrew>בחר שם להוצאה החדשה</Hebrew>
+                  </DialogContentText>
                   {formContent}
                   {createErrorMessage && (
                     <FormHelperText error>{createErrorMessage}</FormHelperText>
                   )}
                 </DialogContent>
                 <DialogActions>
-                  <Button onClick={handleCancel}>Cancel</Button>
+                  <Button onClick={handleCancel}>
+                    <English>Cancel</English>
+                    <Hebrew>בטל</Hebrew>
+                  </Button>
                   <QueryButton type={'submit'} loading={createLoading}>
-                    Create
+                    <English>Create</English>
+                    <Hebrew>צור</Hebrew>
                   </QueryButton>
                 </DialogActions>
               </form>

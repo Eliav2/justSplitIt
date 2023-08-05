@@ -8,6 +8,8 @@ import CheckIcon from '@mui/icons-material/Check';
 import { Avatar, ListItemAvatar } from '@mui/material';
 import ListItemText from '@mui/material/ListItemText';
 import { useEventContext } from '@/pages/EventPage/EventContext';
+import English from '@/components/Language/English';
+import Hebrew from '@/components/Language/Hebrew';
 
 interface ExpenseParticipantsDetailsProps {
   expense: FirestoreExpense;
@@ -23,7 +25,8 @@ export const ExpenseParticipantsDetails = (props: ExpenseParticipantsDetailsProp
 
   return (
     <DialogContent>
-      participants
+      <English>Participants</English>
+      <Hebrew>משתתפים</Hebrew>
       <List dense>
         {participantsInExpense?.map((p) => {
           const isPayer = props.expense.payerId == p.id;

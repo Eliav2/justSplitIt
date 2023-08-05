@@ -7,6 +7,8 @@ import DialogTitle from '@mui/material/DialogTitle';
 import DialogContent from '@mui/material/DialogContent';
 import { DialogActions, DialogContentText } from '@mui/material';
 import Button from '@mui/material/Button';
+import English from '@/components/Language/English';
+import Hebrew from '@/components/Language/Hebrew';
 
 // interface ConfirmDialogButtonBaseProps {
 //   //for controlled state
@@ -30,7 +32,7 @@ import Button from '@mui/material/Button';
 type ConfirmDialogButtonBaseProps = {
   //for controlled state
   open?: boolean;
-  titleText?: string;
+  titleText?: React.ReactNode;
   content?: React.ReactNode;
   buttonElement?: (handleOpen: () => void) => React.ReactNode;
 
@@ -60,7 +62,12 @@ const ConfirmDeleteDialogButton = (props: ConfirmDialogButtonProps) => {
 
   const p = {
     ...({
-      titleText: 'Confirmation',
+      titleText: (
+        <>
+          <English>Confirmation</English>
+          <Hebrew>אישור</Hebrew>
+        </>
+      ),
       content: <DialogContent>Are you sure?</DialogContent>,
       dialogConfirmButtonLabel: 'Yes',
       dialogCancelButtonLabel: 'Cancel',

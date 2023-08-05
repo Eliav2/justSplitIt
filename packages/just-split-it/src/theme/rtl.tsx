@@ -17,7 +17,6 @@ export function RTLSupport(props: any) {
 
 export function RTLProvider(props: any) {
   const [language] = useLanguage();
-  console.log(language);
   if (language == 'hebrew') {
     document.dir = 'rtl';
 

@@ -14,6 +14,8 @@ import Typography from '@mui/material/Typography';
 import { FirestoreEvent } from '@/utils/firebase/firestore/schema';
 import { Chip } from '@mui/material';
 import { EditExpenseDialogListItemButton } from '@/pages/EventPage/Event/ExpenseListItem/ExpenseParticipantsDetails/EditExpenseDialogListItemButton';
+import English from '@/components/Language/English';
+import Hebrew from '@/components/Language/Hebrew';
 
 interface ExpenseProps {
   expenseId: string;
@@ -100,7 +102,12 @@ export const ExpenseListItem = (props: ExpenseProps) => {
                     {isOwner && (
                       <Chip
                         sx={{ mx: 1 }}
-                        label="yours"
+                        label={
+                          <>
+                            <English>yours</English>
+                            <Hebrew>שלך</Hebrew>
+                          </>
+                        }
                         variant="outlined"
                         color="primary"
                         size={'small'}
@@ -116,7 +123,8 @@ export const ExpenseListItem = (props: ExpenseProps) => {
                       color="textSecondary"
                       sx={{ fontSize: '0.8em' }}
                     >
-                      payed by
+                      <English>payed by</English>
+                      <Hebrew>שולם ע"י</Hebrew>
                     </Typography>{' '}
                     {expense?.payerName}
                   </Typography>

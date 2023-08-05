@@ -2,6 +2,8 @@ import IconButton from '@mui/material/IconButton';
 import DeleteIcon from '@mui/icons-material/Delete';
 import DialogContent from '@mui/material/DialogContent';
 import ConfirmDialogButton from '@/components/Dialog/ConfirmDialogButton';
+import English from '@/components/Language/English';
+import Hebrew from '@/components/Language/Hebrew';
 
 export interface ConfirmDialogButtonProps {
   handleConfirm: (close: () => void) => void;
@@ -35,11 +37,22 @@ const ConfirmDeleteDialogButton = (props: ConfirmDialogButtonProps) => {
       dialogHandleConfirm={p.handleConfirm}
       content={
         <DialogContent>
-          Are you sure? <br />
-          this action cannot be undone.
+          <English>
+            Are you sure? <br />
+            this action cannot be undone.
+          </English>
+          <Hebrew>
+            אתה בטוח? <br />
+            פעולה זו לא ניתנת לביטול.
+          </Hebrew>
         </DialogContent>
       }
-      titleText={'Delete Confirmation'}
+      titleText={
+        <>
+          <English>Delete Confirmation </English>
+          <Hebrew>אישור מחיקה</Hebrew>
+        </>
+      }
       buttonElement={p.buttonElement}
     />
   );

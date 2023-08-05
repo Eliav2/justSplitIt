@@ -19,6 +19,8 @@ import { UserNotParticipating } from '@/pages/EventPage/Event/UserNotParticipati
 import Divider from '@mui/material/Divider';
 import { CenteredFlexBox, FlexBox } from '@/components/styled';
 import React from 'react';
+import English from '@/components/Language/English';
+import Hebrew from '@/components/Language/Hebrew';
 
 interface ExpensesListProps {
   eventSnap: DocumentSnapshot<FirestoreEvent>;
@@ -81,7 +83,10 @@ const Event = ({ eventSnap }: ExpensesListProps) => {
             // minWidth: '60%',
           }}
         >
-          <Typography>Expenses</Typography>
+          <Typography>
+            <English>Expenses</English>
+            <Hebrew>הוצאות</Hebrew>
+          </Typography>
 
           <List sx={{ width: '100%', maxWidth: 360, bgcolor: 'background.paper' }}>
             {(expenses?.docs.length ?? 0) > 0 ? (
@@ -96,7 +101,8 @@ const Event = ({ eventSnap }: ExpensesListProps) => {
               <ListItem>
                 <ListItemText>
                   <Typography variant={'caption'} color={'textSecondary'}>
-                    No Expenses in this Event
+                    <English>No Expenses in this Event</English>
+                    <Hebrew>אין עדיין הוצאות באירוע זה </Hebrew>
                   </Typography>
                 </ListItemText>
               </ListItem>
@@ -104,22 +110,43 @@ const Event = ({ eventSnap }: ExpensesListProps) => {
           </List>
           <List dense>
             <ListItem>
-              <ListItemText sx={{}}>Total Expenses: {eventTotalExpense}₪</ListItemText>
-            </ListItem>
-            <ListItem>
-              <ListItemText sx={{}}>You Should Pay back: {userTotalExpense}₪</ListItemText>
-            </ListItem>
-            <ListItem>
-              <ListItemText sx={{}}>You Paid for: {userPayedFor}₪</ListItemText>
+              <ListItemText sx={{}}>
+                <English>Total Expenses: {eventTotalExpense}₪</English>
+                <Hebrew>סך ההוצאות: {eventTotalExpense}₪</Hebrew>
+              </ListItemText>
             </ListItem>
             <ListItem>
               <ListItemText sx={{}}>
-                {userBalance > 0 ? (
-                  <span style={{ color: owedColor }}>You are owed {userBalance}₪</span>
-                ) : (
-                  <span style={{ color: ownColor }}>You owe {userBalance * -1}₪</span>
-                )}
+                <English>You Should Pay back: {userTotalExpense}₪</English>
+                <Hebrew>עליך להחזיר: {userTotalExpense}₪</Hebrew>
               </ListItemText>
+            </ListItem>
+            <ListItem>
+              <ListItemText sx={{}}>
+                <English>You Paid for: {userPayedFor}₪</English>
+                <Hebrew>סך ההוצאות שלך: {userPayedFor}₪</Hebrew>
+              </ListItemText>
+            </ListItem>
+            <ListItem>
+              <CenteredFlexBox>
+                <ListItemText>
+                  {userBalance > 0 ? (
+                    <span style={{ color: owedColor }}>
+                      <English>You are owed </English>
+                      <Hebrew>חייבים לך</Hebrew>
+                      <Typography sx={{ fontWeight: 'bold' }}>{userBalance}₪</Typography>
+                    </span>
+                  ) : (
+                    <span style={{ color: ownColor }}>
+                      <English>You owe:</English>
+                      <Hebrew>אתה חייב:</Hebrew>
+                      <Typography variant={'h3'} sx={{ fontWeight: 'bold' }}>
+                        {userBalance * -1}₪
+                      </Typography>
+                    </span>
+                  )}
+                </ListItemText>
+              </CenteredFlexBox>
             </ListItem>
           </List>
 
@@ -130,7 +157,10 @@ const Event = ({ eventSnap }: ExpensesListProps) => {
           {/* list participants in this event*/}
           <Divider sx={{ m: 2 }} />
 
-          <Typography>participants</Typography>
+          <Typography>
+            <English>Participants</English>
+            <Hebrew>משתתפים</Hebrew>
+          </Typography>
           <List dense>
             {participants?.map((participant) => (
               <ListItem key={participant.id}>
@@ -140,7 +170,10 @@ const Event = ({ eventSnap }: ExpensesListProps) => {
           </List>
           {eventOwner && (
             <>
-              <Typography variant={'body2'}>event created by</Typography>
+              <Typography variant={'body2'} color={'textSecondary'}>
+                <English>event created by</English>
+                <Hebrew>האירוע נוצר ע"י</Hebrew>
+              </Typography>
               <Typography>{eventOwner?.name}</Typography>
             </>
           )}
@@ -151,7 +184,8 @@ const Event = ({ eventSnap }: ExpensesListProps) => {
                 event={eventData}
                 buttonElement={(handleOpen) => (
                   <Button onClick={handleOpen} color={'error'}>
-                    Delete Event
+                    <English>Delete Event</English>
+                    <Hebrew>מחק אירוע</Hebrew>
                   </Button>
                 )}
               />
