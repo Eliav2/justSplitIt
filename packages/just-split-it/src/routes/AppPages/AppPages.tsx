@@ -16,9 +16,9 @@ const Layout = () => {
     <>
       <Header />
       <Sidebar />
-      <FullSizeMiddleFlexContainerColumn>
-        <Outlet />
-      </FullSizeMiddleFlexContainerColumn>
+      {/*<FullSizeMiddleFlexContainerColumn>*/}
+      <Outlet />
+      {/*</FullSizeMiddleFlexContainerColumn>*/}
       <Footer />
     </>
   );

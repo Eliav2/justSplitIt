@@ -9,10 +9,10 @@ import Typography from '@mui/material/Typography';
 import { FlexBox } from '@/components/styled';
 import useHotKeysDialog from '@/store/hotkeys';
 import useSidebar from '@/store/sidebar';
-import useTheme from '@/store/theme';
+import useAppTheme from '@/store/theme';
 
 function HotKeys() {
-  const [, themeActions] = useTheme();
+  const [, themeActions] = useAppTheme();
   const [, sidebarActions] = useSidebar();
   const [isHotKeysDialogOpen, hotKeysDialogActions] = useHotKeysDialog();
 

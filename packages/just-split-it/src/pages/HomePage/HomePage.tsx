@@ -1,5 +1,10 @@
 import Meta from '@/components/Meta';
-import { ColumnFlexBox, FullSizeCenteredFlexBoxColumn } from '@/components/styled';
+import {
+  ColumnFlexBox,
+  FullSizeCenteredFlexBox,
+  FullSizeCenteredFlexBoxColumn,
+  FullSizeMiddleFlexContainerColumn,
+} from '@/components/styled';
 import useOrientation from '@/hooks/useOrientation';
 
 import { useNavigate } from 'react-router-dom';
@@ -13,6 +18,8 @@ import { useLoginUser } from '@/utils/login/useLoginUser';
 import { keyframes } from '@emotion/react';
 import { makeStyles, useTheme } from '@mui/material/styles';
 import { styled } from '@mui/system';
+import useAppTheme from '@/store/theme';
+import Box from '@mui/material/Box';
 
 function HomePage() {
   // const [user, loading, error] = useAuthState(fbAuth);
@@ -28,11 +35,11 @@ function HomePage() {
     <>
       <Meta title="Home" />
       <FullSizeCenteredFlexBoxColumn>
-        <ColumnFlexBox>
-          {/*<Typography variant={'h1'}>JustSplitIt</Typography>*/}
-          <CrazyHugeHeader />
-          <LoginOrAddEventButton />
-        </ColumnFlexBox>
+        <CrazyHugeHeader />
+        <LoginOrAddEventButton />
+        {/*<ColumnFlexBox>*/}
+        {/*<Typography variant={'h1'}>JustSplitIt</Typography>*/}
+        {/*</ColumnFlexBox>*/}
       </FullSizeCenteredFlexBoxColumn>
     </>
   );
@@ -65,12 +72,16 @@ const LoginOrAddEventButton = () => {
 // todo: make it prettier
 const CrazyHugeHeader = () => {
   const theme = useTheme();
+  const [mode] = useAppTheme();
+  console.log(mode);
 
   const headerStyles = {
     // fontSize: '6rem', // Adjust the font size to make it huge
-    // fontWeight: 'bold', // To make it bold and stand out
+    // fontWeight: '300', // To make it bold and stand out
     color: theme.palette.primary.main, // A fun and pretty color
-    textShadow: '4px 4px 8px rgba(0, 0, 0, 0.3)', // Add a subtle text shadow for a cool effect
+    textShadow: `4px 4px 8px ${
+      mode == 'light' ? 'rgba(0, 0, 0, 0.4)' : 'rgba(255, 255, 255, 0.4)'
+    }`, // Add a subtle text shadow for a cool effect
     textAlign: 'center', // Center the text
     marginBottom: '2rem', // Add some spacing at the bottom
     // fontFamily: 'Roboto', // Specify a font

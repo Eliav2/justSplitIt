@@ -29,6 +29,9 @@ function Sidebar() {
 
   return (
     <SwipeableDrawer
+      SwipeAreaProps={{
+        width: 10,
+      }}
       anchor="left"
       open={isSidebarOpen}
       onClose={sidebarActions.close}

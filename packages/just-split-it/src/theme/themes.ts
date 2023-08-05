@@ -1,7 +1,7 @@
 import { ThemeOptions } from '@mui/material/styles';
 import { deepmerge } from '@mui/utils';
 
-import { Themes } from './types';
+import { ThemeMode } from './types';
 import { DeepmergeOptions } from '@mui/utils/deepmerge';
 
 const sharedTheme = {
@@ -82,7 +82,7 @@ const themes = {
     },
     userOwnExpenseColor: '#302c34',
   }),
-} as const satisfies Record<Themes, ThemeOptions>;
+} as const satisfies Record<ThemeMode, ThemeOptions>;
 
 export type AppTheme = (typeof themes)[keyof typeof themes];
 

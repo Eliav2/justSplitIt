@@ -14,7 +14,7 @@ import Typography from '@mui/material/Typography';
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
 import ListItemText from '@mui/material/ListItemText';
-import { CenteredFlexBox } from '@/components/styled';
+import { CenteredFlexBox, FullSizeMiddleFlexContainerColumn } from '@/components/styled';
 import { DeleteEventDialogButton } from '@/components/Dialog/DeleteEventDialogButton';
 import Button from '@mui/material/Button';
 import ParticipantLeaveEventDialogButton from '@/components/Dialog/ParticipantLeaveEventDialogButton';
@@ -31,7 +31,7 @@ function EventPage() {
   const eventNotExistsDialogOpen = !eventLoading && !eventExists;
 
   return (
-    <>
+    <FullSizeMiddleFlexContainerColumn>
       <Meta title={event?.name ?? 'Event'} description={event?.description} />
       {eventSnap?.ref && (
         <JoinEventDialog open={!isUserParticipating} eventId={eventSnap?.ref?.id} user={user} />
@@ -45,7 +45,7 @@ function EventPage() {
           <EventDoesNotExistDialog open={eventNotExistsDialogOpen} />
         )}
       </QueryIndicator>
-    </>
+    </FullSizeMiddleFlexContainerColumn>
   );
 }
 

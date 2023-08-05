@@ -1,4 +1,4 @@
-enum Themes {
+enum ThemeMode {
   DARK = 'dark',
   LIGHT = 'light',
 }
@@ -8,4 +8,4 @@ type CustomThemeProviderProps = {
 };
 
 export type { CustomThemeProviderProps };
-export { Themes };
+export { ThemeMode };
