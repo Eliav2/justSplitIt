@@ -11,7 +11,6 @@ import IconButton from '@mui/material/IconButton';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import Toolbar from '@mui/material/Toolbar';
 import Tooltip from '@mui/material/Tooltip';
-
 import { CenteredFlexBox, FlexBox } from '@/components/styled';
 import { repository, title } from '@/config';
 import useNotifications from '@/store/notifications';
@@ -146,6 +145,25 @@ function Header() {
                 <Tooltip
                   title={
                     <>
+                      <English>Settings</English>
+                      <Hebrew>הגדרות</Hebrew>
+                    </>
+                  }
+                  arrow
+                >
+                  <IconButton
+                    color="primary"
+                    onClick={() => {
+                      navigate(routes.Settings.path);
+                    }}
+                  >
+                    <SettingsIcon />
+                  </IconButton>
+                </Tooltip>
+                <Divider orientation="vertical" flexItem />
+                <Tooltip
+                  title={
+                    <>
                       <English>Switch Theme</English>
                       <Hebrew>שנה סגנון</Hebrew>
                     </>
@@ -167,6 +185,7 @@ function Header() {
 
 const CollapsedMenu = () => {
   const [, themeActions] = useThemeMode();
+  const navigate = useNavigate();
 
   return (
     <ButtonMenu
@@ -187,13 +206,32 @@ const CollapsedMenu = () => {
           <ListItemIcon>
             <ThemeIcon color={'primary'} />
           </ListItemIcon>
-          <ListItemText>Toggle Theme</ListItemText>
+          <ListItemText>
+            <English>Toggle Theme</English>
+            <Hebrew>החלף ערכת נושא</Hebrew>
+          </ListItemText>
+        </MenuItem>
+        <MenuItem
+          onClick={() => {
+            navigate(routes.Settings.path);
+          }}
+        >
+          <ListItemIcon>
+            <SettingsIcon color={'primary'} />
+          </ListItemIcon>
+          <ListItemText>
+            <English>Settings</English>
+            <Hebrew>הגדרות</Hebrew>
+          </ListItemText>
         </MenuItem>
         <MenuItem component={'a'} href={repository} target="_blank" rel="noopener noreferrer">
           <ListItemIcon>
             <GitHubIcon color={'primary'} />
           </ListItemIcon>
-          <ListItemText>Source code</ListItemText>
+          <ListItemText>
+            <English>Source code&#x2197;</English>
+            <Hebrew>לקוד מקור&#x2197;</Hebrew>
+          </ListItemText>
         </MenuItem>
       </MenuList>
     </ButtonMenu>

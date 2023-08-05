@@ -36,8 +36,8 @@ type ConfirmDialogButtonBaseProps = {
   content?: React.ReactNode;
   buttonElement?: (handleOpen: () => void) => React.ReactNode;
 
-  dialogConfirmButtonLabel?: string;
-  dialogCancelButtonLabel?: string;
+  dialogConfirmButtonLabel?: React.ReactNode;
+  dialogCancelButtonLabel?: React.ReactNode;
 };
 export type ConfirmDialogButtonProps = ConfirmDialogButtonBaseProps &
   ({ dialogHandleConfirm: (close: () => void) => void } | { dialogConfirmButton: React.ReactNode });
@@ -69,8 +69,18 @@ const ConfirmDeleteDialogButton = (props: ConfirmDialogButtonProps) => {
         </>
       ),
       content: <DialogContent>Are you sure?</DialogContent>,
-      dialogConfirmButtonLabel: 'Yes',
-      dialogCancelButtonLabel: 'Cancel',
+      dialogConfirmButtonLabel: (
+        <>
+          <English>Yes</English>
+          <Hebrew>כן</Hebrew>
+        </>
+      ),
+      dialogCancelButtonLabel: (
+        <>
+          <English>Cancel</English>
+          <Hebrew>בטל</Hebrew>
+        </>
+      ),
       buttonElement: (handleOpen: () => void = _handleOpen) => (
         <Button onClick={handleOpen}>Confirm Dialog</Button>
       ),

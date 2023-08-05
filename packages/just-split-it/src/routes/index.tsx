@@ -5,7 +5,7 @@ import asyncComponentLoader from '@/utils/loader';
 import { Routes } from './types';
 import English from '@/components/Language/English';
 import Hebrew from '@/components/Language/Hebrew';
-
+import SettingsIcon from '@mui/icons-material/Settings';
 export const routes = {
   Welcome: {
     component: asyncComponentLoader(() => import('@/pages/HomePage/HomePage')),
@@ -28,6 +28,18 @@ export const routes = {
       </>
     ),
     icon: HomeIcon,
+    showInSidebar: false,
+  },
+  Settings: {
+    component: asyncComponentLoader(() => import('@/pages/SettingsPage')),
+    path: '/settings',
+    title: (
+      <>
+        <English>Settings</English>
+        <Hebrew>הגדרות</Hebrew>
+      </>
+    ),
+    icon: SettingsIcon,
     showInSidebar: false,
   },
   NotFound: {

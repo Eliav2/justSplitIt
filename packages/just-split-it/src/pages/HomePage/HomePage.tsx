@@ -26,33 +26,6 @@ import useLanguage, { LanguageMode } from '@/store/theme/useThemeLanguage';
 import English from '@/components/Language/English';
 import Hebrew from '@/components/Language/Hebrew';
 
-const SelectLanguage = () => {
-  const [languageInput, setLanguageInput] = useState('');
-  const [appLanguage, { setLanguage }] = useLanguage();
-
-  const handleChange = (event: SelectChangeEvent) => {
-    const newLanguage = event.target.value;
-    setLanguageInput(newLanguage as string);
-    setLanguage(newLanguage as LanguageMode);
-  };
-  // console.log('appLanguage', appLanguage);
-
-  return (
-    <Box sx={{ minWidth: 120 }}>
-      <FormControl fullWidth>
-        <InputLabel>Language</InputLabel>
-        <Select value={languageInput} label="Language" onChange={handleChange}>
-          {Object.values(LanguageMode).map((language) => (
-            <MenuItem value={language} key={language}>
-              {language}
-            </MenuItem>
-          ))}
-        </Select>
-      </FormControl>
-    </Box>
-  );
-};
-
 function HomePage() {
   // const [user, loading, error] = useAuthState(fbAuth);
   // console.log('user', user);
@@ -71,7 +44,6 @@ function HomePage() {
       <FullSizeCenteredFlexBoxColumn>
         <CrazyHugeHeader />
         <LoginOrAddEventButton />
-        <SelectLanguage />
         {/*<ColumnFlexBox>*/}
         {/*<Typography variant={'h1'}>JustSplitIt</Typography>*/}
         {/*</ColumnFlexBox>*/}

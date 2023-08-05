@@ -10,6 +10,7 @@ import QueryIndicator from '@/components/QueryIndicator';
 import { useLoginUser } from '@/utils/login/useLoginUser';
 import English from '@/components/Language/English';
 import Hebrew from '@/components/Language/Hebrew';
+import { SelectLanguage } from '@/components/Language/SelectLanguage';
 
 function LoginPage() {
   const [user, loading, error] = useAuthState(fbAuth);
@@ -30,6 +31,7 @@ function LoginPage() {
     <>
       <Meta title="Login" />
       <FullSizeCenteredFlexBoxColumn>
+        <SelectLanguage />
         <QueryIndicator loading={loading} errorMessage={error?.message}>
           <Typography>
             <English>You are not logged in.</English>
