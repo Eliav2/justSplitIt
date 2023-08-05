@@ -1,14 +1,13 @@
-import { ThemeProvider, createTheme } from '@mui/material/styles';
-
-import useAppTheme from '@/store/theme';
-
+import { createTheme, ThemeProvider } from '@mui/material/styles';
+import useThemeMode from '@/store/theme/useThemeMode';
 import themes from './themes';
-import type { CustomThemeProviderProps } from './types';
+
+export type CustomThemeProviderProps = {
+  children: JSX.Element;
+};
 
 function CustomThemeProvider({ children }: CustomThemeProviderProps) {
-  const [theme] = useAppTheme();
-  theme;
-
+  const [theme] = useThemeMode();
   return <ThemeProvider theme={createTheme(themes[theme])}>{children}</ThemeProvider>;
 }
 

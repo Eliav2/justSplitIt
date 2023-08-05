@@ -16,7 +16,7 @@ import { CenteredFlexBox, FlexBox } from '@/components/styled';
 import { repository, title } from '@/config';
 import useNotifications from '@/store/notifications';
 import useSidebar from '@/store/sidebar';
-import useAppTheme from '@/store/theme';
+import useThemeMode from '@/store/theme/useThemeMode';
 
 import { getRandomJoke } from './utils';
 import { useAuthState } from 'react-firebase-hooks/auth';
@@ -43,7 +43,7 @@ import ListItemText from '@mui/material/ListItemText';
 
 function Header() {
   const [, sidebarActions] = useSidebar();
-  const [, themeActions] = useAppTheme();
+  const [, themeActions] = useThemeMode();
   const [, notificationsActions] = useNotifications();
   // const isSmallScreen = useMediaQuery((theme: Theme) =>
   //   theme.breakpoints.down('(min-width:600px)'),
@@ -98,29 +98,26 @@ function Header() {
               {title}
             </Button>
           </FlexBox>
-          <FlexBox>
-            <CenteredFlexBox>
-              <QueryIndicator loading={userLoading}>
-                {user && (
-                  <>
-                    <Typography sx={{ textAlign: 'end' }}>{user.displayName}</Typography>
-                    <IconButton
-                      onClick={() => {
-                        navigate(protectedRoutes.User.path);
-                      }}
-                      size="large"
-                      edge="start"
-                      color="primary"
-                      aria-label="menu"
-                      sx={{ ml: 1 }}
-                    >
-                      <AccountCircleIcon />
-                    </IconButton>
-                  </>
-                )}
-              </QueryIndicator>
-            </CenteredFlexBox>
-
+          <CenteredFlexBox>
+            <QueryIndicator loading={userLoading}>
+              {user && (
+                <>
+                  <Typography sx={{ textAlign: 'end' }}>{user.displayName}</Typography>
+                  <IconButton
+                    onClick={() => {
+                      navigate(protectedRoutes.User.path);
+                    }}
+                    size="large"
+                    edge="start"
+                    color="primary"
+                    aria-label="menu"
+                    sx={{ ml: 1 }}
+                  >
+                    <AccountCircleIcon />
+                  </IconButton>
+                </>
+              )}
+            </QueryIndicator>
             {isSmallScreen ? (
               <CollapsedMenu />
             ) : (
@@ -145,7 +142,7 @@ function Header() {
                 </Tooltip>
               </>
             )}
-          </FlexBox>
+          </CenteredFlexBox>
         </Toolbar>
       </AppBar>
     </Box>
@@ -153,7 +150,7 @@ function Header() {
 }
 
 const CollapsedMenu = () => {
-  const [, themeActions] = useAppTheme();
+  const [, themeActions] = useThemeMode();
 
   return (
     <ButtonMenu

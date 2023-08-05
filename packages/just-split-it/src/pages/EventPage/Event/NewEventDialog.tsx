@@ -59,7 +59,6 @@ export const NewEventDialog = () => {
     {
       onSuccess: async (eventRef) => {
         // console.log(eventRef.id);
-        console.log(eventRef);
         eventForm.reset();
         setOpen(false);
         if (eventRef.id) navigate(`/event/${eventRef.id}`);

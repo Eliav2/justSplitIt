@@ -1,10 +1,12 @@
 import { ThemeOptions } from '@mui/material/styles';
 import { deepmerge } from '@mui/utils';
 
-import { ThemeMode } from './types';
 import { DeepmergeOptions } from '@mui/utils/deepmerge';
+import { rtlConfig } from '@/theme/rtl';
+import { ThemeMode } from '@/store/theme/useThemeMode';
 
 const sharedTheme = {
+  direction: rtlConfig.direction,
   typography: {
     // fontFamily: 'Assistant, sans-serif',
     // fontFamily: [

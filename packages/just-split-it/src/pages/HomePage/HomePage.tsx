@@ -18,7 +18,7 @@ import { useLoginUser } from '@/utils/login/useLoginUser';
 import { keyframes } from '@emotion/react';
 import { makeStyles, useTheme } from '@mui/material/styles';
 import { styled } from '@mui/system';
-import useAppTheme from '@/store/theme';
+import useThemeMode from '@/store/theme/useThemeMode';
 import Box from '@mui/material/Box';
 
 function HomePage() {
@@ -72,8 +72,7 @@ const LoginOrAddEventButton = () => {
 // todo: make it prettier
 const CrazyHugeHeader = () => {
   const theme = useTheme();
-  const [mode] = useAppTheme();
-  console.log(mode);
+  const [mode] = useThemeMode();
 
   const headerStyles = {
     // fontSize: '6rem', // Adjust the font size to make it huge

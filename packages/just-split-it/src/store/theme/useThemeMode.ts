@@ -1,23 +1,29 @@
 import { atom, useRecoilState } from 'recoil';
 
-import { ThemeMode } from '@/theme/types';
-
 import type { AtomEffectParams } from '../types';
-import type { Actions } from './types';
+
+enum ThemeMode {
+  DARK = 'dark',
+  LIGHT = 'light',
+}
 
 const themeModeState = atom({
   key: 'theme-mode-state',
   default: 'dark' as ThemeMode,
-  effects: [synchronizeWithLocalStorage],
+  effects: [synchronizeThemeModeWithLocalStorage],
 });
 
-function synchronizeWithLocalStorage({ setSelf, onSet }: AtomEffectParams) {
+function synchronizeThemeModeWithLocalStorage({ setSelf, onSet }: AtomEffectParams) {
   const storedTheme = localStorage.getItem('theme-mode');
   storedTheme && setSelf(storedTheme);
   onSet((value: ThemeMode) => localStorage.setItem('theme-mode', value));
 }
 
-function useAppTheme(): [ThemeMode, Actions] {
+export type Actions = {
+  toggle: () => void;
+};
+
+function useThemeMode(): [ThemeMode, Actions] {
   const [themeMode, setThemeMode] = useRecoilState(themeModeState);
 
   function toggle() {
@@ -27,4 +33,5 @@ function useAppTheme(): [ThemeMode, Actions] {
   return [themeMode, { toggle }];
 }
 
-export default useAppTheme;
+export default useThemeMode;
+export { ThemeMode };
