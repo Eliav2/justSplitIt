@@ -10,6 +10,8 @@ import DefaultIcon from '@mui/icons-material/Deblur';
 import ListItemText from '@mui/material/ListItemText';
 import QueryIndicator from '@/components/QueryIndicator';
 import { DeleteEventDialogButton } from '@/components/Dialog/DeleteEventDialogButton';
+import English from '@/components/Language/English';
+import Hebrew from '@/components/Language/Hebrew';
 
 export const EventsSubmenu = () => {
   const [events, loading, error] = useGetUserEvents();
@@ -22,7 +24,10 @@ export const EventsSubmenu = () => {
   return (
     <>
       {/*<AlertDialog />*/}
-      <ListSubheader sx={{ pt: 2 }}>Events</ListSubheader>
+      <ListSubheader sx={{ pt: 2 }}>
+        <English>Your Events</English>
+        <Hebrew>האירועים שלך</Hebrew>
+      </ListSubheader>
       <List sx={{ width: 250 }}>
         <QueryIndicator loading={loading} errorMessage={error?.message}>
           {eventsData?.map((event) => (
@@ -36,7 +41,7 @@ export const EventsSubmenu = () => {
                 to={`/event/${event.id}`}
                 onClick={sidebarActions.close}
               >
-                <ListItemIcon>{<DefaultIcon />}</ListItemIcon>
+                {/*<ListItemIcon>{<DefaultIcon />}</ListItemIcon>*/}
                 <ListItemText>{event.name}</ListItemText>
               </ListItemButton>
             </ListItem>
