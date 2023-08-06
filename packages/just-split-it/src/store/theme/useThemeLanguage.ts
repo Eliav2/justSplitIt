@@ -3,8 +3,8 @@ import { atom, useRecoilState } from 'recoil';
 import type { AtomEffectParams } from '../types';
 
 export enum LanguageMode {
-  English = 'english',
-  Hebrew = 'hebrew',
+  English = 'English',
+  Hebrew = 'עברית',
 }
 
 const languageState = atom({

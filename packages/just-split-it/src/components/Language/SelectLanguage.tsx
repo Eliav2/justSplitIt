@@ -5,12 +5,10 @@ import Box from '@mui/material/Box';
 import TranslateIcon from '@mui/icons-material/Translate';
 
 export const SelectLanguage = () => {
-  // const [languageInput, setLanguageInput] = useState('');
   const [appLanguage, { setLanguage }] = useLanguage();
 
   const handleChange = (event: SelectChangeEvent) => {
     const newLanguage = event.target.value;
-    // setLanguageInput(newLanguage as string);
     setLanguage(newLanguage as LanguageMode);
   };
   // console.log('appLanguage', appLanguage);
