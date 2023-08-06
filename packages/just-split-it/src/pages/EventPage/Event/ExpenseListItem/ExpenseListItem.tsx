@@ -164,7 +164,10 @@ export const ExpenseListItem = (props: ExpenseProps) => {
                         variant={'subtitle2'}
                         sx={{ fontSize: '0.8em' }}
                       >
-                        <English></English>
+                        <English>
+                          {userOweForExpense > 0 ? 'You owe ' : 'You are owed '}
+                          {Math.abs(userOweForExpense)}₪ for this expense
+                        </English>
                         <Hebrew>
                           {userOweForExpense > 0 ? 'אתה חייב ' : 'חייבים לך '}
                           {Math.abs(userOweForExpense)}₪ עבור הוצאה זו
