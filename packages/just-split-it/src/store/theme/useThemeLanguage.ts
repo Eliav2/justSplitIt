@@ -31,4 +31,9 @@ export const useShouldUseRTL = () => {
   return appLanguage === LanguageMode.Hebrew;
 };
 
+export const useLanguageSentence = (sentences: Record<LanguageMode, string>) => {
+  const [language] = useLanguage();
+  return sentences[language];
+};
+
 export default useLanguage;

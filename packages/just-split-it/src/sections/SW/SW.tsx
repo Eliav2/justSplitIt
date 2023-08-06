@@ -7,7 +7,8 @@ import type { SnackbarKey } from 'notistack';
 import { useRegisterSW } from 'virtual:pwa-register/react';
 
 import useNotifications from '@/store/notifications';
-import { useLanguageSentence, useShouldUseRTL } from '@/components/Language';
+import { useShouldUseRTL } from '@/components/Language';
+import { useLanguageSentence } from '@/store/theme/useThemeLanguage';
 
 // TODO (Suren): this should be a custom hook :)
 function SW() {

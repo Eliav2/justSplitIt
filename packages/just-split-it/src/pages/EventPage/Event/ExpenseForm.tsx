@@ -16,7 +16,8 @@ import { useAuthState } from 'react-firebase-hooks/auth';
 import { fbAuth } from '@/utils/firebase/firebase';
 import English from '@/components/Language/English';
 import Hebrew from '@/components/Language/Hebrew';
-import { useLanguageSentence } from '@/components/Language';
+
+import { useLanguageSentence } from '@/store/theme/useThemeLanguage';
 
 type ExpenseForm = Pick<FirestoreExpense, 'name'>;
 
