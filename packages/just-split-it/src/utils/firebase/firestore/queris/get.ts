@@ -36,7 +36,7 @@ export function useGetEvent(eventId: string) {
 }
 
 export const useGetEventExpenses = (eventId: string, dependencies?: any[]) => {
-  const expensesQuery = query(firestore.expense(), where('parentEventId', '==', eventId));
+  const expensesQuery = query(firestore.expenseName(), where('parentEventId', '==', eventId));
   return useFirestoreCollection(
     expensesQuery,
     { snapshotListenOptions: { includeMetadataChanges: true } },
@@ -48,7 +48,7 @@ export const useGetEventExpenses = (eventId: string, dependencies?: any[]) => {
 };
 
 export const useExpense = (expenseId: string) => {
-  return useGrabDocumentDataById(firestore.expense(), expenseId);
+  return useGrabDocumentDataById(firestore.expenseName(), expenseId);
 };
 
 export const useParticipantsByIds = (participantsId: string[] | undefined) => {

@@ -29,11 +29,11 @@ export async function addEvent(eventDetails: IEventForm) {
 }
 
 export const addExpense = async (data: FirestoreExpense) => {
-  return addDoc(firestore.expense(), data);
+  return addDoc(firestore.expenseName(), data);
 };
 
 export const deleteExpense = async (expenseId: string) => {
-  const expenseRef = doc(firestore.expense(), expenseId);
+  const expenseRef = doc(firestore.expenseName(), expenseId);
   await deleteDoc(expenseRef);
 };
 
@@ -41,7 +41,7 @@ export const deleteEvent = async (eventId: string) => {
   const eventRef = doc(firestore.event(), eventId);
 
   //query for all expenses of this event
-  const expensesQuery = query(firestore.expense(), where('parentEventId', '==', eventId));
+  const expensesQuery = query(firestore.expenseName(), where('parentEventId', '==', eventId));
   const expenses = await getDocs(expensesQuery);
 
   // delete all expenses of this event
@@ -81,13 +81,13 @@ export const participantLeavesEvent = async (eventId: string, participantId: str
 
   // remove the expenses created by this user
   console.log('1', participantId);
-  const userExpensesQuery = query(firestore.expense(), where('payerId', '==', participantId));
+  const userExpensesQuery = query(firestore.expenseName(), where('payerId', '==', participantId));
   const userExpenses = await getDocs(userExpensesQuery);
   console.log(userExpenses);
   await Promise.all(userExpenses.docs.map(async (doc) => await deleteExpense(doc.id)));
   // the participant leaves every expense he participated in
   const userParticipatedInExpensesQuery = query(
-    firestore.expense(),
+    firestore.expenseName(),
     where('participantsIds', 'array-contains', participantId),
   );
   const userParticipatedInExpenses = await getDocs(userParticipatedInExpensesQuery);

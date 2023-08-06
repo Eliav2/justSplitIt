@@ -16,6 +16,7 @@ import { Chip } from '@mui/material';
 import { EditExpenseDialogListItemButton } from '@/pages/EventPage/Event/ExpenseListItem/ExpenseParticipantsDetails/EditExpenseDialogListItemButton';
 import English from '@/components/Language/English';
 import Hebrew from '@/components/Language/Hebrew';
+import Tooltip from '@mui/material/Tooltip';
 
 interface ExpenseProps {
   expenseId: string;
@@ -54,6 +55,24 @@ export const ExpenseListItem = (props: ExpenseProps) => {
       });
     }
   };
+  // const userOweForExpense =
+  //   (expense &&
+  //     user &&
+  //     (expense?.participantsIds?.includes(user?.uid)
+  //       ? expense?.amount / expense.participantsIds.length
+  //       : 0 + expense.payerId == user.uid
+  //       ? expense.amount
+  //       : 0)) ??
+  //   0;
+  let userOweForExpense = 0;
+  if (expense && user) {
+    if (expense.participantsIds?.includes(user.uid)) {
+      userOweForExpense += expense.amount / expense.participantsIds.length;
+    }
+    if (expense.payerId == user.uid) {
+      userOweForExpense -= expense.amount;
+    }
+  }
 
   return (
     <QueryIndicator loading={expenseLoading}>
@@ -84,14 +103,23 @@ export const ExpenseListItem = (props: ExpenseProps) => {
                   e.stopPropagation();
                 }}
               >
-                <Checkbox
-                  edge="start"
-                  // checked={checked[expense.name]?.selected}
-                  checked={includedInExpense}
-                  onChange={handleCheckToggle}
-                  tabIndex={-1}
-                  disableRipple
-                />
+                <Tooltip
+                  title={
+                    <>
+                      <English>Do you participates in this expense?</English>
+                      <Hebrew>האם אתה משתתף בהוצאה זו?</Hebrew>
+                    </>
+                  }
+                >
+                  <Checkbox
+                    edge="start"
+                    // checked={checked[expense.name]?.selected}
+                    checked={includedInExpense}
+                    onChange={handleCheckToggle}
+                    tabIndex={-1}
+                    disableRipple
+                  />
+                </Tooltip>
               </ListItemIcon>
               <ListItemText
                 id={expense?.id}
@@ -116,18 +144,34 @@ export const ExpenseListItem = (props: ExpenseProps) => {
                   </>
                 }
                 secondary={
-                  <Typography variant={'body2'} color="textSecondary">
-                    {expense?.amount}₪{' '}
-                    <Typography
-                      variant={'caption'}
-                      color="textSecondary"
-                      sx={{ fontSize: '0.8em' }}
-                    >
-                      <English>payed by</English>
-                      <Hebrew>שולם ע"י</Hebrew>
-                    </Typography>{' '}
-                    {expense?.payerName}
-                  </Typography>
+                  <>
+                    <Typography variant={'body2'}>
+                      {expense?.amount}₪{' '}
+                      <Typography
+                        variant={'caption'}
+                        color="textSecondary"
+                        sx={{ fontSize: '0.8em' }}
+                      >
+                        <English>payed by</English>
+                        <Hebrew>שולם ע"י</Hebrew>
+                      </Typography>{' '}
+                      {expense?.payerName}
+                    </Typography>
+                    {userOweForExpense != 0 ? (
+                      <Typography
+                        // color={'#6f3675'} //
+                        color={userOweForExpense > 0 ? 'primary.ownColor' : 'primary.owedColor'}
+                        variant={'subtitle2'}
+                        sx={{ fontSize: '0.8em' }}
+                      >
+                        <English></English>
+                        <Hebrew>
+                          {userOweForExpense > 0 ? 'אתה חייב ' : 'חייבים לך '}
+                          {Math.abs(userOweForExpense)}₪ עבור הוצאה זו
+                        </Hebrew>
+                      </Typography>
+                    ) : null}
+                  </>
                 }
               />
             </EditExpenseDialogListItemButton>

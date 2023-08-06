@@ -52,23 +52,30 @@ const Event = ({ eventSnap }: ExpensesListProps) => {
     }, 0) ?? 0,
   );
 
-  const userShouldPay =
-    (user &&
-      expensesData?.map((expense) => {
-        if (!expense.participantsIds.includes(user?.uid))
-          return { expense: expense.name, amount: 0 };
-        return { expense: expense.name, amount: expense.amount / expense.participantsIds.length };
-      }, 0)) ??
-    [];
+  const userDebts =
+    ((user &&
+      expensesData
+        ?.map((expense) => {
+          if (!expense.participantsIds.includes(user?.uid)) return null;
+          return {
+            expenseName: expense.name,
+            amount: expense.amount / expense.participantsIds.length,
+            oweTo: expense.payerName,
+          };
+        }, 0)
+        .filter((e) => e)) as { expenseName: string; amount: number; oweTo: string }[]) ?? [];
 
-  const userTotalExpense = round(sumArray(userShouldPay.map((expense) => expense.amount)));
+  const userTotalExpense = round(sumArray(userDebts.map((expense) => expense.amount)));
 
   const userBalance = round(userPayedFor - userTotalExpense);
   const eventOwner = participants?.find((p) => p.id == eventData.ownerId);
 
+  // const userDebts =
+  console.log(userDebts);
+
   // console.log(userExpenses);
 
-  const owedColor = '#1ECC00';
+  // const owedColor = '#1ECC00';
   const ownColor = '#CC8900';
   return (
     <QueryIndicator loading={loadingUser}>
@@ -131,21 +138,21 @@ const Event = ({ eventSnap }: ExpensesListProps) => {
               <CenteredFlexBox>
                 <ListItemText>
                   {userBalance > 0 ? (
-                    <span style={{ color: owedColor }}>
+                    <Typography sx={{ color: 'primary.owedColor' }}>
                       <English>You are owed: </English>
                       <Hebrew>חייבים לך:</Hebrew>
                       <Typography variant={'h5'} sx={{ fontWeight: 'bold' }}>
                         {userBalance}₪
                       </Typography>
-                    </span>
+                    </Typography>
                   ) : (
-                    <span style={{ color: ownColor }}>
+                    <Typography sx={{ color: 'primary.ownColor' }}>
                       <English>You owe:</English>
                       <Hebrew>אתה חייב:</Hebrew>
                       <Typography variant={'h5'} sx={{ fontWeight: 'bold' }}>
                         {userBalance * -1}₪
                       </Typography>
-                    </span>
+                    </Typography>
                   )}
                 </ListItemText>
               </CenteredFlexBox>
@@ -161,7 +168,7 @@ const Event = ({ eventSnap }: ExpensesListProps) => {
 
           <Typography>
             <English>Participants</English>
-            <Hebrew>משתתפים</Hebrew>
+            <Hebrew>משתתפים באירוע</Hebrew>
           </Typography>
           <List dense>
             {participants?.map((participant) => (

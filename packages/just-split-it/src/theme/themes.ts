@@ -28,6 +28,10 @@ const sharedTheme = {
       default: '#fafafa',
       paper: '#fff',
     },
+    primary: {
+      owedColor: '#1ECC00',
+      ownColor: '#CC8900',
+    },
   },
   components: {
     MuiButtonBase: {

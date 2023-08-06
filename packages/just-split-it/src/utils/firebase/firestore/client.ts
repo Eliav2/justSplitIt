@@ -127,7 +127,7 @@ export const firestore = {
   // }),
   // ),
   // expense: collection(getFirestore(fbApp), 'expense'),
-  expense: (...pathSegments: string[]) =>
+  expenseName: (...pathSegments: string[]) =>
     collectionType<FirestoreExpense>(collection(getFirestore(fbApp), 'expense', ...pathSegments)),
 };
 

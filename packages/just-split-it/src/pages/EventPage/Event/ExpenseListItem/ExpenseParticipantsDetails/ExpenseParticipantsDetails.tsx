@@ -30,7 +30,16 @@ export const ExpenseParticipantsDetails = (props: ExpenseParticipantsDetailsProp
       <List dense>
         {participantsInExpense?.map((p) => {
           const isPayer = props.expense.payerId == p.id;
-          const extraProp = isPayer ? { secondary: 'payer' } : {};
+          const extraProp = isPayer
+            ? {
+                secondary: (
+                  <>
+                    <English>payer</English>
+                    <Hebrew>המשלם</Hebrew>
+                  </>
+                ),
+              }
+            : {};
           return (
             <ListItem key={p.id}>
               <ListItemAvatar>
