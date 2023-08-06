@@ -34,4 +34,5 @@ export interface FirestoreExpense {
   parentEventId: string;
   participantsIds: string[];
   creationTimestamp: FieldValue;
+  editTimestamp: FieldValue;
 }
