@@ -94,14 +94,20 @@ const CrazyHugeHeader = () => {
       mode == 'light' ? 'rgba(0, 0, 0, 0.4)' : 'rgba(255, 255, 255, 0.4)'
     }`, // Add a subtle text shadow for a cool effect
     textAlign: 'center', // Center the text
-    marginBottom: '2rem', // Add some spacing at the bottom
+    marginBottom: '1rem', // Add some spacing at the bottom
     // fontFamily: 'Roboto', // Specify a font
   };
 
   return (
-    <Typography variant="h2" style={headerStyles as any}>
-      JustSplitIt
-    </Typography>
+    <Box sx={{ textAlign: 'center' }}>
+      <Typography variant="h2" style={headerStyles as any}>
+        JustSplitIt
+      </Typography>
+      <Typography variant="subtitle1" sx={{ mb: 2 }}>
+        <English>Shared expenses made easy</English>
+        <Hebrew>חלוקת הוצאות בדרך הקלה</Hebrew>
+      </Typography>
+    </Box>
   );
 };
 

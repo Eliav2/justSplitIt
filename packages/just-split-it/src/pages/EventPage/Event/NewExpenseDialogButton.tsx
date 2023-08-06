@@ -14,6 +14,7 @@ import QueryButton from '@/components/Button/QueryButton';
 import { ExpenseForm, ExpenseFormInput } from '@/pages/EventPage/Event/ExpenseForm';
 import English from '@/components/Language/English';
 import Hebrew from '@/components/Language/Hebrew';
+import { serverTimestamp } from 'firebase/firestore';
 
 interface NewExpenseDialogButtonProps {
   parentEvent: FirestoreEventWithId;
@@ -42,6 +43,7 @@ export const NewExpenseDialogButton = (props: NewExpenseDialogButtonProps) => {
         parentEventId: props.parentEvent.id,
         //by default, all participants of an event would be added to an expense
         participantsIds: props.parentEvent.participantsIds,
+        creationTimestamp: serverTimestamp(),
       });
     },
     {

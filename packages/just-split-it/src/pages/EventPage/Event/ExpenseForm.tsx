@@ -18,6 +18,7 @@ import English from '@/components/Language/English';
 import Hebrew from '@/components/Language/Hebrew';
 
 import { useLanguageSentence } from '@/store/theme/useThemeLanguage';
+import { LanguageMode } from '@/components/Language';
 
 type ExpenseForm = Pick<FirestoreExpense, 'name'>;
 
@@ -62,8 +63,8 @@ export const ExpenseForm = ({
       );
   }, [participants, open]);
   const userSelectErrorMesseage = useLanguageSentence({
-    hebrew: 'אנא בחר אופציה מהרשימה.',
-    english: 'Please select a valid option from the list.',
+    [LanguageMode.Hebrew]: 'אנא בחר אופציה מהרשימה.',
+    [LanguageMode.English]: 'Please select a valid option from the list.',
   });
 
   return (

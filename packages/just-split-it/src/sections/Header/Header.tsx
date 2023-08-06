@@ -185,56 +185,88 @@ function Header() {
 
 const CollapsedMenu = () => {
   const [, themeActions] = useThemeMode();
+  const [openMenu, setOpenMenu] = useState(false);
+  const buttonRef = useRef<any>(null);
   const navigate = useNavigate();
 
+  const handleToggle = () => {
+    return setOpenMenu(!openMenu);
+  };
+
   return (
-    <ButtonMenu
-      renderButton={(handleToggle, buttonRef) => {
-        return (
-          <IconButton ref={buttonRef} onClick={handleToggle}>
-            <MoreVertIcon />
-          </IconButton>
-        );
-      }}
-      anchorOrigin={{
-        vertical: 'bottom',
-        horizontal: 'left',
-      }}
-    >
-      <MenuList>
-        <MenuItem onClick={themeActions.toggle}>
-          <ListItemIcon>
-            <ThemeIcon color={'primary'} />
-          </ListItemIcon>
-          <ListItemText>
-            <English>Toggle Theme</English>
-            <Hebrew>החלף ערכת נושא</Hebrew>
-          </ListItemText>
-        </MenuItem>
-        <MenuItem
-          onClick={() => {
-            navigate(routes.Settings.path);
-          }}
-        >
-          <ListItemIcon>
-            <SettingsIcon color={'primary'} />
-          </ListItemIcon>
-          <ListItemText>
-            <English>Settings</English>
-            <Hebrew>הגדרות</Hebrew>
-          </ListItemText>
-        </MenuItem>
-        <MenuItem component={'a'} href={repository} target="_blank" rel="noopener noreferrer">
-          <ListItemIcon>
-            <GitHubIcon color={'primary'} />
-          </ListItemIcon>
-          <ListItemText>
-            <English>Source code&#x2197;</English>
-            <Hebrew>לקוד מקור&#x2197;</Hebrew>
-          </ListItemText>
-        </MenuItem>
-      </MenuList>
-    </ButtonMenu>
+    // <ButtonMenu
+    //   renderButton={(handleToggle, buttonRef) => {
+    //     return (
+    //       <IconButton
+    //         ref={buttonRef}
+    //         onClick={() => {
+    //           console.log('clicked');
+    //           handleToggle();
+    //         }}
+    //       >
+    //         <MoreVertIcon />
+    //       </IconButton>
+    //     );
+    //   }}
+    //   anchorOrigin={{
+    //     vertical: 'bottom',
+    //     horizontal: 'left',
+    //   }}
+    // >
+    <>
+      <IconButton
+        ref={buttonRef}
+        onClick={() => {
+          handleToggle();
+          console.log('clicked');
+        }}
+      >
+        <MoreVertIcon />
+      </IconButton>
+
+      <Menu open={openMenu} anchorEl={buttonRef.current} onClose={handleToggle}>
+        <MenuList>
+          <MenuItem
+            onClick={() => {
+              themeActions.toggle();
+              handleToggle();
+            }}
+          >
+            <ListItemIcon>
+              <ThemeIcon color={'primary'} />
+            </ListItemIcon>
+            <ListItemText>
+              <English>Toggle Theme</English>
+              <Hebrew>החלף ערכת נושא</Hebrew>
+            </ListItemText>
+          </MenuItem>
+          <MenuItem
+            onClick={() => {
+              navigate(routes.Settings.path);
+              handleToggle();
+            }}
+          >
+            <ListItemIcon>
+              <SettingsIcon color={'primary'} />
+            </ListItemIcon>
+            <ListItemText>
+              <English>Settings</English>
+              <Hebrew>הגדרות</Hebrew>
+            </ListItemText>
+          </MenuItem>
+          <MenuItem component={'a'} href={repository} target="_blank" rel="noopener noreferrer">
+            <ListItemIcon>
+              <GitHubIcon color={'primary'} />
+            </ListItemIcon>
+            <ListItemText>
+              <English>Source code&#x2197;</English>
+              <Hebrew>לקוד מקור&#x2197;</Hebrew>
+            </ListItemText>
+          </MenuItem>
+        </MenuList>
+      </Menu>
+    </>
+    // </ButtonMenu>
   );
 };
 

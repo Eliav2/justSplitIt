@@ -1,6 +1,8 @@
 import isMobile from '@/utils/is-mobile';
 
 import type { Notifications } from './types';
+import English from '@/components/Language/English';
+import Hebrew from '@/components/Language/Hebrew';
 
 const title = 'JustSplitIt';
 
@@ -11,10 +13,25 @@ const repository = 'https://github.com/Eliav2/justSplitIt';
 const messages = {
   app: {
     crash: {
-      title: 'Oooops... Sorry, I guess, something went wrong. You can:',
+      title: (
+        <>
+          <English>Oooops... Sorry, something went wrong. You can:</English>
+          <Hebrew>אופס... סורי, משהו השתבש. אתה יכול:</Hebrew>
+        </>
+      ),
       options: {
-        email: `contact with author by this email - ${email}`,
-        reset: 'Press here to reset the application',
+        email: (
+          <>
+            <English>contact with author by this email - {email}</English>
+            <Hebrew>צור קשר עם יוצר האפליקציה במייל - {email} </Hebrew>
+          </>
+        ),
+        reset: (
+          <>
+            <English>Press here to reset the application</English>
+            <Hebrew>לחץ כאן כדי לאתחל את האפליקציה</Hebrew>
+          </>
+        ),
       },
     },
   },

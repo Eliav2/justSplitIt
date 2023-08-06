@@ -7,7 +7,7 @@ import type { SnackbarKey } from 'notistack';
 import { useRegisterSW } from 'virtual:pwa-register/react';
 
 import useNotifications from '@/store/notifications';
-import { useShouldUseRTL } from '@/components/Language';
+import { LanguageMode } from '@/components/Language';
 import { useLanguageSentence } from '@/store/theme/useThemeLanguage';
 
 // TODO (Suren): this should be a custom hook :)
@@ -30,8 +30,8 @@ function SW() {
   }, [setOfflineReady, setNeedRefresh, notificationsActions]);
 
   const newContentMessage = useLanguageSentence({
-    hebrew: 'תוכן חדש זמין, לחץ על כפתור טען מחדש כדי לעדכן',
-    english: 'New content is available, click on reload button to update.',
+    [LanguageMode.Hebrew]: 'תוכן חדש זמין, לחץ על כפתור טען מחדש כדי לעדכן',
+    [LanguageMode.English]: 'New content is available, click on reload button to update.',
   });
 
   useEffect(() => {

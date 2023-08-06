@@ -5,6 +5,7 @@ import { firestore } from '@/utils/firebase/firestore/client';
 import { FirestoreExpense } from '@/utils/firebase/firestore/schema';
 import { grabDocumentById } from '@/utils/firebase/firestore/queris/util';
 import { IEventForm } from '@/pages/EventPage/NewEventDialog';
+import { serverTimestamp } from 'firebase/firestore';
 
 // add event to the events collection and to the user's events list
 export async function addEvent(eventDetails: IEventForm) {
@@ -22,6 +23,7 @@ export async function addEvent(eventDetails: IEventForm) {
     description: eventDetails.description,
     ownerId: fbAuth.currentUser?.uid,
     participantsIds: [fbAuth.currentUser?.uid],
+    creationTimestamp: serverTimestamp(),
   });
   return eventDoc;
 }

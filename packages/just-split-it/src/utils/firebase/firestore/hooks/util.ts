@@ -8,6 +8,7 @@ import {
   getDoc,
   setDoc,
   refEqual,
+  serverTimestamp,
 } from 'firebase/firestore';
 import { useEffect } from 'react';
 
@@ -23,6 +24,7 @@ export const useEnsureUserExists = () => {
         setDoc(userRef, {
           name: user.displayName,
           email: user.email,
+          creationTimestamp: serverTimestamp(),
         });
       }
     });

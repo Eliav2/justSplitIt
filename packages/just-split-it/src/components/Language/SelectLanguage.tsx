@@ -4,6 +4,8 @@ import { FormControl, InputLabel, MenuItem, Select, SelectChangeEvent } from '@m
 import Box from '@mui/material/Box';
 import TranslateIcon from '@mui/icons-material/Translate';
 import { LanguageMode } from '@/components/Language/index';
+import English from '@/components/Language/English';
+import Hebrew from '@/components/Language/Hebrew';
 
 export const SelectLanguage = () => {
   const [appLanguage, { setLanguage }] = useLanguage();
@@ -17,10 +19,18 @@ export const SelectLanguage = () => {
   return (
     <Box sx={{ minWidth: 200 }}>
       <FormControl fullWidth>
-        <InputLabel>Language</InputLabel>
+        <InputLabel>
+          <English>Language</English>
+          <Hebrew>שפה</Hebrew>
+        </InputLabel>
         <Select
           value={appLanguage}
-          label="Language"
+          label={
+            <>
+              <English>Language</English>
+              <Hebrew>שפה</Hebrew>
+            </>
+          }
           onChange={handleChange}
           startAdornment={<TranslateIcon sx={{ mr: 1 }} />}
         >

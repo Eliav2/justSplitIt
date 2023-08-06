@@ -8,6 +8,8 @@ import Typography from '@mui/material/Typography';
 import { FullSizeCenteredFlexBox } from '@/components/styled';
 import { email, messages } from '@/config';
 import resetApp from '@/utils/reset-app';
+import English from '@/components/Language/English';
+import Hebrew from '@/components/Language/Hebrew';
 
 function AppErrorBoundaryFallback() {
   return (
@@ -27,7 +29,10 @@ function AppErrorBoundaryFallback() {
           >
             {messages.app.crash.options.email}
           </Button>
-          <Typography component="h6">or</Typography>
+          <Typography component="h6">
+            <English>or</English>
+            <Hebrew>או</Hebrew>
+          </Typography>
           <Button startIcon={<RestartIcon />} sx={{ mt: 3 }} variant="outlined" onClick={resetApp}>
             {messages.app.crash.options.reset}
           </Button>
