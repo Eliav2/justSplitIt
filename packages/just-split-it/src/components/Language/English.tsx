@@ -1,6 +1,7 @@
 import React from 'react';
 import Language from '@/components/Language/Language';
-import { LanguageMode } from '@/store/theme/useThemeLanguage';
+
+import { LanguageMode } from '@/components/Language/index';
 
 interface EnglishProps {
   children: React.ReactNode;

@@ -1,8 +1,9 @@
 import { useState } from 'react';
-import useLanguage, { LanguageMode } from '@/store/theme/useThemeLanguage';
+import useLanguage from '@/store/theme/useThemeLanguage';
 import { FormControl, InputLabel, MenuItem, Select, SelectChangeEvent } from '@mui/material';
 import Box from '@mui/material/Box';
 import TranslateIcon from '@mui/icons-material/Translate';
+import { LanguageMode } from '@/components/Language/index';
 
 export const SelectLanguage = () => {
   const [appLanguage, { setLanguage }] = useLanguage();

@@ -1,8 +1,9 @@
-import rtlPlugin from "stylis-plugin-rtl";
-import { CacheProvider } from "@emotion/react";
-import createCache from "@emotion/cache";
-import { prefixer } from "stylis";
-import useLanguage, { LanguageMode } from "@/store/theme/useThemeLanguage";
+import rtlPlugin from 'stylis-plugin-rtl';
+import { CacheProvider } from '@emotion/react';
+import createCache from '@emotion/cache';
+import { prefixer } from 'stylis';
+import useLanguage from '@/store/theme/useThemeLanguage';
+import { LanguageMode } from '@/components/Language';
 
 // Create rtl cache
 const cacheRtl = createCache({

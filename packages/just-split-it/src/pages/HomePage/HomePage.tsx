@@ -22,9 +22,10 @@ import useThemeMode from '@/store/theme/useThemeMode';
 import Box from '@mui/material/Box';
 import { useState } from 'react';
 import { FormControl, InputLabel, MenuItem, Select, SelectChangeEvent } from '@mui/material';
-import useLanguage, { LanguageMode } from '@/store/theme/useThemeLanguage';
+import useLanguage from '@/store/theme/useThemeLanguage';
 import English from '@/components/Language/English';
 import Hebrew from '@/components/Language/Hebrew';
+import { LanguageMode } from '@/components/Language';
 
 function HomePage() {
   // const [user, loading, error] = useAuthState(fbAuth);

@@ -1,11 +1,7 @@
 import { atom, useRecoilState } from 'recoil';
 
 import type { AtomEffectParams } from '../types';
-
-export enum LanguageMode {
-  English = 'English',
-  Hebrew = 'עברית',
-}
+import { LanguageMode } from '@/components/Language';
 
 const languageState = atom({
   key: 'theme-language-mode',
