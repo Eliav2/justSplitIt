@@ -31,7 +31,6 @@ function LoginPage() {
     <>
       <Meta title="Login" />
       <FullSizeCenteredFlexBoxColumn>
-        <SelectLanguage />
         <QueryIndicator loading={loading} errorMessage={error?.message}>
           <Typography>
             <English>You are not logged in.</English>
