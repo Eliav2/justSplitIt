@@ -44,6 +44,7 @@ export const NewExpenseDialogButton = (props: NewExpenseDialogButtonProps) => {
         //by default, all participants of an event would be added to an expense
         participantsIds: props.parentEvent.participantsIds,
         creationTimestamp: serverTimestamp(),
+        editTimestamp: serverTimestamp(),
       });
     },
     {
