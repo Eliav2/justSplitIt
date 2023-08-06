@@ -1,6 +1,6 @@
 import ListItemButton, { ListItemButtonProps } from '@mui/material/ListItemButton';
 import { FirestoreEvent, FirestoreExpense } from '@/utils/firebase/firestore/schema';
-import { DocumentReference, updateDoc } from 'firebase/firestore';
+import { DocumentReference, serverTimestamp, setDoc, updateDoc } from 'firebase/firestore';
 import * as React from 'react';
 import { BaseSyntheticEvent, useState } from 'react';
 import { useGrabDocumentDataById } from '@/utils/firebase/firestore/hooks/query';
@@ -53,7 +53,8 @@ export const EditExpenseDialogListItemButton = ({
         amount: Number(data.amount),
         name: data.name,
         payerId: data.payer.id,
-        payerName: payer!.name,
+        payerName: data.payer!.name,
+        editTimestamp: serverTimestamp(),
       });
     },
 
