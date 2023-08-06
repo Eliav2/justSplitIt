@@ -1,6 +1,7 @@
 import Box from '@mui/material/Box';
 import { styled } from '@mui/system';
 import Container from '@mui/material/Container';
+import React from 'react';
 
 const FlexBox = styled(Box)({
   display: 'flex',
@@ -15,10 +16,12 @@ export const ColumnFlexBox = styled(FlexBox)({
   flexDirection: 'column',
 });
 
-const FullSizeCenteredFlexBox = styled(CenteredFlexBox)({
-  minWidth: '100%',
-  minHeight: '100%',
-});
+const FullSizeCenteredFlexBox = React.memo(
+  styled(CenteredFlexBox)((props) => ({
+    minWidth: '100%',
+    minHeight: '100%',
+  })),
+);
 export const FullSizeCenteredFlexBoxColumn = styled(FullSizeCenteredFlexBox)({
   flexDirection: 'column',
 });

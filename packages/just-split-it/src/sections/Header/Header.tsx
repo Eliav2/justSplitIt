@@ -218,7 +218,6 @@ const CollapsedMenu = () => {
         ref={buttonRef}
         onClick={() => {
           handleToggle();
-          console.log('clicked');
         }}
       >
         <MoreVertIcon />

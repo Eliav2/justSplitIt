@@ -132,15 +132,17 @@ const Event = ({ eventSnap }: ExpensesListProps) => {
                 <ListItemText>
                   {userBalance > 0 ? (
                     <span style={{ color: owedColor }}>
-                      <English>You are owed </English>
-                      <Hebrew>חייבים לך</Hebrew>
-                      <Typography sx={{ fontWeight: 'bold' }}>{userBalance}₪</Typography>
+                      <English>You are owed: </English>
+                      <Hebrew>חייבים לך:</Hebrew>
+                      <Typography variant={'h5'} sx={{ fontWeight: 'bold' }}>
+                        {userBalance}₪
+                      </Typography>
                     </span>
                   ) : (
                     <span style={{ color: ownColor }}>
                       <English>You owe:</English>
                       <Hebrew>אתה חייב:</Hebrew>
-                      <Typography variant={'h3'} sx={{ fontWeight: 'bold' }}>
+                      <Typography variant={'h5'} sx={{ fontWeight: 'bold' }}>
                         {userBalance * -1}₪
                       </Typography>
                     </span>

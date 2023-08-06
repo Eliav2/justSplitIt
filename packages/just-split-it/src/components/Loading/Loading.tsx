@@ -1,11 +1,14 @@
 import CircularProgress from '@mui/material/CircularProgress';
 
 import { FullSizeCenteredFlexBox } from '@/components/styled';
+import QueryIndicator from '@/components/QueryIndicator';
 
 function Loading() {
   return (
     <FullSizeCenteredFlexBox>
-      <CircularProgress />
+      <QueryIndicator loading={true}>
+        <CircularProgress />
+      </QueryIndicator>
     </FullSizeCenteredFlexBox>
   );
 }

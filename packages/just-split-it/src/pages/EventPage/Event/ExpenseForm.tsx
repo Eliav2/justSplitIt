@@ -49,7 +49,7 @@ export const ExpenseForm = ({
   const expenseForm = useForm<ExpenseFormInput>({
     defaultValues: defaultValues ?? {
       name: '',
-      amount: '0',
+      amount: '',
       payer: participantsData?.find((p) => p.id == user?.uid) || (null as any),
     },
   });
