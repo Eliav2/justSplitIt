@@ -22,6 +22,7 @@ import React from 'react';
 import English from '@/components/Language/English';
 import Hebrew from '@/components/Language/Hebrew';
 import Box from '@mui/material/Box';
+import ArrowRightAltIcon from '@mui/icons-material/ArrowRightAlt';
 
 interface ExpensesListProps {
   eventSnap: DocumentSnapshot<FirestoreEvent>;
@@ -75,12 +76,7 @@ const Event = ({ eventSnap }: ExpensesListProps) => {
   // const userDebts =
   // console.log(userDebts);
 
-  const eventsDebts: {
-    amount: number;
-    oweTo: string;
-    participantName: string;
-    expenseName: string;
-  }[] = [];
+  const eventsDebts: Debt[] = [];
   for (const expense of expensesData) {
     for (const participant of participantsData) {
       if (expense.payerId === participant.id) {
@@ -98,10 +94,10 @@ const Event = ({ eventSnap }: ExpensesListProps) => {
     }
     // console.log(userExpenses
   }
-  console.log(eventsDebts);
+
+  // console.log(eventsDebts);
 
   // const owedColor = '#1ECC00';
-  const ownColor = '#CC8900';
   return (
     <QueryIndicator loading={loadingUser}>
       <Typography variant="h2" sx={{ m: 1, mb: 2, textAlign: 'center' }}>
@@ -147,18 +143,7 @@ const Event = ({ eventSnap }: ExpensesListProps) => {
                 <Hebrew>סך ההוצאות: {eventTotalExpense}₪</Hebrew>
               </ListItemText>
             </ListItem>
-            <ListItem>
-              <ListItemText sx={{}}>
-                <English>You Should Pay back: {userTotalExpense}₪</English>
-                <Hebrew>עליך להחזיר: {userTotalExpense}₪</Hebrew>
-              </ListItemText>
-            </ListItem>
-            <ListItem>
-              <ListItemText sx={{}}>
-                <English>You Paid for: {userPayedFor}₪</English>
-                <Hebrew>סך ההוצאות שלך: {userPayedFor}₪</Hebrew>
-              </ListItemText>
-            </ListItem>
+
             <ListItem>
               <CenteredFlexBox>
                 <ListItemText>
@@ -188,22 +173,41 @@ const Event = ({ eventSnap }: ExpensesListProps) => {
             </ListItem>
           </List>
 
-          <Typography>חובות האירוע</Typography>
+          <Typography>
+            <English>Users Debts</English>
+            <Hebrew>חובות האירוע</Hebrew>
+          </Typography>
           <List>
             {eventsDebts.map((debt) => {
               return (
-                <ListItem key={debt.participantName + debt.oweTo}>
+                <ListItem key={debt.participantName + debt.oweTo + debt.expenseName}>
                   <ListItemText>
-                    {debt.participantName}{' '}
-                    <Typography sx={{ display: 'inline', fontStyle: 'italic' }} variant={'body2'}>
-                      owe
+                    <Typography
+                      variant={'body1'}
+                      sx={{ display: 'inline', color: 'primary.main', fontWeight: 'medium' }}
+                    >
+                      {debt.participantName}
                     </Typography>{' '}
-                    {debt.oweTo}{' '}
-                    <Typography sx={{ display: 'inline', fontWeight: 'bold' }}>
+                    {/*<ArrowRightAltIcon />*/}
+                    <Typography sx={{ display: 'inline', fontStyle: 'italic' }} variant={'body2'}>
+                      <English>owe </English>
+                      <Hebrew>חייב ל</Hebrew>
+                      {/*->*/}
+                    </Typography>
+                    <Typography
+                      sx={{ display: 'inline', color: 'primary.main', fontWeight: 'medium' }}
+                    >
+                      {debt.oweTo}
+                    </Typography>
+                    :{' '}
+                    <Typography
+                      sx={{ display: 'inline', fontWeight: 'bold', color: 'primary.ownColor' }}
+                    >
                       {debt.amount}₪
                     </Typography>{' '}
                     <Typography sx={{ display: 'inline', fontStyle: 'italic' }} variant={'body2'}>
-                      for
+                      <English>for</English>
+                      <Hebrew>עבור</Hebrew>
                     </Typography>{' '}
                     {debt.expenseName}
                   </ListItemText>
@@ -261,6 +265,31 @@ const Event = ({ eventSnap }: ExpensesListProps) => {
       )}
     </QueryIndicator>
   );
+};
+
+type Debt = {
+  amount: number;
+  oweTo: string;
+  participantName: string;
+  expenseName: string;
+};
+
+const simplifyDebts = (debts: Debt[]) => {
+  const simplifiedDebts: Debt[] = structuredClone(simplifyDebts);
+  let i = 0;
+  while (i < debts.length) {
+    const deductions = debts.filter((d) => d.participantName === debts[i].oweTo);
+  }
+  // for (const debt of debts) {
+  //   const existingDebt = simplifiedDebts.find(
+  //     (d) => d.participantName === debt.participantName && d.oweTo === debt.oweTo,
+  //   );
+  //   if (existingDebt) {
+  //     existingDebt.amount += debt.amount;
+  //   } else {
+  //     simplifiedDebts.push(debt);
+  //   }
+  // }
 };
 
 export default Event;

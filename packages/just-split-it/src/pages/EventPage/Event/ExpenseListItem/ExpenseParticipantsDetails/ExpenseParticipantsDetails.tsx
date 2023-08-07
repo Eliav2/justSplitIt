@@ -34,8 +34,8 @@ export const ExpenseParticipantsDetails = (props: ExpenseParticipantsDetailsProp
             ? {
                 secondary: (
                   <>
-                    <English>payer</English>
-                    <Hebrew>המשלם</Hebrew>
+                    <English>Payed for this expense</English>
+                    <Hebrew>שילם על הוצאה זו</Hebrew>
                   </>
                 ),
               }
