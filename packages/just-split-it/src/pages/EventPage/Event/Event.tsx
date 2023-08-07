@@ -21,6 +21,7 @@ import { CenteredFlexBox, FlexBox } from '@/components/styled';
 import React from 'react';
 import English from '@/components/Language/English';
 import Hebrew from '@/components/Language/Hebrew';
+import Box from '@mui/material/Box';
 
 interface ExpensesListProps {
   eventSnap: DocumentSnapshot<FirestoreEvent>;
@@ -34,13 +35,14 @@ const Event = ({ eventSnap }: ExpensesListProps) => {
   const [participants, loadingParticipants, errorParticipants] = useParticipantsByIds(
     eventData?.participantsIds,
   );
+  const participantsData = participants ?? [];
   const isOwner = user?.uid === eventData?.ownerId;
 
   const [expenses, loading, error] = useGetEventExpenses(eventSnap.id as string, [
     isUserParticipating,
   ]);
 
-  const expensesData = expenses?.docs.map((expense) => expense.data());
+  const expensesData = expenses?.docs.map((expense) => expense.data()) ?? [];
   const eventTotalExpense = sumArray(expensesData?.map((expense) => expense.amount) ?? []);
 
   const userPayedFor = round(
@@ -71,9 +73,32 @@ const Event = ({ eventSnap }: ExpensesListProps) => {
   const eventOwner = participants?.find((p) => p.id == eventData.ownerId);
 
   // const userDebts =
-  console.log(userDebts);
+  // console.log(userDebts);
 
-  // console.log(userExpenses);
+  const eventsDebts: {
+    amount: number;
+    oweTo: string;
+    participantName: string;
+    expenseName: string;
+  }[] = [];
+  for (const expense of expensesData) {
+    for (const participant of participantsData) {
+      if (expense.payerId === participant.id) {
+        continue;
+      }
+      if (expense.participantsIds.includes(participant.id)) {
+        const debt = {
+          expenseName: expense.name,
+          amount: expense.amount / expense.participantsIds.length,
+          participantName: participant.name,
+          oweTo: expense.payerName,
+        };
+        eventsDebts.push(debt);
+      }
+    }
+    // console.log(userExpenses
+  }
+  console.log(eventsDebts);
 
   // const owedColor = '#1ECC00';
   const ownColor = '#CC8900';
@@ -138,25 +163,53 @@ const Event = ({ eventSnap }: ExpensesListProps) => {
               <CenteredFlexBox>
                 <ListItemText>
                   {userBalance > 0 ? (
-                    <Typography sx={{ color: 'primary.owedColor' }}>
-                      <English>You are owed: </English>
-                      <Hebrew>חייבים לך:</Hebrew>
+                    <Box sx={{ color: 'primary.owedColor' }}>
+                      <Typography>
+                        <English>You are owed: </English>
+                        <Hebrew>חייבים לך:</Hebrew>
+                      </Typography>
                       <Typography variant={'h5'} sx={{ fontWeight: 'bold' }}>
                         {userBalance}₪
                       </Typography>
-                    </Typography>
+                    </Box>
                   ) : (
-                    <Typography sx={{ color: 'primary.ownColor' }}>
-                      <English>You owe:</English>
-                      <Hebrew>אתה חייב:</Hebrew>
+                    <Box sx={{ color: 'primary.ownColor' }}>
+                      <Typography>
+                        <English>You owe:</English>
+                        <Hebrew>אתה חייב:</Hebrew>
+                      </Typography>
                       <Typography variant={'h5'} sx={{ fontWeight: 'bold' }}>
                         {userBalance * -1}₪
                       </Typography>
-                    </Typography>
+                    </Box>
                   )}
                 </ListItemText>
               </CenteredFlexBox>
             </ListItem>
+          </List>
+
+          <Typography>חובות האירוע</Typography>
+          <List>
+            {eventsDebts.map((debt) => {
+              return (
+                <ListItem key={debt.participantName + debt.oweTo}>
+                  <ListItemText>
+                    {debt.participantName}{' '}
+                    <Typography sx={{ display: 'inline', fontStyle: 'italic' }} variant={'body2'}>
+                      owe
+                    </Typography>{' '}
+                    {debt.oweTo}{' '}
+                    <Typography sx={{ display: 'inline', fontWeight: 'bold' }}>
+                      {debt.amount}₪
+                    </Typography>{' '}
+                    <Typography sx={{ display: 'inline', fontStyle: 'italic' }} variant={'body2'}>
+                      for
+                    </Typography>{' '}
+                    {debt.expenseName}
+                  </ListItemText>
+                </ListItem>
+              );
+            })}
           </List>
 
           <CenteredFlexBox>

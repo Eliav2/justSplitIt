@@ -17,6 +17,7 @@ import { EditExpenseDialogListItemButton } from '@/pages/EventPage/Event/Expense
 import English from '@/components/Language/English';
 import Hebrew from '@/components/Language/Hebrew';
 import Tooltip from '@mui/material/Tooltip';
+import Box from '@mui/material/Box';
 
 interface ExpenseProps {
   expenseId: string;
@@ -121,62 +122,55 @@ export const ExpenseListItem = (props: ExpenseProps) => {
                   />
                 </Tooltip>
               </ListItemIcon>
-              <ListItemText
-                id={expense?.id}
-                primary={
-                  <>
-                    {expense?.name}
+              <Box>
+                <ListItemText
+                  sx={{ mb: 0 }}
+                  id={expense?.id}
+                  primary={
+                    <>
+                      {expense?.name}
 
-                    {isOwner && (
-                      <Chip
-                        sx={{ mx: 1 }}
-                        label={
-                          <>
-                            <English>yours</English>
-                            <Hebrew>שלך</Hebrew>
-                          </>
-                        }
-                        variant="outlined"
-                        color="primary"
-                        size={'small'}
-                      />
-                    )}
-                  </>
-                }
-                secondary={
-                  <>
-                    <Typography variant={'body2'}>
-                      {expense?.amount}₪{' '}
-                      <Typography
-                        variant={'caption'}
-                        color="textSecondary"
-                        sx={{ fontSize: '0.8em' }}
-                      >
-                        <English>payed by</English>
-                        <Hebrew>שולם ע"י</Hebrew>
-                      </Typography>{' '}
-                      {expense?.payerName}
+                      {isOwner && (
+                        <Chip
+                          sx={{ mx: 1 }}
+                          label={
+                            <>
+                              <English>yours</English>
+                              <Hebrew>שלך</Hebrew>
+                            </>
+                          }
+                          variant="outlined"
+                          color="primary"
+                          size={'small'}
+                        />
+                      )}
+                    </>
+                  }
+                />
+                <>
+                  <Typography variant={'caption'} color="textSecondary" sx={{ fontSize: '0.8em' }}>
+                    {expense?.amount}₪ <English>payed by</English> <Hebrew>שולם ע"י</Hebrew>{' '}
+                    {expense?.payerName}
+                  </Typography>{' '}
+                  {userOweForExpense != 0 ? (
+                    <Typography
+                      // color={'#6f3675'} //
+                      color={userOweForExpense > 0 ? 'primary.ownColor' : 'primary.owedColor'}
+                      variant={'subtitle2'}
+                      sx={{ fontSize: '0.8em' }}
+                    >
+                      <English>
+                        {userOweForExpense > 0 ? 'You owe ' : 'You are owed '}
+                        {Math.abs(userOweForExpense)}₪ for this expense
+                      </English>
+                      <Hebrew>
+                        {userOweForExpense > 0 ? 'אתה חייב ' : 'חייבים לך '}
+                        {Math.abs(userOweForExpense)}₪ עבור הוצאה זו
+                      </Hebrew>
                     </Typography>
-                    {userOweForExpense != 0 ? (
-                      <Typography
-                        // color={'#6f3675'} //
-                        color={userOweForExpense > 0 ? 'primary.ownColor' : 'primary.owedColor'}
-                        variant={'subtitle2'}
-                        sx={{ fontSize: '0.8em' }}
-                      >
-                        <English>
-                          {userOweForExpense > 0 ? 'You owe ' : 'You are owed '}
-                          {Math.abs(userOweForExpense)}₪ for this expense
-                        </English>
-                        <Hebrew>
-                          {userOweForExpense > 0 ? 'אתה חייב ' : 'חייבים לך '}
-                          {Math.abs(userOweForExpense)}₪ עבור הוצאה זו
-                        </Hebrew>
-                      </Typography>
-                    ) : null}
-                  </>
-                }
-              />
+                  ) : null}
+                </>
+              </Box>
             </EditExpenseDialogListItemButton>
           </ListItem>
         </>
