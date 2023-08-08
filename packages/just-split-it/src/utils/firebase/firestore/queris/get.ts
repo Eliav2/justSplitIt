@@ -7,7 +7,10 @@ import {
 } from '@/utils/firebase/firestore/hooks/query';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { fbAuth } from '@/utils/firebase/firebase';
-import { useCollection as useFirestoreCollection } from '@/react-firebase-hooks/firestore/useCollection';
+import {
+  useCollection as useFirestoreCollection,
+  useCollectionData,
+} from '@/react-firebase-hooks/firestore/useCollection';
 import {
   useDocument as useFirestoreDocument,
   useDocumentData,
@@ -37,10 +40,10 @@ export function useGetEvent(eventId: string) {
 
 export const useGetEventExpenses = (eventId: string, dependencies?: any[]) => {
   const expensesQuery = query(firestore.expenseName(), where('parentEventId', '==', eventId));
-  return useFirestoreCollection(
+  return useCollectionData(
     expensesQuery,
     { snapshotListenOptions: { includeMetadataChanges: true } },
-    dependencies ?? [],
+    // dependencies ?? [],
   );
 
   // const expensesQuery = query(firestore.expense(), where('parentEventId', '==', eventId));

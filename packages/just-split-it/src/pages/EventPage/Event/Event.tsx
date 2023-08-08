@@ -23,6 +23,7 @@ import English from '@/components/Language/English';
 import Hebrew from '@/components/Language/Hebrew';
 import Box from '@mui/material/Box';
 import ArrowRightAltIcon from '@mui/icons-material/ArrowRightAlt';
+import EventGraph from '@/classes/EventGraph';
 
 interface ExpensesListProps {
   eventSnap: DocumentSnapshot<FirestoreEvent>;
@@ -43,11 +44,11 @@ const Event = ({ eventSnap }: ExpensesListProps) => {
     isUserParticipating,
   ]);
 
-  const expensesData = expenses?.docs.map((expense) => expense.data()) ?? [];
-  const eventTotalExpense = sumArray(expensesData?.map((expense) => expense.amount) ?? []);
+  // const expensesData = expenses?.docs.map((expense) => expense.data()) ?? [];
+  const eventTotalExpense = sumArray(expenses?.map((expense) => expense.amount) ?? []);
 
   const userPayedFor = round(
-    expensesData?.reduce((acc, expense) => {
+    expenses?.reduce((acc, expense) => {
       if (expense.payerId === user?.uid) {
         return acc + expense.amount;
       }
@@ -57,7 +58,7 @@ const Event = ({ eventSnap }: ExpensesListProps) => {
 
   const userDebts =
     ((user &&
-      expensesData
+      expenses
         ?.map((expense) => {
           if (!expense.participantsIds.includes(user?.uid)) return null;
           return {
@@ -76,24 +77,52 @@ const Event = ({ eventSnap }: ExpensesListProps) => {
   // const userDebts =
   // console.log(userDebts);
 
-  const eventsDebts: Debt[] = [];
-  for (const expense of expensesData) {
-    for (const participant of participantsData) {
-      if (expense.payerId === participant.id) {
-        continue;
-      }
-      if (expense.participantsIds.includes(participant.id)) {
-        const debt = {
-          expenseName: expense.name,
-          amount: expense.amount / expense.participantsIds.length,
-          participantName: participant.name,
-          oweTo: expense.payerName,
-        };
-        eventsDebts.push(debt);
-      }
-    }
-    // console.log(userExpenses
-  }
+  const eventGraph = new EventGraph(participants, expenses);
+  // console.log(eventGraph);
+  // console.log();
+
+  let eventsDebts: Debt[] = eventGraph.allDebts.map((debt) => {
+    return {
+      expenseName: debt.expense.name,
+      amount: debt.amount,
+      participantName: debt.owedBy.user.name,
+      oweTo: debt.oweTo.user.name,
+      simplified: false,
+    };
+  });
+
+  const simplifiedDebts = eventGraph.getSimplifiedDebts();
+  eventsDebts = simplifiedDebts.map((debt) => {
+    return {
+      expenseName: debt.expense.name,
+      amount: debt.amount,
+      participantName: debt.owedBy.user.name,
+      oweTo: debt.oweTo.user.name,
+      simplified: debt.simplified,
+    };
+  });
+  console.log(eventGraph);
+  console.log(simplifiedDebts);
+
+  // const eventsDebts = [];
+  // for (const expense of expenses) {
+  //   for (const participant of participantsData) {
+  //     if (expense.payerId === participant.id) {
+  //       continue;
+  //     }
+  //     if (expense.participantsIds.includes(participant.id)) {
+  //       const debt = {
+  //         expenseName: expense.name,
+  //         amount: expense.amount / expense.participantsIds.length,
+  //         participantName: participant.name,
+  //         oweTo: expense.payerName,
+  //         simplified: false,
+  //       } satisfies Debt;
+  //       eventsDebts.push(debt);
+  //     }
+  //   }
+  //   // console.log(userExpenses
+  // }
 
   // console.log(eventsDebts);
 
@@ -117,9 +146,9 @@ const Event = ({ eventSnap }: ExpensesListProps) => {
           </Typography>
 
           <List sx={{ width: '100%', maxWidth: 360, bgcolor: 'background.paper' }}>
-            {(expenses?.docs.length ?? 0) > 0 ? (
+            {expenses && (expenses.length ?? 0) > 0 ? (
               <QueryIndicator loading={loading} errorMessage={error?.message}>
-                {expenses?.docs.map((expene, expenseIndex) => {
+                {expenses.map((expene, expenseIndex) => {
                   return (
                     <ExpenseListItem eventData={eventData} expenseId={expene.id} key={expene.id} />
                   );
@@ -267,29 +296,49 @@ const Event = ({ eventSnap }: ExpensesListProps) => {
   );
 };
 
-type Debt = {
+export type Debt = {
   amount: number;
   oweTo: string;
   participantName: string;
   expenseName: string;
+  simplified: false | [Debt, Debt];
 };
 
-const simplifyDebts = (debts: Debt[]) => {
-  const simplifiedDebts: Debt[] = structuredClone(simplifyDebts);
-  let i = 0;
-  while (i < debts.length) {
-    const deductions = debts.filter((d) => d.participantName === debts[i].oweTo);
-  }
-  // for (const debt of debts) {
-  //   const existingDebt = simplifiedDebts.find(
-  //     (d) => d.participantName === debt.participantName && d.oweTo === debt.oweTo,
-  //   );
-  //   if (existingDebt) {
-  //     existingDebt.amount += debt.amount;
-  //   } else {
-  //     simplifiedDebts.push(debt);
-  //   }
-  // }
-};
+// const mergeSameDebts = (debts: Debt[]) => {
+//   const mergedDebts: Debt[] = [];
+//   for (const debt of debts) {
+//     const existingDebt = mergedDebts.find(
+//       (d) => d.participantName === debt.participantName && d.oweTo === debt.oweTo,
+//     );
+//     if (existingDebt) {
+//       existingDebt.amount += debt.amount;
+//     } else {
+//       mergedDebts.push(debt);
+//     }
+//   }
+//   return mergedDebts;
+// };
+
+// const simplifyDebts = (debts: Debt[]) => {
+//   const simplifiedDebts: Debt[] = structuredClone(simplifyDebts);
+//   let i = 0;
+//   while (i < debts.length) {
+//     const currentDebt = debts[i];
+//     const deductions = debts.filter((d) => d.participantName === currentDebt.oweTo);
+//     if (deductions.length > 0) {
+//       // for
+//     }
+//   }
+//   // for (const debt of debts) {
+//   //   const existingDebt = simplifiedDebts.find(
+//   //     (d) => d.participantName === debt.participantName && d.oweTo === debt.oweTo,
+//   //   );
+//   //   if (existingDebt) {
+//   //     existingDebt.amount += debt.amount;
+//   //   } else {
+//   //     simplifiedDebts.push(debt);
+//   //   }
+//   // }
+// };
 
 export default Event;

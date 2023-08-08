@@ -36,3 +36,7 @@ export interface FirestoreExpense {
   creationTimestamp: FieldValue;
   editTimestamp: FieldValue;
 }
+
+export interface FirestoreExpenseWithId extends FirestoreExpense {
+  id: string;
+}
