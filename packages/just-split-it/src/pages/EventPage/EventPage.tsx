@@ -39,12 +39,14 @@ function EventPage() {
     <>
       <Meta title={event?.name ?? 'Event'} description={event?.description} />
       <FullSizeCenteredFlexBoxColumn>
-        {eventSnap?.ref && (
-          <JoinEventDialog open={!isUserParticipating} eventId={eventSnap?.ref?.id} user={user} />
-        )}
         <QueryIndicator loading={eventLoading}>
           {!eventNotExistsDialogOpen && event && eventSnap ? (
             <EventContext.Provider value={event}>
+              <JoinEventDialog
+                open={!isUserParticipating}
+                eventId={eventSnap?.ref?.id}
+                user={user}
+              />
               <Event eventSnap={eventSnap} />
             </EventContext.Provider>
           ) : (
