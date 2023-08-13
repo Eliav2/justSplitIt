@@ -19,7 +19,7 @@ const Layout = () => {
       {/*<FullSizeMiddleFlexContainerColumn>*/}
       <Outlet />
       {/*</FullSizeMiddleFlexContainerColumn>*/}
-      <Footer />
+      {/*<Footer />*/}
     </>
   );
 };

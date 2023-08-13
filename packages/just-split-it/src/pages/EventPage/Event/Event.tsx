@@ -85,24 +85,24 @@ const Event = ({ eventSnap }: ExpensesListProps) => {
     return {
       expenseName: debt.expense.name,
       amount: debt.amount,
-      participantName: debt.owedBy.user.name,
-      oweTo: debt.oweTo.user.name,
+      participantName: debt.owedBy.participant.name,
+      oweTo: debt.oweTo.participant.name,
       simplified: false,
     };
   });
 
   const simplifiedDebts = eventGraph.getSimplifiedDebts();
-  eventsDebts = simplifiedDebts.map((debt) => {
-    return {
-      expenseName: debt.expense.name,
-      amount: debt.amount,
-      participantName: debt.owedBy.user.name,
-      oweTo: debt.oweTo.user.name,
-      simplified: debt.simplified,
-    };
-  });
-  console.log(eventGraph);
-  console.log(simplifiedDebts);
+  // eventsDebts = simplifiedDebts.map((debt) => {
+  //   return {
+  //     expenseName: debt.expense.name,
+  //     amount: debt.amount,
+  //     participantName: debt.owedBy.participant.name,
+  //     oweTo: debt.oweTo.participant.name,
+  //     simplified: debt.simplified,
+  //   };
+  // });
+  // console.log(eventGraph);
+  // console.log(simplifiedDebts);
 
   // const eventsDebts = [];
   // for (const expense of expenses) {
@@ -232,7 +232,7 @@ const Event = ({ eventSnap }: ExpensesListProps) => {
                     <Typography
                       sx={{ display: 'inline', fontWeight: 'bold', color: 'primary.ownColor' }}
                     >
-                      {debt.amount}₪
+                      {round(debt.amount)}₪
                     </Typography>{' '}
                     <Typography sx={{ display: 'inline', fontStyle: 'italic' }} variant={'body2'}>
                       <English>for</English>

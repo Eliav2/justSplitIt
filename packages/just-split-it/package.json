@@ -21,7 +21,9 @@
     "firestore-emulator": "firebase emulators:start --only firestore,auth",
     "firestore-emulator-persistant": "firebase emulators:start --only firestore,auth --import ./.firebase-data --export-on-exit ./.firebase-data",
     "firestore-emulator:cleanup": "bash ./scripts/firestore-emulator-cleanup.bash",
-    "firebase-emulator": "firebase emulators:start"
+    "firebase-emulator": "firebase emulators:start",
+    "test": "vitest",
+    "coverage": "vitest run --coverage"
   },
   "dependencies": {
     "@emotion/cache": "^11.11.0",
@@ -34,6 +36,7 @@
     "@mui/utils": "^5.14.1",
     "@types/json2mq": "^0.2.0",
     "@types/stylis": "^4.2.0",
+    "@types/uuid": "^9.0.2",
     "firebase": "^10.1.0",
     "is-mobile": "^3.1.1",
     "json2mq": "^0.2.0",
@@ -50,6 +53,7 @@
     "recoil": "^0.7.7",
     "stylis": "^4.3.0",
     "stylis-plugin-rtl": "^2.1.1",
+    "uuid": "^9.0.0",
     "workbox-window": "^7.0.0"
   },
   "devDependencies": {
@@ -69,7 +73,8 @@
     "prettier": "2.7.1",
     "typescript": "^5.1.6",
     "vite": "^4.4.7",
-    "vite-plugin-pwa": "^0.16.4"
+    "vite-plugin-pwa": "^0.16.4",
+    "vitest": "^0.34.1"
   },
   "engines": {
     "pnpm": "8"

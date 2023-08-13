@@ -18,6 +18,7 @@ import English from '@/components/Language/English';
 import Hebrew from '@/components/Language/Hebrew';
 import Tooltip from '@mui/material/Tooltip';
 import Box from '@mui/material/Box';
+import { round } from '@/utils/math';
 
 interface ExpenseProps {
   expenseId: string;
@@ -149,7 +150,7 @@ export const ExpenseListItem = (props: ExpenseProps) => {
                 />
                 <>
                   <Typography variant={'caption'} color="textSecondary" sx={{ fontSize: '0.8em' }}>
-                    {expense?.amount}₪ <English>payed by</English> <Hebrew>שולם ע"י</Hebrew>{' '}
+                    {round(expense?.amount)}₪ <English>payed by</English> <Hebrew>שולם ע"י</Hebrew>{' '}
                     {expense?.payerName}
                   </Typography>{' '}
                   {userOweForExpense != 0 ? (
@@ -161,11 +162,11 @@ export const ExpenseListItem = (props: ExpenseProps) => {
                     >
                       <English>
                         {userOweForExpense > 0 ? 'You owe ' : 'You are owed '}
-                        {Math.abs(userOweForExpense)}₪ for this expense
+                        {round(Math.abs(userOweForExpense))}₪ for this expense
                       </English>
                       <Hebrew>
                         {userOweForExpense > 0 ? 'אתה חייב ' : 'חייבים לך '}
-                        {Math.abs(userOweForExpense)}₪ עבור הוצאה זו
+                        {round(Math.abs(userOweForExpense))}₪ עבור הוצאה זו
                       </Hebrew>
                     </Typography>
                   ) : null}
