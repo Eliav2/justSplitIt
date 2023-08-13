@@ -24,6 +24,7 @@ import Hebrew from '@/components/Language/Hebrew';
 import Box from '@mui/material/Box';
 import ArrowRightAltIcon from '@mui/icons-material/ArrowRightAlt';
 import EventGraph from '@/classes/EventGraph';
+import { splitByCondition } from '@/utils/general';
 
 interface ExpensesListProps {
   eventSnap: DocumentSnapshot<FirestoreEvent>;
@@ -91,16 +92,24 @@ const Event = ({ eventSnap }: ExpensesListProps) => {
     };
   });
 
-  const simplifiedDebts = eventGraph.getSimplifiedDebts();
-  // eventsDebts = simplifiedDebts.map((debt) => {
-  //   return {
-  //     expenseName: debt.expense.name,
-  //     amount: debt.amount,
-  //     participantName: debt.owedBy.participant.name,
-  //     oweTo: debt.oweTo.participant.name,
-  //     simplified: debt.simplified,
-  //   };
-  // });
+  const _simplifiedDebts = eventGraph.getSimplifiedDebts();
+  const simplifiedDebts = _simplifiedDebts.map((debt) => {
+    return {
+      expenseName: debt.expense.name,
+      amount: debt.amount,
+      participantName: debt.owedBy.participant.name,
+      oweTo: debt.oweTo.participant.name,
+      simplified: debt.simplified,
+    };
+  });
+
+  const ownedDebts = _simplifiedDebts.filter(
+    (debt) => debt.owedBy.participant.id === user?.uid || debt.oweTo.participant.id === user?.uid,
+  );
+  const [userOwes, userOwned] = splitByCondition(
+    ownedDebts,
+    (debt) => debt.owedBy.participant.id === user?.uid,
+  );
   // console.log(eventGraph);
   // console.log(simplifiedDebts);
 
@@ -197,16 +206,71 @@ const Event = ({ eventSnap }: ExpensesListProps) => {
                       </Typography>
                     </Box>
                   )}
+                  {userOwes.map((debt) => (
+                    <Typography variant={'body2'} key={debt.id} sx={{ color: 'primary.ownColor' }}>
+                      <Hebrew>אתה חייב ל</Hebrew>
+                      <English>You owe to</English>
+                      {` ${debt.oweTo.participant.name} ${debt.amount}₪`}
+                    </Typography>
+                  ))}
+                  {userOwned.map((debt) => (
+                    <Typography variant={'body2'} key={debt.id} sx={{ color: 'primary.owedColor' }}>
+                      {`${debt.owedBy.participant.name} `}
+                      <Hebrew>חייב לך</Hebrew>
+                      <English>owes you</English>
+                      {` ${debt.amount}₪`}
+                    </Typography>
+                  ))}
                 </ListItemText>
               </CenteredFlexBox>
             </ListItem>
           </List>
 
+          <Divider sx={{ m: 2 }} />
+
           <Typography>
-            <English>Users Debts</English>
-            <Hebrew>חובות האירוע</Hebrew>
+            <English>Simplified debts</English>
+            <Hebrew>חובות מפושטים</Hebrew>
           </Typography>
           <List>
+            {simplifiedDebts.map((debt) => {
+              return (
+                <ListItem key={debt.participantName + debt.oweTo + debt.expenseName}>
+                  <ListItemText>
+                    <Typography
+                      variant={'body1'}
+                      sx={{ display: 'inline', color: 'primary.main', fontWeight: 'medium' }}
+                    >
+                      {debt.participantName}
+                    </Typography>{' '}
+                    {/*<ArrowRightAltIcon />*/}
+                    <Typography sx={{ display: 'inline', fontStyle: 'italic' }} variant={'body2'}>
+                      <English>owe </English>
+                      <Hebrew>חייב ל</Hebrew>
+                      {/*->*/}
+                    </Typography>
+                    <Typography
+                      sx={{ display: 'inline', color: 'primary.main', fontWeight: 'medium' }}
+                    >
+                      {debt.oweTo}
+                    </Typography>
+                    :{' '}
+                    <Typography
+                      sx={{ display: 'inline', fontWeight: 'bold', color: 'primary.ownColor' }}
+                    >
+                      {round(debt.amount)}₪
+                    </Typography>
+                  </ListItemText>
+                </ListItem>
+              );
+            })}
+          </List>
+
+          <Typography>
+            <English>All Event's debts</English>
+            <Hebrew>כל חובות האירוע</Hebrew>
+          </Typography>
+          <List dense>
             {eventsDebts.map((debt) => {
               return (
                 <ListItem key={debt.participantName + debt.oweTo + debt.expenseName}>
