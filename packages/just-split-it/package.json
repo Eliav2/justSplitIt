@@ -18,7 +18,7 @@
     "preview": "vite preview",
     "https-preview": "serve dist",
     "deploy": "firebase deploy",
-    "firestore-emulator": "firebase emulators:start --only firestore,auth",
+    "firestore-emulator": "firebase emulators:start --only firestore,auth --import ./firebase-export --export-on-exit ./firebase-export" ,
     "firestore-emulator-persistant": "firebase emulators:start --only firestore,auth --import ./.firebase-data --export-on-exit ./.firebase-data",
     "firestore-emulator:cleanup": "bash ./scripts/firestore-emulator-cleanup.bash",
     "firebase-emulator": "firebase emulators:start",
