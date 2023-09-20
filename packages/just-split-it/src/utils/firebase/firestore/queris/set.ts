@@ -1,4 +1,14 @@
-import { addDoc, doc, getDoc, setDoc, deleteDoc, query, where, getDocs } from 'firebase/firestore';
+import {
+  addDoc,
+  doc,
+  getDoc,
+  setDoc,
+  deleteDoc,
+  query,
+  where,
+  getDocs,
+  updateDoc,
+} from 'firebase/firestore';
 import { fbAuth } from '@/utils/firebase/firebase';
 
 import { firestore } from '@/utils/firebase/firestore/client';
@@ -30,6 +40,18 @@ export async function addEvent(eventDetails: IEventForm) {
 
 export const addExpense = async (data: FirestoreExpense) => {
   return addDoc(firestore.expenseName(), data);
+};
+
+export const editEvent = async (eventId: string, eventDetails: IEventForm) => {
+  const [eventSnap, eventRef] = await grabDocumentById(firestore.event(), eventId);
+  if (!eventSnap || !eventRef) {
+    throw new Error("event isn't found");
+  }
+
+  return updateDoc(eventRef, {
+    name: eventDetails.name,
+    description: eventDetails.description,
+  });
 };
 
 export const deleteExpense = async (expenseId: string) => {

@@ -9,7 +9,7 @@ enum ThemeMode {
 
 const themeModeState = atom({
   key: 'theme-mode-state',
-  default: 'dark' as ThemeMode,
+  default: 'light' as ThemeMode,
   effects: [synchronizeThemeModeWithLocalStorage],
 });
 

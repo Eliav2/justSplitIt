@@ -1,6 +1,6 @@
 import Meta from '@/components/Meta';
 import { useParams } from 'react-router-dom';
-import { useGetEvent, useParticipantsByIds } from '@/utils/firebase/firestore/queris/get';
+import { useGetEvent } from '@/utils/firebase/firestore/queris/get';
 import QueryIndicator from '@/components/QueryIndicator';
 import { EventDoesNotExistDialog } from '@/pages/EventPage/EventDoesNotExistDialog';
 import { useAuthState } from 'react-firebase-hooks/auth';
@@ -9,20 +9,7 @@ import { JoinEventDialog } from '@/pages/EventPage/JoinEventDialog';
 import Event from './Event';
 import React from 'react';
 import EventContext from './EventContext';
-import Divider from '@mui/material/Divider';
-import Typography from '@mui/material/Typography';
-import List from '@mui/material/List';
-import ListItem from '@mui/material/ListItem';
-import ListItemText from '@mui/material/ListItemText';
-import {
-  CenteredFlexBox,
-  FullSizeCenteredFlexBox,
-  FullSizeCenteredFlexBoxColumn,
-  FullSizeMiddleFlexContainerColumn,
-} from '@/components/styled';
-import { DeleteEventDialogButton } from '@/components/Dialog/DeleteEventDialogButton';
-import Button from '@mui/material/Button';
-import ParticipantLeaveEventDialogButton from '@/components/Dialog/ParticipantLeaveEventDialogButton';
+import { FullSizeCenteredFlexBoxColumn } from '@/components/styled';
 
 function EventPage() {
   const [user] = useAuthState(fbAuth);

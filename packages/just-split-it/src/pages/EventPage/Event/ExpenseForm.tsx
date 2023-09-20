@@ -7,7 +7,7 @@ import {
 import { User } from 'firebase/auth';
 import { Controller, useForm, UseFormReturn } from 'react-hook-form';
 import { Autocomplete, InputAdornment, TextField } from '@mui/material';
-import Form from '@/components/Form/Form';
+import FormRenderer, { RenderFormContent } from '@/components/Form/FormRenderer';
 import { useEffect } from 'react';
 import { QuerySnapshot } from 'firebase/firestore';
 import { useGrabDocumentsByIds } from '@/utils/firebase/firestore/hooks/query';
@@ -28,10 +28,7 @@ export type ExpenseFormInput = ExpenseForm & {
 };
 
 interface ExpenseFormProps {
-  renderFormContent: (
-    formContent: React.ReactNode,
-    formHook: UseFormReturn<ExpenseFormInput>,
-  ) => React.ReactNode;
+  renderFormContent: RenderFormContent<ExpenseFormInput>;
   parentEvent: FirestoreEventWithId;
   defaultValues?: ExpenseFormInput;
 }
@@ -68,7 +65,7 @@ export const ExpenseForm = ({
   });
 
   return (
-    <Form renderFormContent={renderFormContent} formHook={expenseForm}>
+    <FormRenderer renderFormContent={renderFormContent} formHook={expenseForm}>
       <Controller
         name={'name'}
         control={expenseForm.control}
@@ -165,7 +162,7 @@ export const ExpenseForm = ({
           );
         }}
       />
-    </Form>
+    </FormRenderer>
   );
 
   // return renderFormContent(

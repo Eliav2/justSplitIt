@@ -1,10 +1,5 @@
 import Meta from '@/components/Meta';
-import {
-  ColumnFlexBox,
-  FullSizeCenteredFlexBox,
-  FullSizeCenteredFlexBoxColumn,
-  FullSizeMiddleFlexContainerColumn,
-} from '@/components/styled';
+import { FullSizeCenteredFlexBoxColumn } from '@/components/styled';
 import useOrientation from '@/hooks/useOrientation';
 
 import { useNavigate } from 'react-router-dom';
@@ -15,17 +10,18 @@ import { useAuthState } from 'react-firebase-hooks/auth';
 import Button from '@mui/material/Button';
 import QueryIndicator from '@/components/QueryIndicator';
 import { useLoginUser } from '@/utils/login/useLoginUser';
-import { keyframes } from '@emotion/react';
-import { makeStyles, useTheme } from '@mui/material/styles';
-import { styled } from '@mui/system';
+import { useTheme } from '@mui/material/styles';
 import useThemeMode from '@/store/theme/useThemeMode';
 import Box from '@mui/material/Box';
-import { useState } from 'react';
-import { FormControl, InputLabel, MenuItem, Select, SelectChangeEvent } from '@mui/material';
-import useLanguage from '@/store/theme/useThemeLanguage';
 import English from '@/components/Language/English';
 import Hebrew from '@/components/Language/Hebrew';
-import { LanguageMode } from '@/components/Language';
+// @ts-ignore
+import { ReactComponent as JLightIcon } from '@/assets/icons/j-light.svg';
+// @ts-ignore
+import { ReactComponent as JDarkIcon } from '@/assets/icons/j-dark.svg';
+
+import SvgResizer from 'react-svg-resizer';
+import { DarkTheme, LightTheme } from '@/theme/Theme';
 
 function HomePage() {
   // const [user, loading, error] = useAuthState(fbAuth);
@@ -86,25 +82,40 @@ const CrazyHugeHeader = () => {
   const theme = useTheme();
   const [mode] = useThemeMode();
 
+  // const color = '#282525';
+  const color = mode == 'light' ? '#282525' : '#faf4f4';
   const headerStyles = {
-    // fontSize: '6rem', // Adjust the font size to make it huge
+    fontSize: '3rem', // Adjust the font size to make it huge
     // fontWeight: '300', // To make it bold and stand out
-    color: theme.palette.primary.main, // A fun and pretty color
+    // color: theme.palette.primary.main, // A fun and pretty color
+    color: color, // A fun and pretty color
     textShadow: `4px 4px 8px ${
-      mode == 'light' ? 'rgba(0, 0, 0, 0.4)' : 'rgba(255, 255, 255, 0.4)'
+      mode == 'light' ? 'rgba(0, 0, 0, 0.2)' : 'rgba(255, 255, 255, 0.2)'
     }`, // Add a subtle text shadow for a cool effect
     textAlign: 'center', // Center the text
-    marginBottom: '1rem', // Add some spacing at the bottom
-    // fontFamily: 'Roboto', // Specify a font
+    // marginBottom: '0.5rem', // Add some spacing at the bottom
+    fontFamily: 'Raleway', // Specify a font
   };
 
   return (
     <Box sx={{ textAlign: 'center' }}>
-      <Typography variant="h2" style={headerStyles as any}>
-        JustSplitIt
-      </Typography>
-      <Typography variant="subtitle1" sx={{ mb: 2 }}>
-        <English>Shared expenses made easy</English>
+      <SvgResizer size={120}>
+        <LightTheme>
+          <JDarkIcon />
+        </LightTheme>
+        <DarkTheme>
+          <JLightIcon />
+        </DarkTheme>
+      </SvgResizer>
+      <div style={headerStyles as any}>
+        <span style={{ fontWeight: 350 }}>Just</span>
+        <span style={{ fontWeight: 650 }}>SplitIt</span>
+      </div>
+
+      <Typography variant="subtitle1" sx={{ mb: 4, fontWeight: 550, color: color }}>
+        <English>
+          <span style={{ fontFamily: 'Raleway' }}>Shared expenses made easy</span>
+        </English>
         <Hebrew>חלוקת הוצאות בדרך הקלה</Hebrew>
       </Typography>
     </Box>

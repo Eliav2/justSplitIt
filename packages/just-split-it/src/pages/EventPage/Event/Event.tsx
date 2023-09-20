@@ -17,14 +17,15 @@ import ListItemText from '@mui/material/ListItemText';
 import Paper from '@mui/material/Paper';
 import { UserNotParticipating } from '@/pages/EventPage/Event/UserNotParticipating';
 import Divider from '@mui/material/Divider';
-import { CenteredFlexBox, FlexBox } from '@/components/styled';
+import { CenteredFlexBox } from '@/components/styled';
 import React from 'react';
 import English from '@/components/Language/English';
 import Hebrew from '@/components/Language/Hebrew';
 import Box from '@mui/material/Box';
-import ArrowRightAltIcon from '@mui/icons-material/ArrowRightAlt';
 import EventGraph from '@/classes/EventGraph';
 import { splitByCondition } from '@/utils/general';
+import AppBar from '@mui/material/AppBar';
+import { EventTitle } from '@/pages/EventPage/Event/EventTitle';
 
 interface ExpensesListProps {
   eventSnap: DocumentSnapshot<FirestoreEvent>;
@@ -138,17 +139,15 @@ const Event = ({ eventSnap }: ExpensesListProps) => {
   // const owedColor = '#1ECC00';
   return (
     <QueryIndicator loading={loadingUser}>
-      <Typography variant="h2" sx={{ m: 1, mb: 2, textAlign: 'center' }}>
-        {eventData?.name}
-      </Typography>
-
       {isUserParticipating ? (
         <Paper
           sx={{
             p: 2,
+            m: 2,
             // minWidth: '60%',
           }}
         >
+          <EventTitle eventData={eventData} />
           <Typography>
             <English>Expenses</English>
             <Hebrew>הוצאות</Hebrew>

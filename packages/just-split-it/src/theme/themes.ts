@@ -79,7 +79,7 @@ const themes = {
     palette: {
       mode: 'dark',
       background: {
-        default: '#111',
+        default: '#151515',
         paper: '#171717',
       },
       primary: {
