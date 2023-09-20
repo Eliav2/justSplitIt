@@ -7,13 +7,18 @@ import { IEventForm } from '@/pages/EventPage/NewEventDialogButton';
 
 interface EventFormProps extends FormRendererProps<IEventForm> {
   errorMessage: string;
+  defaultValues?: Partial<IEventForm>;
 }
 
-export const EventForm = ({ errorMessage, renderFormContent }: EventFormProps) => {
+export const EventForm = ({
+  errorMessage,
+  renderFormContent,
+  defaultValues: { name = '', description = '' } = {},
+}: EventFormProps) => {
   const eventForm = useForm<IEventForm>({
     defaultValues: {
-      name: '',
-      description: '',
+      name: name,
+      description: description,
     },
   });
 

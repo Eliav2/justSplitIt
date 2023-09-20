@@ -47,8 +47,6 @@ export const EditEventDialogButton: React.FC<EditEventDialogButtonProps> = ({ ev
     },
   );
 
-  const [, sidebarActions] = useSidebar();
-
   return (
     <>
       <Box sx={{ pb: 2 }}>
@@ -58,18 +56,22 @@ export const EditEventDialogButton: React.FC<EditEventDialogButtonProps> = ({ ev
       </Box>
       <Dialog open={open} onClose={handleCloseDialog} disableRestoreFocus>
         <EventForm
+          defaultValues={{
+            description: event.description,
+            name: event.name,
+          }}
           errorMessage={editErrorMessage}
           renderFormContent={(formContent, eventForm) => {
             return (
               <form onSubmit={eventForm.handleSubmit(editEventHandler(eventForm))}>
                 <DialogTitle>
-                  <English>New Event</English>
-                  <Hebrew>אירוע חדש</Hebrew>
+                  <English>Edit Event</English>
+                  <Hebrew>ערוך אירוע</Hebrew>
                 </DialogTitle>
                 <DialogContent>
                   <DialogContentText>
-                    <English>Provide a name for the new event.</English>
-                    <Hebrew>בחר שם לאירוע שיווצר.</Hebrew>
+                    <English>Edit the details of the event</English>
+                    <Hebrew>ערוך את פרטי האירוע </Hebrew>
                   </DialogContentText>
                   {formContent}
                 </DialogContent>
@@ -81,8 +83,8 @@ export const EditEventDialogButton: React.FC<EditEventDialogButtonProps> = ({ ev
                     </>
                   </Button>
                   <QueryButton loading={editLoading} type={'submit'}>
-                    <English>Create</English>
-                    <Hebrew>צור</Hebrew>
+                    <English>Update</English>
+                    <Hebrew>עדכן</Hebrew>
                   </QueryButton>
                   {/*<Button type={'submit'}>{loadingState == 'idle' ? 'Create' : <Loading />}</Button>*/}
                 </DialogActions>
