@@ -10,16 +10,18 @@ import { EditEventDialogButton } from '@/pages/EventPage/EditEventDialogButton';
 export const EventTitle = ({ eventData }: { eventData: FirestoreEventWithId }) => {
   return (
     <>
-      <Stack direction="row" spacing={1} alignItems={'center'}>
-        <Typography variant="h4" sx={{ m: 1, mb: 2 }}>
-          {eventData?.name}
-        </Typography>
-        <Stack>
-          {/*<IconButton aria-label="edit">*/}
-          {/*  <EditIcon />*/}
-          {/*</IconButton>*/}
-          <EditEventDialogButton event={eventData} />
+      <Stack>
+        <Stack direction="row" spacing={1} alignItems={'center'}>
+          <Typography variant="h4" sx={{ m: 1, mb: 2 }}>
+            {eventData?.name}
+          </Typography>
+          <Stack>
+            <EditEventDialogButton event={eventData} />
+          </Stack>
         </Stack>
+        <Typography variant="body2" sx={{ mx: 1, mb: 2 }}>
+          {eventData?.description}
+        </Typography>
       </Stack>
       <Divider sx={{ mb: 2 }} />
     </>
