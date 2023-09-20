@@ -25,11 +25,13 @@ import { redirect } from 'react-router-dom';
 import { protectedRoutes, routes } from '@/routes';
 import { useNavigate } from 'react-router-dom';
 import {
+  ButtonBase,
   Menu,
   MenuItem,
   MenuList,
   Popover,
   PopoverProps,
+  Stack,
   Theme,
   useMediaQuery,
 } from '@mui/material';
@@ -41,6 +43,9 @@ import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import English from '@/components/Language/English';
 import Hebrew from '@/components/Language/Hebrew';
+import SvgResizer from 'react-svg-resizer';
+import { DarkTheme, LightTheme } from '@/theme/Theme';
+import AppIcon from '@/assets/icons/AppIcon';
 
 function Header() {
   const [, sidebarActions] = useSidebar();
@@ -89,15 +94,22 @@ function Header() {
             >
               <MenuIcon />
             </IconButton>
-            <Button
-              // onClick={showNotification}
-              onClick={() => navigate(routes.Welcome.path)}
-              color="info"
-              sx={{ textTransform: 'none' }}
-              autoCapitalize={'false'}
-            >
-              {title}
-            </Button>
+
+            <ButtonBase dir={'ltr'}>
+              <AppIcon size={10} />
+              <Box
+                // onClick={showNotification}
+                onClick={() => navigate(routes.Welcome.path)}
+                color="info"
+                sx={{ textTransform: 'none' }}
+                autoCapitalize={'false'}
+              >
+                {/*ustSplitIt*/}
+
+                <span style={{ fontWeight: 350 }}>ust</span>
+                <span style={{ fontWeight: 550 }}>SplitIt</span>
+              </Box>
+            </ButtonBase>
           </FlexBox>
           <CenteredFlexBox>
             <QueryIndicator loading={userLoading}>

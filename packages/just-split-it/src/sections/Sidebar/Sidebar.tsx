@@ -12,6 +12,7 @@ import { protectedRoutes, routes } from '@/routes';
 import useSidebar from '@/store/sidebar';
 import type { Routes } from '@/routes/types';
 import { EventsSubmenu } from '@/sections/Sidebar/EventsSubmenu';
+import { TextField } from '@mui/material';
 
 const sidebarRoutes: Routes = { ...routes, ...protectedRoutes } as const satisfies Routes;
 
@@ -22,6 +23,7 @@ function Sidebar() {
     <SwipeableDrawer
       SwipeAreaProps={{
         width: 10,
+        // maxWidth: 600,
       }}
       anchor="left"
       open={isSidebarOpen}
@@ -29,6 +31,12 @@ function Sidebar() {
       onOpen={sidebarActions.open}
       disableBackdropTransition={false}
       swipeAreaWidth={30}
+      sx={{
+        maxWidth: '60%', // Set your maximum width value here
+        '& .MuiDrawer-paper': {
+          maxWidth: '60%', // Apply the same value to the drawer paper
+        },
+      }}
     >
       <List sx={{ width: 250, pt: (theme) => `${theme.mixins.toolbar.minHeight}px` }}>
         {Object.values(sidebarRoutes)

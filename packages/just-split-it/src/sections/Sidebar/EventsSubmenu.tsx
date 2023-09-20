@@ -1,6 +1,6 @@
 import { useGetUserEvents } from '@/utils/firebase/firestore/queris/get';
 import useSidebar from '@/store/sidebar';
-import { ListSubheader } from '@mui/material';
+import { ListSubheader, TextField } from '@mui/material';
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
 import ListItemButton from '@mui/material/ListItemButton';
@@ -28,7 +28,17 @@ export const EventsSubmenu = () => {
         <English>Your Events</English>
         <Hebrew>האירועים שלך</Hebrew>
       </ListSubheader>
-      <List sx={{ width: 250 }}>
+      <List sx={{ minWidth: 250 }}>
+        {/*<TextField*/}
+        {/*  sx={{ mx: 2, p: 0, my: 0 }}*/}
+        {/*  label={*/}
+        {/*    <>*/}
+        {/*      <Hebrew>סנן</Hebrew>*/}
+        {/*    </>*/}
+        {/*  }*/}
+        {/*  variant="standard"*/}
+        {/*/>*/}
+
         <QueryIndicator loading={loading} errorMessage={error?.message}>
           {eventsData?.map((event) => (
             <ListItem

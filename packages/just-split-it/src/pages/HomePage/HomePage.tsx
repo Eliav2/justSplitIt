@@ -23,6 +23,7 @@ import { ReactComponent as JDarkIcon } from '@/assets/icons/j-dark.svg';
 import SvgResizer from 'react-svg-resizer';
 import { DarkTheme, LightTheme } from '@/theme/Theme';
 import useSidebar from '@/store/sidebar';
+import AppIcon from '@/assets/icons/AppIcon';
 
 function HomePage() {
   // const [user, loading, error] = useAuthState(fbAuth);
@@ -107,14 +108,8 @@ const CrazyHugeHeader = () => {
 
   return (
     <Box sx={{ textAlign: 'center' }}>
-      <SvgResizer size={120}>
-        <LightTheme>
-          <JDarkIcon />
-        </LightTheme>
-        <DarkTheme>
-          <JLightIcon />
-        </DarkTheme>
-      </SvgResizer>
+      <AppIcon size={120} />
+
       <div style={headerStyles as any}>
         <span style={{ fontWeight: 350 }}>Just</span>
         <span style={{ fontWeight: 650 }}>SplitIt</span>

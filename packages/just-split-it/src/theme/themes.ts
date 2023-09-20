@@ -68,8 +68,8 @@ const themes = {
         paper: '#fff',
       },
       primary: {
-        main: '#863fb5',
-        mainLight: '#f1c8ff',
+        main: '#1c65ed',
+        mainLight: '#1c65ed',
       },
     },
     userOwnExpenseColor: '#f6f0ff',
@@ -83,7 +83,7 @@ const themes = {
         paper: '#171717',
       },
       primary: {
-        main: '#f1c8ff',
+        main: '#1cb5ed',
       },
     },
     userOwnExpenseColor: '#302c34',
