@@ -3,6 +3,14 @@
   "short_name": "JustSplitIt",
   "description": "share your expenses equally the easy way",
   "theme_color": "#ffffff",
+  "display": "standalone",
+  "screenshots": [
+    {
+      "src": "pwa-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ],
   "icons": [
     {
       "src": "pwa-192x192.png",

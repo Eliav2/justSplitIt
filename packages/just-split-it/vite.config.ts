@@ -5,9 +5,31 @@ import { VitePWA } from 'vite-plugin-pwa';
 import svgr from 'vite-plugin-svgr';
 
 import manifest from './manifest.json';
+import fs from 'fs';
 
 // https://vitejs.dev/config/
 export default defineConfig({
+  // mostly for development
+  server: {
+    host: '0.0.0.0',
+    https: {
+      key: fs.readFileSync('./https/localhost+1-key.pem'),
+      cert: fs.readFileSync('./https/localhost+1.pem'),
+      ca: fs.readFileSync('./https/mkcert-ca.pem'),
+    },
+  },
+  build: {
+    // ignore the annoying `Module level directives cause errors when bundled, "use client" in <module>` errors
+    rollupOptions: {
+      onwarn(warning, warn) {
+        if (warning.code === 'MODULE_LEVEL_DIRECTIVE') {
+          return;
+        }
+        warn(warning);
+      },
+    },
+  },
+
   plugins: [
     svgr(),
     react(),
@@ -26,17 +48,6 @@ export default defineConfig({
   resolve: {
     alias: {
       '@': path.resolve(__dirname, './src'),
-    },
-  },
-  build: {
-    // ignore the annoying `Module level directives cause errors when bundled, "use client" in <module>` errors
-    rollupOptions: {
-      onwarn(warning, warn) {
-        if (warning.code === 'MODULE_LEVEL_DIRECTIVE') {
-          return;
-        }
-        warn(warning);
-      },
     },
   },
 });
