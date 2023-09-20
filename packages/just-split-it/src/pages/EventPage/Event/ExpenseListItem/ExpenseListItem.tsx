@@ -81,6 +81,7 @@ export const ExpenseListItem = (props: ExpenseProps) => {
       {expense && expenseSnap && (
         <>
           <ListItem
+            // sx={{wid}}
             key={expense.id}
             secondaryAction={
               <ConfirmDeleteDialogButton

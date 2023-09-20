@@ -153,7 +153,7 @@ const Event = ({ eventSnap }: ExpensesListProps) => {
             <Hebrew>הוצאות</Hebrew>
           </Typography>
 
-          <List sx={{ width: '100%', maxWidth: 360, bgcolor: 'background.paper' }}>
+          <List sx={{ width: '100%', minWidth: 220, bgcolor: 'background.paper' }}>
             {expenses && (expenses.length ?? 0) > 0 ? (
               <QueryIndicator loading={loading} errorMessage={error?.message}>
                 {expenses.map((expene, expenseIndex) => {

@@ -24,7 +24,12 @@ const ConfirmDeleteDialogButton = (props: ConfirmDialogButtonProps) => {
   const p = {
     ...{
       buttonElement: (handleOpen: () => void) => (
-        <IconButton edge="end" aria-label="delete" onClick={handleOpen}>
+        <IconButton
+          edge="end"
+          aria-label="delete"
+          onClick={handleOpen}
+          // style={{ marginInlineStart: 'auto' }}
+        >
           <DeleteIcon />
         </IconButton>
       ),
