@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { forwardRef, useState } from 'react';
 import Dialog, { DialogProps } from '@mui/material/Dialog';
 import DialogContent from '@mui/material/DialogContent';
 import Button from '@mui/material/Button';
@@ -7,7 +7,7 @@ import { removeUndefined } from '@/utils/general';
 type DialogButtonProps = {
   //for controlled state
   open?: boolean;
-  dialogContent?: React.ReactNode;
+  dialogContent?: (handleClose: () => void) => React.ReactNode;
   buttonElement?: (handleOpen: () => void) => React.ReactNode;
   dialogProps?: DialogProps;
 };
@@ -28,7 +28,7 @@ const DialogButton = (props: DialogButtonProps) => {
 
   const p = {
     ...({
-      dialogContent: <DialogContent>Are you sure?</DialogContent>,
+      dialogContent: () => <DialogContent>Are you sure?</DialogContent>,
       buttonElement: (handleOpen: () => void = handleOpenDialog) => (
         <Button onClick={handleOpen}>Open Dialog</Button>
       ),
@@ -40,7 +40,7 @@ const DialogButton = (props: DialogButtonProps) => {
     <>
       {p.buttonElement(handleOpenDialog)}
       <Dialog open={_open} {...props.dialogProps}>
-        {props.dialogContent}
+        {props.dialogContent?.(handleCloseDialog)}
       </Dialog>
     </>
   );

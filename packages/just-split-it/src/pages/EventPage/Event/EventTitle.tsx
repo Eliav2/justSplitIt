@@ -6,6 +6,7 @@ import EditIcon from '@mui/icons-material/Edit';
 import IconButton from '@mui/material/IconButton';
 import Divider from '@mui/material/Divider';
 import { EditEventDialogButton } from '@/pages/EventPage/EditEventDialogButton';
+import Box from '@mui/material/Box';
 
 export const EventTitle = ({ eventData }: { eventData: FirestoreEventWithId }) => {
   return (
@@ -15,9 +16,9 @@ export const EventTitle = ({ eventData }: { eventData: FirestoreEventWithId }) =
           <Typography variant="h4" sx={{ m: 1, mb: 2 }}>
             {eventData?.name}
           </Typography>
-          <Stack>
+          <Box style={{ marginInlineStart: 'auto' }}>
             <EditEventDialogButton event={eventData} />
-          </Stack>
+          </Box>
         </Stack>
         <Typography variant="body2" sx={{ mx: 1, mb: 2 }}>
           {eventData?.description}
