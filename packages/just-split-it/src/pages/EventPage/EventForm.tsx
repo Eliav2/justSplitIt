@@ -3,7 +3,7 @@ import { Controller, useForm } from 'react-hook-form';
 import { FormHelperText, TextField } from '@mui/material';
 import English from '@/components/Language/English';
 import Hebrew from '@/components/Language/Hebrew';
-import { IEventForm } from '@/pages/EventPage/NewEventDialog';
+import { IEventForm } from '@/pages/EventPage/NewEventDialogButton';
 
 interface EventFormProps extends FormRendererProps<IEventForm> {
   errorMessage: string;

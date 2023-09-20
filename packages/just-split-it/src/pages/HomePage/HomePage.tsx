@@ -1,9 +1,9 @@
 import Meta from '@/components/Meta';
-import { FullSizeCenteredFlexBoxColumn } from '@/components/styled';
+import { ColumnFlexBox, FullSizeCenteredFlexBoxColumn } from '@/components/styled';
 import useOrientation from '@/hooks/useOrientation';
 
 import { useNavigate } from 'react-router-dom';
-import { NewEventDialog } from '@/pages/EventPage/NewEventDialog';
+import { NewEventDialogButton } from '@/pages/EventPage/NewEventDialogButton';
 import Typography from '@mui/material/Typography';
 import { fbAuth } from '@/utils/firebase/firebase';
 import { useAuthState } from 'react-firebase-hooks/auth';
@@ -22,6 +22,7 @@ import { ReactComponent as JDarkIcon } from '@/assets/icons/j-dark.svg';
 
 import SvgResizer from 'react-svg-resizer';
 import { DarkTheme, LightTheme } from '@/theme/Theme';
+import useSidebar from '@/store/sidebar';
 
 function HomePage() {
   // const [user, loading, error] = useAuthState(fbAuth);
@@ -53,11 +54,18 @@ const LoginOrAddEventButton = () => {
   const [user, loading, error] = useAuthState(fbAuth);
   const navigate = useNavigate();
   const { signInWithGoogle } = useLoginUser();
+  const [, sidebarActions] = useSidebar();
 
   return (
-    <>
+    <ColumnFlexBox>
       {user ? (
-        <NewEventDialog />
+        <>
+          <NewEventDialogButton />
+          <Button variant="text" onClick={sidebarActions.toggle}>
+            <English>Your Events</English>
+            <Hebrew>האירועים שלך</Hebrew>
+          </Button>
+        </>
       ) : (
         <QueryIndicator loading={loading} errorMessage={error?.message}>
           <Button variant="contained" onClick={signInWithGoogle}>
@@ -73,7 +81,7 @@ const LoginOrAddEventButton = () => {
           </Typography>
         </QueryIndicator>
       )}
-    </>
+    </ColumnFlexBox>
   );
 };
 

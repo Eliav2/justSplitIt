@@ -14,7 +14,7 @@ import { fbAuth } from '@/utils/firebase/firebase';
 import { firestore } from '@/utils/firebase/firestore/client';
 import { FirestoreExpense } from '@/utils/firebase/firestore/schema';
 import { grabDocumentById } from '@/utils/firebase/firestore/queris/util';
-import { IEventForm } from '@/pages/EventPage/NewEventDialog';
+import { IEventForm } from '@/pages/EventPage/NewEventDialogButton';
 import { serverTimestamp } from 'firebase/firestore';
 
 // add event to the events collection and to the user's events list
