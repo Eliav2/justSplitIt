@@ -15,9 +15,7 @@ import useThemeMode from '@/store/theme/useThemeMode';
 import Box from '@mui/material/Box';
 import English from '@/components/Language/English';
 import Hebrew from '@/components/Language/Hebrew';
-// @ts-ignore
 import { ReactComponent as JLightIcon } from '@/assets/icons/j-light.svg';
-// @ts-ignore
 import { ReactComponent as JDarkIcon } from '@/assets/icons/j-dark.svg';
 
 import SvgResizer from 'react-svg-resizer';

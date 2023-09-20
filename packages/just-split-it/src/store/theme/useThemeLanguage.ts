@@ -10,7 +10,11 @@ const languageState = atom({
 });
 
 function synchronizeLanguageWithLocalStorage({ setSelf, onSet }: AtomEffectParams) {
-  const storedTheme = localStorage.getItem('language-mode');
+  let storedTheme = localStorage.getItem('language-mode') as LanguageMode | null;
+  if (storedTheme && !Object.values(LanguageMode).includes(storedTheme)) {
+    localStorage.setItem('language-mode', LanguageMode.Hebrew);
+    storedTheme = LanguageMode.Hebrew;
+  }
   storedTheme && setSelf(storedTheme);
   onSet((value: LanguageMode) => localStorage.setItem('language-mode', value));
 }

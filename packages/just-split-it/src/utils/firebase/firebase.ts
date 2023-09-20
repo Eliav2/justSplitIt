@@ -54,8 +54,8 @@ export const fbDB = getFirestore(fbApp);
 
 // console.log('isDev', isDev);
 if (isDev) {
-  connectAuthEmulator(fbAuth, 'http://127.0.0.1:9099');
-  connectFirestoreEmulator(fbDB, '127.0.0.1', 8080);
+  // connectAuthEmulator(fbAuth, 'http://127.0.0.1:9099');
+  // connectFirestoreEmulator(fbDB, '127.0.0.1', 8080);
 } else {
   _analytics = getAnalytics(fbApp);
 }
