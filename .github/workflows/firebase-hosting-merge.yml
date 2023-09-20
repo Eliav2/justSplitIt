@@ -29,12 +29,13 @@ jobs:
           node-version: ${{ matrix.node-version }}
           cache: 'pnpm'
       - run: pnpm install
-      - uses: FirebaseExtended/action-hosting-deploy@v0
-        with:
-          repoToken: '${{ secrets.GITHUB_TOKEN }}'
-          firebaseServiceAccount: '${{ secrets.FIREBASE_SERVICE_ACCOUNT_JUST_SPLITIT }}'
-          channelId: live
-          projectId: just-splitit
-          entryPoint: packages/just-split-it
-        env:
-          FIREBASE_CLI_EXPERIMENTS: webframeworks
+      - run: pnpm run deploy
+#      - uses: FirebaseExtended/action-hosting-deploy@v0
+#        with:
+#          repoToken: '${{ secrets.GITHUB_TOKEN }}'
+#          firebaseServiceAccount: '${{ secrets.FIREBASE_SERVICE_ACCOUNT_JUST_SPLITIT }}'
+#          channelId: live
+#          projectId: just-splitit
+#          entryPoint: packages/just-split-it
+#        env:
+#          FIREBASE_CLI_EXPERIMENTS: webframeworks
