@@ -9,43 +9,12 @@ name: Deploy to Firebase Hosting on merge
 jobs:
   build_and_deploy:
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        node-version: [ 17 ]
-    # change working directory for script
-    defaults:
-      run:
-        working-directory: packages/just-split-it
     steps:
       - uses: actions/checkout@v3
-      # install pnpm verison 8
-      - uses: pnpm/action-setup@v2
-        with:
-          version: 8
-      # setup node to use cache
-      - name: Use Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v3
-        with:
-          node-version: ${{ matrix.node-version }}
-          cache: 'pnpm'
-      - run: pnpm install
-#      - name: Authenticate Firebase
-#        run: |
-#         echo "${{ secrets.FIREBASE_SERVICE_ACCOUNT_JUST_SPLITIT }}" > service-account.json
-#         npx firebase login:ci --token "${{ secrets.FIREBASE_TOKEN }}"
-#      - name: Deploy to Firebase Hosting
-#        run: |
-#          npx firebase use --token "${{ secrets.FIREBASE_TOKEN }}" --add just-splitit
-#          npx firebase deploy --token "${{ secrets.FIREBASE_TOKEN }}" --only hosting -P just-splitit --project just-splitit
-#          rm service-account.json
-#      - run: pnpm run deploy --token ${{ secrets.FIREBASE_SERVICE_ACCOUNT_JUST_SPLITIT }}
-
+      - run: 'pnpm run build:prod'
       - uses: FirebaseExtended/action-hosting-deploy@v0
         with:
           repoToken: '${{ secrets.GITHUB_TOKEN }}'
           firebaseServiceAccount: '${{ secrets.FIREBASE_SERVICE_ACCOUNT_JUST_SPLITIT }}'
           channelId: live
           projectId: just-splitit
-          entryPoint: packages/just-split-it
-        env:
-          FIREBASE_CLI_EXPERIMENTS: webframeworks
