@@ -29,23 +29,23 @@ jobs:
           node-version: ${{ matrix.node-version }}
           cache: 'pnpm'
       - run: pnpm install
-      - name: Authenticate Firebase
-        run: |
-         echo "${{ secrets.FIREBASE_SERVICE_ACCOUNT_JUST_SPLITIT }}" > service-account.json
-         npx firebase login:ci --token "${{ secrets.FIREBASE_TOKEN }}"
-      - name: Deploy to Firebase Hosting
-        run: |
-          npx firebase use --token "${{ secrets.FIREBASE_TOKEN }}" --add just-splitit
-          npx firebase deploy --token "${{ secrets.FIREBASE_TOKEN }}" --only hosting -P just-splitit --project just-splitit
-          rm service-account.json
+#      - name: Authenticate Firebase
+#        run: |
+#         echo "${{ secrets.FIREBASE_SERVICE_ACCOUNT_JUST_SPLITIT }}" > service-account.json
+#         npx firebase login:ci --token "${{ secrets.FIREBASE_TOKEN }}"
+#      - name: Deploy to Firebase Hosting
+#        run: |
+#          npx firebase use --token "${{ secrets.FIREBASE_TOKEN }}" --add just-splitit
+#          npx firebase deploy --token "${{ secrets.FIREBASE_TOKEN }}" --only hosting -P just-splitit --project just-splitit
+#          rm service-account.json
 #      - run: pnpm run deploy --token ${{ secrets.FIREBASE_SERVICE_ACCOUNT_JUST_SPLITIT }}
 
-#      - uses: FirebaseExtended/action-hosting-deploy@v0
-#        with:
-#          repoToken: '${{ secrets.GITHUB_TOKEN }}'
-#          firebaseServiceAccount: '${{ secrets.FIREBASE_SERVICE_ACCOUNT_JUST_SPLITIT }}'
-#          channelId: live
-#          projectId: just-splitit
-#          entryPoint: packages/just-split-it
-#        env:
-#          FIREBASE_CLI_EXPERIMENTS: webframeworks
+      - uses: FirebaseExtended/action-hosting-deploy@v0
+        with:
+          repoToken: '${{ secrets.GITHUB_TOKEN }}'
+          firebaseServiceAccount: '${{ secrets.FIREBASE_SERVICE_ACCOUNT_JUST_SPLITIT }}'
+          channelId: live
+          projectId: just-splitit
+          entryPoint: packages/just-split-it
+        env:
+          FIREBASE_CLI_EXPERIMENTS: webframeworks

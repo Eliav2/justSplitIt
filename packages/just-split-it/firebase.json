@@ -4,7 +4,7 @@
       "pnpm run build:prod"
     ],
     "public": "dist",
-    "source": ".",
+//    "source": ".",
     "ignore": [
       "firebase.json",
       "**/.*",

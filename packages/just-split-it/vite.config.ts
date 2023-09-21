@@ -11,10 +11,7 @@ import fs from 'fs';
 // console.log(process.env);
 // https://vitejs.dev/config/
 export default defineConfig(({ mode }) => {
-  process.env = { ...process.env, ...loadEnv(mode, process.cwd()) };
-  console.log('mode', mode);
-  console.log('loadEnv(mode, process.cwd())', loadEnv(mode, process.cwd()));
-  console.log(`process.env['START_URL']`, process.env['START_URL']);
+  process.env = { ...process.env, ...loadEnv(mode, process.cwd(), '') };
 
   return {
     // mostly for development
