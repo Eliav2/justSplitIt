@@ -24,6 +24,7 @@ import SvgResizer from 'react-svg-resizer';
 import { DarkTheme, LightTheme } from '@/theme/Theme';
 import useSidebar from '@/store/sidebar';
 import AppIcon from '@/assets/icons/AppIcon';
+import ServiceWorker from '@/utils/ServiceWorker';
 
 function HomePage() {
   // const [user, loading, error] = useAuthState(fbAuth);
@@ -108,6 +109,7 @@ const CrazyHugeHeader = () => {
 
   return (
     <Box sx={{ textAlign: 'center' }}>
+      {/*<ServiceWorker />*/}
       <AppIcon size={120} />
 
       <div style={headerStyles as any}>

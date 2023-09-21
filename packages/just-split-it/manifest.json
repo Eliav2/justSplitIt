@@ -1,5 +1,6 @@
 {
   "name": "JustSplitIt",
+  "start_url": "https://just-splitit.web.app",
   "short_name": "JustSplitIt",
   "description": "share your expenses equally the easy way",
   "theme_color": "#ffffff",
