@@ -14,7 +14,8 @@ jobs:
         working-directory: packages/just-split-it
     steps:
       - uses: actions/checkout@v3
-
+        with:
+          lfs: true  # This flag ensures that Git LFS is enabled during the checkout process
       # install pnpm verison 8
       - uses: pnpm/action-setup@v2
         with:
