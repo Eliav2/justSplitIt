@@ -13,6 +13,8 @@ import { styled } from '@mui/material/styles';
 import { grey } from '@mui/material/colors';
 import Typography from '@mui/material/Typography';
 import { isInStandaloneMode, isMobile } from '@/utils/is-mobile';
+import Hebrew from '@/components/Language/Hebrew';
+import English from '@/components/Language/English';
 
 /**
  * The BeforeInstallPromptEvent is fired at the Window.onbeforeinstallprompt handler
@@ -160,38 +162,44 @@ export function MobileInstallationDrawer({}: MobileInstallationDrawerProps) {
 
   return (
     <div>
-      <SwipeableDrawer anchor={'bottom'} open={open} onClose={closeDrawer} onOpen={openDrawer}>
+      <SwipeableDrawer
+        anchor={'bottom'}
+        open={open}
+        onClose={closeDrawer}
+        onOpen={openDrawer}
+        // PaperProps={{ sx: { pb: 3 } }}
+      >
         <Puller />
         <Box sx={{ px: 2 }}>
+          <Typography variant={'h6'}>
+            <Hebrew>שמנו לב שאתה גולש ממכשיר נייד!</Hebrew>
+            <English>We noticed that you are browsing from a mobile device!</English>
+          </Typography>
           <Typography>
-            שמנו לב שאתה גולש ממכשיר נייד ושהאפליקציה שלנו עדיין לא מותקנת על המכשיר שלך. <br />
-            התקנה של האפליקציה תאפשר גישה מהירה יותר, קבלת התראות, גישת אופליין ועוד.
-            <br /> האם תרצה להתקין אותה?
+            <Hebrew>
+              התקנה של האפליקציה תאפשר גישה מהירה יותר לאפליקציה, קבלת התראות, גישת אופליין ועוד!
+              האם תרצה להתקין אותה?
+            </Hebrew>
+            <English>
+              Installing the app will allow faster access to the app, receiving notifications,
+              offline access and more! Would you like to install it?
+            </English>
           </Typography>
           <Box
-            sx={{ width: 'auto' }}
+            // sx={{ width: 'auto' }}
+            sx={{ display: 'flex', justifyContent: 'center', gap: '10%', p: 2 }}
             role="presentation"
             onClick={openDrawer}
             onKeyDown={closeDrawer}
           >
-            <List>
-              <ListItem disablePadding>
-                <ListItemButton>
-                  <ListItemIcon>
-                    <InboxIcon />
-                  </ListItemIcon>
-                  <ListItemText primary={'התקן'} />
-                </ListItemButton>
-              </ListItem>
-              <ListItem disablePadding>
-                <ListItemButton>
-                  <ListItemIcon>
-                    <InboxIcon />
-                  </ListItemIcon>
-                  <ListItemText primary={'אל תתקין'} />
-                </ListItemButton>
-              </ListItem>
-            </List>
+            <Button variant={'contained'}>
+              <Hebrew>התקן</Hebrew>
+              <English>Install</English>
+            </Button>
+            <Button sx={{ color: (theme) => theme.palette.primary.light }}>
+              <Hebrew>לא תודה</Hebrew>
+              <English>No thanks</English>
+            </Button>
           </Box>
         </Box>
       </SwipeableDrawer>

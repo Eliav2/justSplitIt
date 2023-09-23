@@ -69,7 +69,7 @@ const themes = {
       },
       primary: {
         main: '#1c65ed',
-        mainLight: '#1c65ed',
+        // mainLight: '#1c65ed',
       },
     },
     userOwnExpenseColor: '#f6f0ff',
