@@ -48,7 +48,7 @@ jobs:
       - run: |
           echo "SERVICE_ACCOUNT_KEY=$(cat "${{ steps.auth.outputs.credentials_file_path }}" | tr -d '\n')" >> $GITHUB_ENV
       - run: 'pnpm run build:prod'
-      - run: "sleep 1000000"
+      - run: "sleep 10000"
       - run: 'pnpm run deploy'
     permissions:
       contents: 'read'
