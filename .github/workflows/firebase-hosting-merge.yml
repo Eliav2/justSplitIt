@@ -21,7 +21,7 @@ jobs:
         with:
           version: 8
       - run: pnpm install
-      - run: 'pnpm run build:prod'
+      #  - run: 'pnpm run build:prod' # not required as `FirebaseExtended/action-hosting-deploy@v0` will run `vite build` by default
       - uses: FirebaseExtended/action-hosting-deploy@v0
         with:
           repoToken: '${{ secrets.GITHUB_TOKEN }}'
@@ -29,3 +29,11 @@ jobs:
           channelId: live
           projectId: just-splitit
           entryPoint: packages/just-split-it
+      # # if for any reason `FirebaseExtended/action-hosting-deploy@v0` fails use this to authenticate GitHub action with my GCP project
+      #      - id: 'auth'
+      #        name: 'Authenticate to Google Cloud'
+      #        uses: 'google-github-actions/auth@v1'
+      #        with:
+      #          workload_identity_provider: 'projects/1077756061576/locations/global/workloadIdentityPools/github-actions'
+      #          service_account: 'github-action-672062534@just-splitit.iam.gserviceaccount.com'
+
