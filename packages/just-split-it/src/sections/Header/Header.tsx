@@ -95,17 +95,15 @@ function Header() {
               <MenuIcon />
             </IconButton>
 
-            <ButtonBase dir={'ltr'}>
-              <AppIcon size={10} />
+            <ButtonBase dir={'ltr'} disableRipple>
+              <AppIcon size={12} />
               <Box
                 // onClick={showNotification}
                 onClick={() => navigate(routes.Welcome.path)}
                 color="info"
-                sx={{ textTransform: 'none' }}
+                sx={{ textTransform: 'none', fontSize: 18, fontFamily: 'Raleway' }}
                 autoCapitalize={'false'}
               >
-                {/*ustSplitIt*/}
-
                 <span style={{ fontWeight: 350 }}>ust</span>
                 <span style={{ fontWeight: 550 }}>SplitIt</span>
               </Box>

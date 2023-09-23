@@ -3,12 +3,18 @@ import useThemeMode from '@/store/theme/useThemeMode';
 import themes from './themes';
 import useLanguage, { useShouldUseRTL } from '@/store/theme/useThemeLanguage';
 import { languageLocalesMap } from '@/components/Language';
+import React from 'react';
 
 export type CustomThemeProviderProps = {
-  children: JSX.Element;
+  children: React.ReactNode;
 };
 
 function CustomThemeProvider({ children }: CustomThemeProviderProps) {
+  const finalTheme = useFinalTheme();
+  return <ThemeProvider theme={finalTheme}>{children}</ThemeProvider>;
+}
+
+export const useFinalTheme = () => {
   const [theme] = useThemeMode();
   const shouldUseRTL = useShouldUseRTL();
   const [appLanguage] = useLanguage();
@@ -17,7 +23,7 @@ function CustomThemeProvider({ children }: CustomThemeProviderProps) {
     direction: shouldUseRTL ? 'rtl' : 'ltr',
   });
 
-  return <ThemeProvider theme={finalTheme}>{children}</ThemeProvider>;
-}
+  return finalTheme;
+};
 
 export default CustomThemeProvider;

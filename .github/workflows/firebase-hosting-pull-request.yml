@@ -9,9 +9,16 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      - run: 'pnpm run build:prod'
-      - uses: FirebaseExtended/action-hosting-deploy@v0
+      - id: 'auth'
+        name: 'Authenticate to Google Cloud'
+        uses: 'google-github-actions/auth@v1'
         with:
-          repoToken: '${{ secrets.GITHUB_TOKEN }}'
-          firebaseServiceAccount: '${{ secrets.FIREBASE_SERVICE_ACCOUNT_JUST_SPLITIT }}'
-          projectId: just-splitit
+          workload_identity_provider: 'projects/1077756061576/locations/global/workloadIdentityPools/github-actions'
+          service_account: 'github-action-672062534@just-splitit.iam.gserviceaccount.com'
+      - run: 'pnpm run build:prod'
+      - run: 'pnpm run deploy'
+#      - uses: FirebaseExtended/action-hosting-deploy@v0
+#        with:
+#          repoToken: '${{ secrets.GITHUB_TOKEN }}'
+#          firebaseServiceAccount: '${{ secrets.FIREBASE_SERVICE_ACCOUNT_JUST_SPLITIT }}'
+#          projectId: just-splitit

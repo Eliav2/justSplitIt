@@ -144,7 +144,7 @@ const Event = ({ eventSnap }: ExpensesListProps) => {
           sx={{
             p: 2,
             m: 2,
-            // minWidth: '60%',
+            minWidth: '30%',
           }}
         >
           <EventTitle eventData={eventData} />

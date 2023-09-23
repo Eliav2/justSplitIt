@@ -3,6 +3,7 @@ import { Helmet } from 'react-helmet-async';
 import { title as appTitle, defaultMetaTags } from '@/config';
 
 import type { MetaProps } from './types';
+import { useFinalTheme } from '@/theme/Provider';
 
 function Meta({
   description = defaultMetaTags.description,
@@ -12,11 +13,14 @@ function Meta({
   image,
 }: MetaProps) {
   const pageTitle = `${appTitle}${title ? ' | ' + title : ''}`;
+  const theme = useFinalTheme();
+  const primaryColor = theme.palette.primary.main;
 
   return (
     <Helmet
       title={pageTitle}
       meta={[
+        { name: 'theme-color', content: primaryColor },
         {
           name: 'description',
           content: description,

@@ -24,7 +24,7 @@ import SvgResizer from 'react-svg-resizer';
 import { DarkTheme, LightTheme } from '@/theme/Theme';
 import useSidebar from '@/store/sidebar';
 import AppIcon from '@/assets/icons/AppIcon';
-import ServiceWorker from '@/utils/ServiceWorker';
+import PromptPWAInstall from '@/utils/PromptPWAInstall';
 
 function HomePage() {
   // const [user, loading, error] = useAuthState(fbAuth);
@@ -92,7 +92,6 @@ const CrazyHugeHeader = () => {
   const theme = useTheme();
   const [mode] = useThemeMode();
 
-  // const color = '#282525';
   const color = mode == 'light' ? '#282525' : '#faf4f4';
   const headerStyles = {
     fontSize: '3rem', // Adjust the font size to make it huge
@@ -109,7 +108,6 @@ const CrazyHugeHeader = () => {
 
   return (
     <Box sx={{ textAlign: 'center' }}>
-      {/*<ServiceWorker />*/}
       <AppIcon size={120} />
 
       <div style={headerStyles as any}>

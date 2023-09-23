@@ -1,4 +1,4 @@
-import isMobile from '@/utils/is-mobile';
+import { isMobile } from '@/utils/is-mobile';
 
 import type { Notifications } from './types';
 import English from '@/components/Language/English';

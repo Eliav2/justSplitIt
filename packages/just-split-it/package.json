@@ -23,7 +23,7 @@
 
     "preview": "vite preview",
     "https-preview": "serve dist",
-    "deploy": "firebase deploy",
+    "deploy": "firebase deploy --only hosting",
     "firebase-emulator": "firebase emulators:start --only firestore,auth --import ./firebase-export --export-on-exit ./firebase-export",
 
     "test": "vitest",

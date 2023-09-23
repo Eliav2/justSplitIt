@@ -9,6 +9,8 @@ import { useRegisterSW } from 'virtual:pwa-register/react';
 import useNotifications from '@/store/notifications';
 import { LanguageMode } from '@/components/Language';
 import { useLanguageSentence } from '@/store/theme/useThemeLanguage';
+import Hebrew from '@/components/Language/Hebrew';
+import English from '@/components/Language/English';
 
 // TODO (Suren): this should be a custom hook :)
 function SW() {
@@ -50,8 +52,14 @@ function SW() {
           persist: true,
           action: (
             <>
-              <Button onClick={() => updateServiceWorker(true)}>Reload</Button>
-              <Button onClick={close}>Close</Button>
+              <Button onClick={() => updateServiceWorker(true)}>
+                <English>Reload</English>
+                <Hebrew>טען מחדש</Hebrew>
+              </Button>
+              <Button onClick={close}>
+                <English>Close</English>
+                <Hebrew>סגור</Hebrew>
+              </Button>
             </>
           ),
         },
