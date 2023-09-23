@@ -45,11 +45,13 @@ jobs:
         with:
           workload_identity_provider: 'projects/1077756061576/locations/global/workloadIdentityPools/github-actions'
           service_account: 'github-action-672062534@just-splitit.iam.gserviceaccount.com'
-      - run: |
-          echo "SERVICE_ACCOUNT_KEY=$(cat "${{ steps.auth.outputs.credentials_file_path }}" | tr -d '\n')" >> $GITHUB_ENV
+#      - run: |
+#          echo "SERVICE_ACCOUNT_KEY=$(cat "${{ steps.auth.outputs.credentials_file_path }}" | tr -d '\n')" >> $GITHUB_ENV
       - run: 'pnpm run build:prod'
-      - run: "sleep 10000"
+#      - run: "sleep 10000"
       - run: 'pnpm run deploy'
+        env:
+          GOOGLE_APPLICATION_CREDENTIALS: ${{ steps.auth.outputs.credentials_file_path }}
     permissions:
       contents: 'read'
       id-token: 'write'
