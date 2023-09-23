@@ -49,6 +49,8 @@ jobs:
 #          echo "SERVICE_ACCOUNT_KEY=$(cat "${{ steps.auth.outputs.credentials_file_path }}" | tr -d '\n')" >> $GITHUB_ENV
       - run: 'pnpm run build:prod'
 #      - run: "sleep 10000"
+      - name: Setup upterm session
+        uses: lhotari/action-upterm@v1
       - run: 'pnpm run deploy'
         env:
           GOOGLE_APPLICATION_CREDENTIALS: ${{ steps.auth.outputs.credentials_file_path }}
