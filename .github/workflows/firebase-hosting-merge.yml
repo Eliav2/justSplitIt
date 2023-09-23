@@ -29,32 +29,31 @@ jobs:
             pnpm-${{ runner.os }}-
       - name: Install Dependencies
         run: pnpm install
-#      #  - run: 'pnpm run build:prod' # not required as `FirebaseExtended/action-hosting-deploy@v0` will run `vite build` by default
-#      - uses: FirebaseExtended/action-hosting-deploy@v0
-#        with:
-#          repoToken: '${{ secrets.GITHUB_TOKEN }}'
-#          firebaseServiceAccount: '${{ secrets.FIREBASE_SERVICE_ACCOUNT_JUST_SPLITIT }}'
-#          channelId: live
-#          projectId: just-splitit
-#          entryPoint: packages/just-split-it
-
-      # if for any reason `FirebaseExtended/action-hosting-deploy@v0` fails use this to authenticate GitHub action with my GCP project
-      - id: 'auth'
-        name: 'Authenticate to Google Cloud'
-        uses: 'google-github-actions/auth@v1'
+      #  - run: 'pnpm run build:prod' # not required as `FirebaseExtended/action-hosting-deploy@v0` will run `vite build` by default
+      - uses: FirebaseExtended/action-hosting-deploy@v0
         with:
-          workload_identity_provider: 'projects/1077756061576/locations/global/workloadIdentityPools/github-actions'
-          service_account: 'github-action-672062534@just-splitit.iam.gserviceaccount.com'
-#      - run: |
-#          echo "SERVICE_ACCOUNT_KEY=$(cat "${{ steps.auth.outputs.credentials_file_path }}" | tr -d '\n')" >> $GITHUB_ENV
-      - run: 'pnpm run build:prod'
-#      - run: "sleep 10000"
-      - name: Setup upterm session
-        uses: lhotari/action-upterm@v1
-      - run: 'pnpm run deploy'
-        env:
-          GOOGLE_APPLICATION_CREDENTIALS: ${{ steps.auth.outputs.credentials_file_path }}
-    permissions:
-      contents: 'read'
-      id-token: 'write'
+          repoToken: '${{ secrets.GITHUB_TOKEN }}'
+          firebaseServiceAccount: '${{ secrets.FIREBASE_SERVICE_ACCOUNT_JUST_SPLITIT }}'
+          channelId: live
+          projectId: just-splitit
+          entryPoint: packages/just-split-it
 
+#      # if for any reason `FirebaseExtended/action-hosting-deploy@v0` fails use this to authenticate GitHub action with my GCP project
+#      - id: 'auth'
+#        name: 'Authenticate to Google Cloud'
+#        uses: 'google-github-actions/auth@v1'
+#        with:
+#          workload_identity_provider: 'projects/1077756061576/locations/global/workloadIdentityPools/github-actions'
+#          service_account: 'github-action-672062534@just-splitit.iam.gserviceaccount.com'
+#      - run: 'pnpm run build:prod'
+#      #      # Debug only
+#      #      - name: Debug with upterm session
+#      #        uses: lhotari/action-upterm@v1
+#      - run: 'pnpm run deploy'
+#        env:
+#          GOOGLE_APPLICATION_CREDENTIALS: ${{ steps.auth.outputs.credentials_file_path }}
+#
+#    permissions:
+#      contents: 'read'
+#      id-token: 'write'
+#
