@@ -28,3 +28,4 @@ jobs:
           firebaseServiceAccount: '${{ secrets.FIREBASE_SERVICE_ACCOUNT_JUST_SPLITIT }}'
           channelId: live
           projectId: just-splitit
+          entryPoint: packages/just-split-it
