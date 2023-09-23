@@ -9,6 +9,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
+        with:
+          lfs: true  # This flag ensures that Git LFS is enabled during the checkout process
       - id: 'auth'
         name: 'Authenticate to Google Cloud'
         uses: 'google-github-actions/auth@v1'
@@ -17,6 +19,7 @@ jobs:
           service_account: 'github-action-672062534@just-splitit.iam.gserviceaccount.com'
       - run: 'pnpm run build:prod'
       - run: 'pnpm run deploy'
+
 #      - uses: FirebaseExtended/action-hosting-deploy@v0
 #        with:
 #          repoToken: '${{ secrets.GITHUB_TOKEN }}'
