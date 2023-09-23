@@ -39,4 +39,7 @@ jobs:
           service_account: 'github-action-672062534@just-splitit.iam.gserviceaccount.com'
       - run: 'pnpm run build:prod'
       - run: 'pnpm run deploy'
+    permissions:
+      contents: 'read'
+      id-token: 'write'
 
