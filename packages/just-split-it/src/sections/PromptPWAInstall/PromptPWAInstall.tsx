@@ -3,47 +3,13 @@ import { useEffect, useRef } from 'react';
 import Box from '@mui/material/Box';
 import SwipeableDrawer from '@mui/material/SwipeableDrawer';
 import Button from '@mui/material/Button';
-import List from '@mui/material/List';
-import ListItem from '@mui/material/ListItem';
-import ListItemButton from '@mui/material/ListItemButton';
-import ListItemIcon from '@mui/material/ListItemIcon';
-import ListItemText from '@mui/material/ListItemText';
-import InboxIcon from '@mui/icons-material/MoveToInbox';
 import { styled } from '@mui/material/styles';
 import { grey } from '@mui/material/colors';
 import Typography from '@mui/material/Typography';
 import { isInStandaloneMode, isMobile } from '@/utils/is-mobile';
 import Hebrew from '@/components/Language/Hebrew';
 import English from '@/components/Language/English';
-
-/**
- * The BeforeInstallPromptEvent is fired at the Window.onbeforeinstallprompt handler
- * before a user is prompted to "install" a web site to a home screen on mobile.
- *
- */
-interface BeforeInstallPromptEvent extends Event {
-  /**
-   * Returns an array of DOMString items containing the platforms on which the event was dispatched.
-   * This is provided for user agents that want to present a choice of versions to the user such as,
-   * for example, "web" or "play" which would allow the user to chose between a web version or
-   * an Android version.
-   */
-  readonly platforms: Array<string>;
-
-  /**
-   * Returns a Promise that resolves to a DOMString containing either "accepted" or "dismissed".
-   */
-  readonly userChoice: Promise<{
-    outcome: 'accepted' | 'dismissed';
-    platform: string;
-  }>;
-
-  /**
-   * Allows a developer to show the install prompt at a time of their own choosing.
-   * This method returns a Promise.
-   */
-  prompt(): Promise<void>;
-}
+import { BeforeInstallPromptEvent } from '@/sections/PromptPWAInstall/BeforeInstallPromptEvent';
 
 const PWAInstallButton = () => {
   console.log('ServiceWorker');
@@ -78,63 +44,72 @@ const PWAInstallButton = () => {
   return <div></div>;
 };
 
+const isPWAInstallSupported = () => {
+  return 'BeforeInstallPromptEvent' in window;
+};
+
+const isAppInstalled = () => {
+  if ('getInstalledRelatedApps' in navigator) {
+    const installedRelatedApps = (navigator as any).getInstalledRelatedApps() as Promise<
+      {
+        platform:
+          | 'chrome_web_store'
+          | 'play'
+          | 'itunes'
+          | 'windows'
+          | 'webapp'
+          | 'f-droid'
+          | 'amazon';
+        url?: string;
+        version?: string;
+        id?: string;
+      }[]
+    >;
+
+    return installedRelatedApps.then((relatedApps) => {
+      return relatedApps;
+    });
+  }
+  console.log('getInstalledRelatedApps not supported');
+  return Promise.resolve([]);
+};
+
 const PromptPWAInstall = () => {
+  // navigator.getInstalledRelatedApps()
   console.log('ServiceWorker');
-  const deferredPrompt = useRef<BeforeInstallPromptEvent | null>(null);
+  const installEvent = useRef<BeforeInstallPromptEvent | null>(null);
+
+  console.log('pwaInstallSupported', isPWAInstallSupported());
 
   // const [openPromptPWAInstall, setOpenPromptPWAInstall] = React.useState(false);
-
-  const installPWA = () => {
-    if (deferredPrompt.current) {
-      deferredPrompt.current.prompt();
-      deferredPrompt.current.userChoice.then((choiceResult) => {
-        if (choiceResult.outcome === 'accepted') {
-          console.log('User accepted the install prompt');
-        } else {
-          console.log('User dismissed the install prompt');
-        }
-        deferredPrompt.current = null;
-      });
-    }
-  };
 
   useEffect(() => {
     window.addEventListener('beforeinstallprompt', (e) => {
       console.log('beforeinstallprompt', e);
       // e.preventDefault();
-      deferredPrompt.current = e as BeforeInstallPromptEvent;
+      installEvent.current = e as BeforeInstallPromptEvent;
     });
 
-    // todo: notify that the app was updated
-    // const SWWasUpdated = async () => {
-    //   console.log('?SWWasUpdated?');
-    //   if ('serviceWorker' in navigator) {
-    //     const registration = await navigator.serviceWorker.getRegistration();
-    //     console.log('registration', registration);
-    //     if (!registration) return;
-    //     registration.addEventListener('updatefound', () => {
-    //       console.log('updatefound');
-    //       // A new service worker has been found
-    //       const newWorker = registration.installing;
-    //
-    //       newWorker?.addEventListener('statechange', () => {
-    //         // The state of the new service worker has changed
-    //         if (newWorker?.state === 'installed') {
-    //           // A new service worker has been installed and is ready to take control
-    //           console.log('A new service worker is available.');
-    //         }
-    //       });
-    //     });
-    //   }
-    // };
-    // SWWasUpdated();
+    window.addEventListener('appinstalled', () => {
+      // If visible, hide the install promotion
+      // hideInAppInstallPromotion();
+      // Log install to analytics
+      console.log('INSTALL: Success');
+    });
+
+    isAppInstalled().then((relatedApps) => {
+      console.log('relatedApps', relatedApps);
+    });
 
     return () => {
       // Clean up event listener when component unmounts
     };
   }, []);
+  const shouldPromptInstall = isMobile && !isInStandaloneMode() && isPWAInstallSupported();
 
-  return <div>{isMobile && !isInStandaloneMode() && <MobileInstallationDrawer />}</div>;
+  return (
+    <div>{shouldPromptInstall && <MobileInstallationDrawer installEvent={installEvent} />}</div>
+  );
 };
 export default PromptPWAInstall;
 
@@ -148,9 +123,11 @@ const Puller = styled(Box)(({ theme }) => ({
   marginBottom: 8,
 }));
 
-interface MobileInstallationDrawerProps {}
+interface MobileInstallationDrawerProps {
+  installEvent: React.MutableRefObject<BeforeInstallPromptEvent | null>;
+}
 
-export function MobileInstallationDrawer({}: MobileInstallationDrawerProps) {
+export function MobileInstallationDrawer({ installEvent }: MobileInstallationDrawerProps) {
   const [open, setOpen] = React.useState(true);
 
   const closeDrawer = () => {
@@ -158,6 +135,22 @@ export function MobileInstallationDrawer({}: MobileInstallationDrawerProps) {
   };
   const openDrawer = () => {
     setOpen(true);
+  };
+
+  console.log(installEvent.current);
+
+  const installPWA = () => {
+    if (installEvent.current) {
+      installEvent.current.prompt();
+      installEvent.current.userChoice.then((choiceResult) => {
+        if (choiceResult.outcome === 'accepted') {
+          console.log('User accepted the install prompt');
+        } else {
+          console.log('User dismissed the install prompt');
+        }
+        installEvent.current = null;
+      });
+    }
   };
 
   return (
@@ -192,11 +185,14 @@ export function MobileInstallationDrawer({}: MobileInstallationDrawerProps) {
             onClick={openDrawer}
             onKeyDown={closeDrawer}
           >
-            <Button variant={'contained'}>
+            <Button variant={'contained'} onClick={installPWA}>
               <Hebrew>התקן</Hebrew>
               <English>Install</English>
             </Button>
-            <Button sx={{ color: (theme) => theme.palette.primary.light }}>
+            <Button variant={'contained'} href={'https://localhost:4173'} target="_blank">
+              <Hebrew>פתח</Hebrew>
+            </Button>
+            <Button sx={{ color: (theme) => theme.palette.primary.light }} onClick={closeDrawer}>
               <Hebrew>לא תודה</Hebrew>
               <English>No thanks</English>
             </Button>

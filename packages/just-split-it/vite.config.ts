@@ -13,6 +13,16 @@ import fs from 'fs';
 export default defineConfig(({ mode }) => {
   process.env = { ...process.env, ...loadEnv(mode, process.cwd(), '') };
 
+  const start_url = process.env['START_URL'];
+  if (!start_url) throw new Error('START_URL is not defined');
+  const scope = start_url;
+  const related_applications = [
+    {
+      platform: 'webapp',
+      url: process.env['START_URL'] + '/manifest.webmanifest',
+    },
+  ];
+
   return {
     // mostly for development
     server: {
@@ -39,7 +49,7 @@ export default defineConfig(({ mode }) => {
       svgr(),
       react(),
       VitePWA({
-        manifest: { ...manifest, start_url: process.env['START_URL'] ?? '/' },
+        manifest: { ...manifest, start_url, scope, related_applications },
         includeAssets: ['favicon.svg', 'favicon.ico', 'robots.txt', 'apple-touch-icon.png'],
         // switch to "true" to enable sw on development
         devOptions: {

@@ -9,7 +9,7 @@ import Notifications from '@/sections/Notifications';
 import SW from '@/sections/SW';
 import { useEnsureUserExists } from '@/utils/firebase/firestore/hooks/util';
 import { rtlConfig, RTLProvider, RTLSupport } from '@/theme/rtl';
-import PromptPWAInstall from '@/utils/PromptPWAInstall';
+import PromptPWAInstall from '@/sections/PromptPWAInstall/PromptPWAInstall';
 
 // import { router } from '@/routes/AppPages/AppPages';
 
