@@ -86,14 +86,15 @@ const PromptPWAInstall = () => {
   useEffect(() => {
     window.addEventListener('beforeinstallprompt', (e) => {
       console.log('beforeinstallprompt', e);
-      // e.preventDefault();
+      e.preventDefault();
       installEvent.current = e as BeforeInstallPromptEvent;
     });
 
     window.addEventListener('appinstalled', () => {
-      // If visible, hide the install promotion
-      // hideInAppInstallPromotion();
-      // Log install to analytics
+      // navigate to the app
+      // window.location.href = startURL;
+      isMobile && window.open(startURL, '_blank');
+
       console.log('INSTALL: Success');
     });
 
@@ -126,6 +127,8 @@ const Puller = styled(Box)(({ theme }) => ({
 interface MobileInstallationDrawerProps {
   installEvent: React.MutableRefObject<BeforeInstallPromptEvent | null>;
 }
+
+const startURL = import.meta.env.VITE_START_URL as string;
 
 export function MobileInstallationDrawer({ installEvent }: MobileInstallationDrawerProps) {
   const [open, setOpen] = React.useState(true);
@@ -189,9 +192,9 @@ export function MobileInstallationDrawer({ installEvent }: MobileInstallationDra
               <Hebrew>התקן</Hebrew>
               <English>Install</English>
             </Button>
-            <Button variant={'contained'} href={'https://localhost:4173'} target="_blank">
-              <Hebrew>פתח</Hebrew>
-            </Button>
+            {/*<Button variant={'contained'} href={startURL} target="_blank">*/}
+            {/*  <Hebrew>פתח</Hebrew>*/}
+            {/*</Button>*/}
             <Button sx={{ color: (theme) => theme.palette.primary.light }} onClick={closeDrawer}>
               <Hebrew>לא תודה</Hebrew>
               <English>No thanks</English>

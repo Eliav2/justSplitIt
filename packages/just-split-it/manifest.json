@@ -1,7 +1,7 @@
 {
   "name": "JustSplitIt",
-  "start_url": "START_URL",
-  "scope": "START_URL",
+  "start_url": "VITE_START_URL",
+  "scope": "VITE_START_URL",
   "short_name": "JustSplitIt",
   "description": "share your expenses equally the easy way",
   "theme_color": "#1c65ed",
@@ -16,7 +16,7 @@
   "related_applications": [
     {
       "platform": "webapp",
-      "url": "START_URL"
+      "url": "VITE_START_URL"
     }
   ],
   "prefer_related_applications": true,

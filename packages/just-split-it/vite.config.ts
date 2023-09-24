@@ -13,13 +13,13 @@ import fs from 'fs';
 export default defineConfig(({ mode }) => {
   process.env = { ...process.env, ...loadEnv(mode, process.cwd(), '') };
 
-  const start_url = process.env['START_URL'];
-  if (!start_url) throw new Error('START_URL is not defined');
+  const start_url = process.env['VITE_START_URL'];
+  if (!start_url) throw new Error('VITE_START_URL is not defined');
   const scope = start_url;
   const related_applications = [
     {
       platform: 'webapp',
-      url: process.env['START_URL'] + '/manifest.webmanifest',
+      url: process.env['VITE_START_URL'] + '/manifest.webmanifest',
     },
   ];
 
@@ -28,8 +28,8 @@ export default defineConfig(({ mode }) => {
     server: {
       host: '0.0.0.0',
       https: {
-        key: fs.readFileSync('./https/localhost+1-key.pem'),
-        cert: fs.readFileSync('./https/localhost+1.pem'),
+        key: fs.readFileSync('./https/localhost+2-key.pem'),
+        cert: fs.readFileSync('./https/localhost+2.pem'),
         ca: fs.readFileSync('./https/mkcert-ca.pem'),
       },
     },
